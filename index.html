@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#e9e9e9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Elite Combos">
+<link rel="icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Elite Combos</title>
+<style>
+:root{
+  --bg:#e9e9e9; --bg2:#e2e2e0; --card:#ffffff; --ink:#111111; --muted:#6f6f6f; --line:#d8d8d8;
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:92px}
+button{font:inherit;cursor:pointer;min-height:44px}
+a{color:inherit}
+/* HEADER */
+.cover{padding:34px 20px 18px;max-width:720px;margin:0 auto}
+.cover-top{display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.cover h1{font-size:64px;line-height:.88;letter-spacing:.02em;margin:18px 0 0;font-weight:900;text-transform:uppercase}
+.cover h1 span{display:block}
+.cover h1 .thin{font-weight:300;letter-spacing:.14em;font-size:28px;line-height:1.1;margin-top:10px}
+.cover-rule{height:1px;background:#111;margin:22px 0 14px}
+.cover-sub{display:flex;justify-content:space-between;gap:16px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;line-height:1.6}
+.cover-sub b{font-weight:800}
+.credit{margin-top:14px;font-size:11px;letter-spacing:.04em;color:var(--muted);text-transform:none;line-height:1.5;letter-spacing:0}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:20px}
+.stat{background:var(--card);border-radius:14px;padding:14px 12px}
+.stat strong{display:block;font-size:22px;line-height:1}
+.stat span{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:700}
+/* LAYOUT */
+.wrap{max-width:720px;margin:0 auto;padding:6px 16px 24px}
+.view{display:none}
+.view.active{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.view.active{animation:none}}
+/* SECTIONS */
+.section-head{margin:28px 4px 14px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.section-head h2{font-size:11px;letter-spacing:.26em;text-transform:uppercase;margin:0;font-weight:800;white-space:nowrap}
+.section-head .line{flex:1;height:1px;background:#c9c9c9}
+.section-head .count{font-size:11px;color:var(--muted);letter-spacing:.1em}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(min-width:560px){.grid{grid-template-columns:1fr 1fr 1fr}}
+.tile{background:var(--card);border:0;border-radius:var(--radius);padding:10px;text-align:left;width:100%;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+.tile:active{transform:scale(.985)}
+.swatch{height:118px;border-radius:12px;border:1px solid rgba(0,0,0,.08);position:relative;overflow:hidden}
+.swatch::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.14),transparent 55%)}
+.tile-name{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;padding:12px 4px 4px;line-height:1.3}
+.tile-meta{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:0 4px 6px;font-weight:600}
+/* DETAIL */
+.backbtn{background:#111;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;margin:8px 0 16px}
+.detail-hero{border-radius:22px;overflow:hidden;background:var(--card)}
+.detail-swatch{height:280px;position:relative}
+.detail-swatch-label{position:absolute;left:20px;bottom:18px;right:20px}
+.detail-swatch-label .k{font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;opacity:.75}
+.detail-swatch-label h2{font-size:42px;line-height:.95;margin:6px 0 0;text-transform:uppercase;letter-spacing:.02em;font-weight:900}
+.on-dark{color:#fff}.on-light{color:#111}
+.detail-body{padding:20px}
+.detail-body h3{font-size:11px;letter-spacing:.26em;text-transform:uppercase;margin:0 0 6px}
+.detail-body p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+.wear-note{padding:18px 20px;border-top:1px solid var(--line)}
+.wear-note .k{font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+.wear-note p{margin:6px 0 0;font-size:14px;line-height:1.6;color:var(--ink)}
+.partner-list{display:grid;gap:12px;margin-top:16px}
+.partner{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;align-items:center;gap:14px;width:100%;text-align:left}
+.partner-swatch{width:64px;height:64px;border-radius:12px;flex:0 0 64px;border:1px solid rgba(0,0,0,.08)}
+.partner-info{flex:1;min-width:0}
+.partner-info strong{display:block;font-size:14px;letter-spacing:.12em;text-transform:uppercase}
+.partner-info span{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.dots{display:flex;align-items:center}
+.dot{width:34px;height:34px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.18)}
+.dot+.dot{margin-left:-10px}
+/* CHECKER */
+.panel{background:var(--card);border-radius:20px;padding:18px;margin-bottom:14px}
+.panel h3{font-size:11px;letter-spacing:.26em;text-transform:uppercase;margin:0 0 4px}
+.panel p{margin:0 0 14px;color:var(--muted);font-size:13px;line-height:1.5}
+.pick-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.pick{border:2px solid transparent;background:#f3f3f3;border-radius:12px;padding:6px;min-height:56px}
+.pick i{display:block;height:28px;border-radius:8px;border:1px solid rgba(0,0,0,.08)}
+.pick span{display:block;font-size:8px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;margin-top:5px;line-height:1.2;overflow:hidden}
+.pick.sel{border-color:#111;background:#fff}
+.pair-preview{display:flex;border-radius:18px;overflow:hidden;height:150px;border:1px solid rgba(0,0,0,.08)}
+.pair-half{flex:1;display:flex;align-items:flex-end;padding:14px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:800}
+.verdict{text-align:center;padding:22px 16px}
+.verdict .big{font-size:28px;letter-spacing:.08em;text-transform:uppercase;font-weight:900;line-height:1.05}
+.verdict .sub{color:var(--muted);font-size:13px;margin-top:8px;line-height:1.6}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px 8px 8px;display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;min-height:40px}
+.chip i{width:20px;height:20px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.1)}
+.mini-head{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:18px 0 4px}
+/* SHUFFLE */
+.shuffle-hero{background:#111;color:#fff;border-radius:22px;padding:22px}
+.shuffle-hero h2{font-size:30px;line-height:.95;text-transform:uppercase;margin:0 0 8px;font-weight:900}
+.shuffle-hero p{color:#bdbdbd;margin:0;font-size:14px;line-height:1.6}
+.deal-btn{background:#fff;color:#111;border:0;border-radius:999px;padding:14px 22px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:900;width:100%;margin-top:18px;min-height:52px}
+.deal-btn.dark{background:#111;color:#fff}
+.outfit{display:grid;gap:12px;margin-top:16px}
+.look{border-radius:20px;overflow:hidden;background:var(--card)}
+.look-swatch{height:150px;display:flex;align-items:flex-end;padding:16px}
+.look-meta{padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.look-meta strong{font-size:16px;letter-spacing:.12em;text-transform:uppercase}
+.look-meta span{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.look-note{padding:0 16px 16px;color:var(--muted);font-size:13px;line-height:1.55}
+.formula{margin-top:18px;border-top:1px solid var(--line);padding-top:16px;text-align:left}
+.formula .k{font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:800;color:var(--muted);text-align:center}
+.formula p{margin:8px 0 0;font-size:15px;line-height:1.6;font-weight:700;text-align:center}
+.empty{border:1.5px dashed #bdbdbd;border-radius:20px;padding:28px 20px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6;margin-top:16px;background:rgba(255,255,255,.45)}
+/* BOTTOM NAV */
+.nav{position:fixed;left:12px;right:12px;bottom:12px;max-width:720px;margin:0 auto;background:#111;color:#fff;border-radius:999px;display:grid;grid-template-columns:1fr 1fr 1fr;padding:6px;z-index:50;box-shadow:0 12px 32px rgba(0,0,0,.22)}
+.nav button{background:transparent;color:#a8a8a8;border:0;border-radius:999px;padding:12px 6px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;min-height:48px}
+.nav button.active{background:#fff;color:#111}
+.footer{max-width:720px;margin:0 auto;padding:10px 20px 8px;font-size:11px;color:var(--muted);line-height:1.6;text-align:center}
+/* LINKS */
+.linkbtn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid #111;background:transparent;color:#111;border-radius:999px;padding:10px 18px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:800;text-decoration:none;min-height:44px}
+.linkbtn:active{background:#111;color:#fff}
+.linkbtn.small{padding:7px 13px;min-height:38px;font-size:9px;letter-spacing:.18em;flex:0 0 auto}
+.linkbtn.light{border-color:#fff;color:#fff}
+.worn-wrap{padding:16px 20px 20px;border-top:1px solid var(--line)}
+.combo-link-row{margin-top:16px;text-align:center}
+.outfit-link-row{margin-top:16px;text-align:center}
+/* WEATHER */
+.today{display:none;background:#111;color:#fff;border-radius:20px;padding:18px 20px;margin:4px 0 6px}
+.today.show{display:block}
+.today .k{font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:800;color:#bdbdbd}
+.today-main{display:flex;align-items:baseline;gap:14px;margin-top:8px;flex-wrap:wrap}
+.today-temp{font-size:38px;line-height:1;font-weight:900}
+.today-cond{font-size:14px;letter-spacing:.16em;text-transform:uppercase;font-weight:800}
+.today-hilo{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#bdbdbd;font-weight:700}
+.today-line{margin:12px 0 0;font-size:14px;line-height:1.6;color:#e8e8e8}
+.shuffle-weather{display:none;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-top:14px;text-align:center}
+.shuffle-weather.show{display:block}
+</style>
+</head>
+<body>
+<header class="cover">
+  <div class="cover-top"><span>Erik Xei</span><span>Playbook — Vol. 01</span></div>
+  <h1><span>Elite</span><span class="thin">Color Combo<br>Playbook</span></h1>
+  <div class="cover-rule"></div>
+  <div class="cover-sub"><span><b>25 colors</b><br>4 sections</span><span style="text-align:right"><b>Elite pairs only</b><br>No guessing</span></div>
+  <p class="credit">Combos from the Elite Color Combo Playbook by Erik Xei — personal use.</p>
+  <div class="stats">
+    <div class="stat"><strong>25</strong><span>Colors</span></div>
+    <div class="stat"><strong id="pairCount">—</strong><span>Pairings listed</span></div>
+    <div class="stat"><strong>3</strong><span>Ways to play</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- COLORS -->
+  <section id="view-colors" class="view active">
+    <div class="today" id="todayStrip" aria-live="polite">
+      <div class="k">Today — American Fork, Utah</div>
+      <div class="today-main"><span class="today-temp" id="todayTemp"></span><span class="today-cond" id="todayCond"></span><span class="today-hilo" id="todayHilo"></span></div>
+      <p class="today-line" id="todayLine"></p>
+    </div>
+    <div id="sections"></div>
+  </section>
+
+  <!-- DETAIL (inside colors flow) -->
+  <section id="view-detail" class="view">
+    <button class="backbtn" onclick="goColors()">← &nbsp;All colors</button>
+    <div id="detail"></div>
+  </section>
+
+  <!-- CHECKER -->
+  <section id="view-checker" class="view">
+    <div class="panel">
+      <h3>Color A</h3><p>Tap a color for the first piece.</p>
+      <div class="pick-grid" id="pickA"></div>
+    </div>
+    <div class="panel">
+      <h3>Color B</h3><p>Tap a color for the second piece.</p>
+      <div class="pick-grid" id="pickB"></div>
+    </div>
+    <div class="panel" id="verdictPanel"></div>
+  </section>
+
+  <!-- SHUFFLE -->
+  <section id="view-shuffle" class="view">
+    <div class="shuffle-hero">
+      <h2>Deal an<br>outfit</h2>
+      <p>Three colors — top, bottom, accent — where every pair is an elite combo in the playbook. No clashes, no filler.</p>
+      <button class="deal-btn" onclick="deal(true)">Deal an outfit</button>
+    </div>
+    <div id="outfitWrap"><div class="empty">Nothing dealt yet.<br>Tap “Deal an outfit” and get a ready-to-wear trio.</div></div>
+    <div id="rerollWrap"></div>
+    <p class="shuffle-weather" id="shuffleWeather"></p>
+  </section>
+</main>
+
+<p class="footer">Every pairing on this page comes straight from the book. If it is not listed, it is not called elite here.</p>
+
+<nav class="nav" aria-label="Main">
+  <button id="nav-colors" class="active" onclick="showTab('colors')">Colors</button>
+  <button id="nav-checker" onclick="showTab('checker')">Checker</button>
+  <button id="nav-shuffle" onclick="showTab('shuffle')">Shuffle</button>
+</nav>
+
+<script>
+var COLORS = {
+  "White":{hex:"#f5f5f5",section:1},"Black":{hex:"#1a1a1a",section:1},"Grey":{hex:"#808080",section:1},"Cream":{hex:"#fffeed",section:1},"Beige":{hex:"#d8d1b8",section:1},
+  "Camel":{hex:"#c19a6b",section:2},"Olive":{hex:"#6b6e44",section:2},"Sage":{hex:"#b3c8ae",section:2},"Taupe":{hex:"#cac0b4",section:2},"Dark Taupe":{hex:"#8c7b6e",section:2},"Brown":{hex:"#6b4c36",section:2},"Espresso":{hex:"#371b06",section:2},"Rust":{hex:"#c5622d",section:2},
+  "Navy":{hex:"#0a2563",section:3},"Wine":{hex:"#5b1028",section:3},"Forest":{hex:"#1e4218",section:3},
+  "Cobalt":{hex:"#064bbf",section:4},"Slate Blue":{hex:"#6e86ad",section:4},"Chartreuse":{hex:"#b6a73d",section:4},"Red":{hex:"#a21724",section:4},"Baby Blue":{hex:"#e2edfd",section:4},"Dust Violet":{hex:"#b4a9c6",section:4},"Butter":{hex:"#fffdd0",section:4},"Dust Pink":{hex:"#f1d4d4",section:4},"Teal":{hex:"#006a67",section:4}
+};
+var SECTIONS = [
+  {n:1,label:"Section 1 — The Foundations"},
+  {n:2,label:"Section 2 — The Earth Palette"},
+  {n:3,label:"Section 3 — The Cool Classics"},
+  {n:4,label:"Section 4 — The Contemporary"}
+];
+var COMBOS = {
+  "White":["Navy","Black","Taupe","Espresso","Wine","Olive","Rust","Slate Blue"],
+  "Black":["White","Camel","Grey","Wine","Olive","Rust","Cobalt","Butter"],
+  "Grey":["White","Navy","Wine","Camel","Black","Dust Pink","Butter","Olive"],
+  "Cream":["Espresso","Navy","Camel","Olive","Wine","Dark Taupe","Black","Rust"],
+  "Beige":["White","Espresso","Navy","Olive","Black","Wine","Sage","Rust"],
+  "Camel":["White","Cream","Espresso","Navy","Black","Wine","Grey","Olive"],
+  "Olive":["Cream","White","Navy","Espresso","Camel","Rust","Black","Grey"],
+  "Sage":["Cream","White","Beige","Camel","Espresso","Navy","Grey","Dust Pink"],
+  "Taupe":["Cream","Navy","White","Camel","Espresso","Black","Wine","Sage"],
+  "Dark Taupe":["White","Espresso","Navy","Black","Olive","Wine","Camel","Butter"],
+  "Brown":["Cobalt","Wine","Grey","Camel","Olive","Butter","White","Navy"],
+  "Espresso":["Grey","Camel","Olive","Navy","Cobalt","Black","Butter","White"],
+  "Rust":["Navy","Cream","White","Olive","Espresso","Grey","Beige","Black"],
+  "Navy":["Brown","Baby Blue","Camel","Olive","Wine","Rust","White","Grey"],
+  "Wine":["Camel","Cream","Olive","Navy","Black","White","Taupe"],
+  "Forest":["Cream","Black","Grey","Wine","Rust","Espresso","Brown","White"],
+  "Cobalt":["Black","White","Grey","Rust","Espresso","Beige","Brown","Butter"],
+  "Slate Blue":["Grey","Black","White","Brown","Taupe","Baby Blue","Wine","Camel"],
+  "Chartreuse":["Black","Wine","Grey","Navy","White","Espresso","Baby Blue","Dark Taupe"],
+  "Red":["Black","White","Dust Pink","Butter","Camel","Olive","Chartreuse","Beige"],
+  "Baby Blue":["White","Black","Grey","Brown","Navy","Espresso","Cream"],
+  "Dust Violet":["Teal","Camel","Grey","Navy","Forest","Butter","White","Black"],
+  "Butter":["Olive","Wine","Grey","Navy","White","Brown","Black"],
+  "Dust Pink":["Olive","Wine","Grey","Rust","White","Brown","Navy","Black"],
+  "Teal":["White","Black","Camel","Taupe","Grey","Brown","Rust","Navy"]
+};
+var WEAR = {
+  "White":"Clean base or top. Makes every other color pop; white sneakers finish almost any combo.",
+  "Black":"The base for everything. Black pants + a colored top is the easy formula; go all black and add ONE accent color.",
+  "Grey":"Neutral middle ground. Hoodies and sweats live here; bridges bright colors so they don't clash.",
+  "Cream":"Softer than white. Use it anywhere you'd use white when white feels too harsh.",
+  "Beige":"Warm neutral base. Pants or an overshirt; tones down loud colors.",
+  "Camel":"Statement neutral. Coats, overshirts, pants. Best with navy, white, black.",
+  "Olive":"Earthy mid-tone. Cargos, overshirts, tees. Never head-to-toe — break it with cream or white.",
+  "Sage":"Soft top color. Calm and clean with white or cream bottoms.",
+  "Taupe":"Quiet neutral. Pants or a layer when black feels too harsh.",
+  "Dark Taupe":"Deep neutral base. Pants or a jacket; like black but softer.",
+  "Brown":"Warm base. Pants, boots, belts. Killer with navy and cream.",
+  "Espresso":"The deepest brown. Wear it like black, but warmer — jacket, pants, shoes.",
+  "Rust":"Statement color. ONE rust piece per outfit (top or overshirt); neutrals carry the rest.",
+  "Navy":"The workhorse. Navy top + almost anything works; navy + white is the cleanest combo in the book.",
+  "Wine":"Rich statement. One piece only — sweater or overshirt — keep the rest dark or neutral.",
+  "Forest":"Deep green statement. Jacket or top; cream and black calm it down.",
+  "Cobalt":"The loudest blue. ONE piece only, everything else neutral — black, white, grey.",
+  "Slate Blue":"Soft blue top. Almost a neutral; easy with white and grey.",
+  "Chartreuse":"Bold accent only. Small doses — shoes, hat, graphic tee. A black base makes it work.",
+  "Red":"Statement. One red piece max; black, white and camel keep it clean.",
+  "Baby Blue":"Soft top. White bottoms keep it clean; navy deepens it.",
+  "Dust Violet":"Soft statement. Tops and layers; grey and white keep it calm.",
+  "Butter":"Pale and soft. A top color; olive, navy and brown ground it.",
+  "Dust Pink":"Soft accent or top. Grey, white and navy stop it looking sweet.",
+  "Teal":"Rich mid-tone. Top or layer; white and navy are safe, rust is the bold move."
+};
+var ROLES = {
+  "Black":"base","Beige":"base","Taupe":"base","Dark Taupe":"base","Brown":"base","Espresso":"base",
+  "Sage":"top","Rust":"top","Wine":"top","Forest":"top","Cobalt":"top","Slate Blue":"top","Red":"top","Baby Blue":"top","Dust Violet":"top","Butter":"top","Dust Pink":"top","Teal":"top",
+  "White":"anywhere","Grey":"anywhere","Cream":"anywhere","Camel":"anywhere","Olive":"anywhere","Navy":"anywhere",
+  "Chartreuse":"accent"
+};
+function roleOf(n){return ROLES[n]||'anywhere'}
+function pinUrl(q){return 'https://www.pinterest.com/search/pins/?q='+encodeURIComponent(q)}
+var NAMES = Object.keys(COLORS);
+function hex(n){return COLORS[n].hex}
+function pairs(a,b){return (COMBOS[a]&&COMBOS[a].indexOf(b)>-1)||(COMBOS[b]&&COMBOS[b].indexOf(a)>-1)}
+function isLight(hexv){
+  var c=hexv.replace('#',''); var r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);
+  return (0.299*r+0.587*g+0.114*b)>150;
+}
+function textOn(n){return isLight(hex(n))?'on-light':'on-dark'}
+// pair count
+var total=0; for(var k in COMBOS) total+=COMBOS[k].length;
+document.getElementById('pairCount').textContent=total;
+
+// Build sections
+var secHtml='';
+SECTIONS.forEach(function(s){
+  var list=NAMES.filter(function(n){return COLORS[n].section===s.n});
+  secHtml+='<div class="section-head"><h2>'+s.label+'</h2><div class="line"></div><span class="count">'+list.length+' colors</span></div><div class="grid">';
+  list.forEach(function(n){
+    secHtml+='<button class="tile" onclick="openDetail(\''+n.replace(/'/g,"\\'")+'\')"><div class="swatch" style="background:'+hex(n)+'"></div><div class="tile-name">'+n+'</div><div class="tile-meta">'+COMBOS[n].length+' elite pairs</div></button>';
+  });
+  secHtml+='</div>';
+});
+document.getElementById('sections').innerHTML=secHtml;
+
+// Tabs
+var currentTab='colors';
+function showTab(t){
+  currentTab=t;
+  ['colors','checker','shuffle','detail'].forEach(function(v){document.getElementById('view-'+v).classList.remove('active')});
+  document.getElementById('view-'+t).classList.add('active');
+  ['colors','checker','shuffle'].forEach(function(v){document.getElementById('nav-'+v).classList.toggle('active', v===t || (t==='detail'&&v==='colors'))});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goColors(){showTab('colors')}
+function openDetail(name){
+  var partners=COMBOS[name]||[];
+  var h='<div class="detail-hero"><div class="detail-swatch" style="background:'+hex(name)+'"><div class="detail-swatch-label '+textOn(name)+'"><div class="k">Section '+COLORS[name].section+' &nbsp;·&nbsp; '+partners.length+' elite pairs</div><h2>'+name+'</h2></div></div>'
+    +'<div class="wear-note"><div class="k">How to wear it</div><p>'+WEAR[name]+'</p></div>'
+    +'<div class="worn-wrap"><a class="linkbtn" href="'+pinUrl(name+' outfit men')+'" target="_blank" rel="noopener">See it worn ↗</a></div>'
+    +'<div class="detail-body"><h3>Pairs with</h3><p>These are '+name+'’s elite partners in the book — tap any one to jump straight to it.</p><div class="partner-list">';
+  partners.forEach(function(p){
+    h+='<div class="partner"><button style="background:none;border:0;padding:0;display:flex;align-items:center;gap:14px;flex:1;min-width:0;text-align:left;min-height:44px" onclick="openDetail(\''+p+'\')"><span class="partner-swatch" style="background:'+hex(p)+'"></span><span class="partner-info"><strong>'+p+'</strong><span>View its combos</span></span><span class="dots"><span class="dot" style="background:'+hex(name)+'"></span><span class="dot" style="background:'+hex(p)+'"></span></span></button><a class="linkbtn small" href="'+pinUrl(name+' and '+p+' outfit men')+'" target="_blank" rel="noopener" aria-label="See '+name+' and '+p+' worn together">See this combo ↗</a></div>';
+  });
+  h+='</div></div></div>';
+  document.getElementById('detail').innerHTML=h;
+  showTab('detail');
+}
+
+// Checker
+var selA='Navy', selB='Camel';
+function pickGrid(elId, which){
+  var el=document.getElementById(elId); var h='';
+  NAMES.forEach(function(n){
+    var sel=(which==='A'?selA:selB)===n;
+    h+='<button class="pick'+(sel?' sel':'')+'" onclick="setPick(\''+which+'\',\''+n+'\')"><i style="background:'+hex(n)+'"></i><span>'+n+'</span></button>';
+  });
+  el.innerHTML=h;
+}
+function setPick(which,name){ if(which==='A') selA=name; else selB=name; renderChecker(); }
+function chipsFor(name, which){
+  // chips update the OTHER selection (or same side?) — spec: chips that update the selection. Clicking a partner chip sets the opposite slot.
+  var target = which==='A' ? 'B' : 'A';
+  var h='<div class="chips">';
+  (COMBOS[name]||[]).forEach(function(p){
+    h+='<button class="chip" onclick="setPick(\''+target+'\',\''+p+'\')"><i style="background:'+hex(p)+'"></i>'+p+'</button>';
+  });
+  return h+'</div>';
+}
+function formulaFor(a,b){
+  var ra=roleOf(a), rb=roleOf(b);
+  if(ra==='accent'||rb==='accent'){
+    var acc=ra==='accent'?a:b, main=ra==='accent'?b:a;
+    return 'Keep '+acc+' as the accent — shoes, hat or tee detail. '+main+' carries the outfit as the main piece.';
+  }
+  var pants, top;
+  if(ra==='base'&&rb!=='base'){pants=a;top=b;}
+  else if(rb==='base'&&ra!=='base'){pants=b;top=a;}
+  else if(ra==='base'&&rb==='base'){pants=a;top=b;}
+  else if(ra==='top'&&rb!=='top'){top=a;pants=b;}
+  else if(rb==='top'&&ra!=='top'){top=b;pants=a;}
+  else if(ra==='top'&&rb==='top'){ pants=isLight(hex(a))?b:a; top=pants===a?b:a; }
+  else { pants=isLight(hex(a))?a:b; top=pants===a?b:a; }
+  if(roleOf(top)==='base'){
+    return pants+' pants · '+top+' as the jacket or overshirt.';
+  }
+  var line=top+' on top · '+pants+' pants';
+  var third=null;
+  var cands=['White','Black','Cream','Grey'];
+  for(var i=0;i<cands.length;i++){ if(cands[i]!==a&&cands[i]!==b&&pairs(a,cands[i])&&pairs(b,cands[i])){third=cands[i];break;} }
+  if(!third){
+    var pa=COMBOS[a]||[];
+    for(var j=0;j<pa.length;j++){ if(pa[j]!==b&&pairs(b,pa[j])){third=pa[j];break;} }
+  }
+  if(third) line+=' · '+third+' shoes if you add a third';
+  return line+'.';
+}
+function renderChecker(){
+  pickGrid('pickA','A'); pickGrid('pickB','B');
+  var elite = selA!==selB && pairs(selA,selB);
+  var same = selA===selB;
+  var h='<div class="pair-preview"><div class="pair-half" style="background:'+hex(selA)+';color:'+(isLight(hex(selA))?'#111':'#fff')+'">'+selA+'</div><div class="pair-half" style="background:'+hex(selB)+';color:'+(isLight(hex(selB))?'#111':'#fff')+'">'+selB+'</div></div>';
+  h+='<div class="verdict">';
+  if(same){ h+='<div class="big">Pick two<br>different colors</div><div class="sub">You picked '+selA+' twice. Choose a second color to check the combo.</div>'; }
+  else if(elite){ h+='<div class="big">Elite Combo</div><div class="sub">'+selA+' + '+selB+' is in the playbook. Wear it with confidence.</div><div class="formula"><div class="k">Wear it like this</div><p>'+formulaFor(selA,selB)+'</p></div><div class="combo-link-row"><a class="linkbtn" href="'+pinUrl(selA+' and '+selB+' outfit men')+'" target="_blank" rel="noopener">See this combo ↗</a></div>'; }
+  else { h+='<div class="big">Not in the playbook</div><div class="sub">'+selA+' + '+selB+' is not listed as an elite combo. Here is what each one does pair with — tap a chip to try it instead.</div>'; }
+  h+='</div>';
+  if(!elite && !same){
+    h+='<div class="mini-head">'+selA+' pairs with</div>'+chipsFor(selA,'A');
+    h+='<div class="mini-head">'+selB+' pairs with</div>'+chipsFor(selB,'B');
+  }
+  if(elite){
+    h+='<div class="mini-head">More partners for '+selA+'</div>'+chipsFor(selA,'A');
+  }
+  document.getElementById('verdictPanel').innerHTML=h;
+}
+renderChecker();
+
+// Shuffle
+function shuffleArr(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function deal(scroll){
+  var bottoms=NAMES.filter(function(n){var r=roleOf(n);return r==='base'||r==='anywhere'});
+  var found=null;
+  for(var attempt=0; attempt<800 && !found; attempt++){
+    var bottom=bottoms[Math.floor(Math.random()*bottoms.length)];
+    var topCands=(COMBOS[bottom]||[]).filter(function(n){var r=roleOf(n);return r==='top'||r==='anywhere'});
+    if(!topCands.length) continue;
+    var top=topCands[Math.floor(Math.random()*topCands.length)];
+    var accCands=(COMBOS[bottom]||[]).filter(function(n){return n!==top && pairs(top,n)});
+    if(!accCands.length) continue;
+    var stmt=accCands.filter(function(n){var r=roleOf(n);return r==='accent'||r==='top'});
+    var accPool=stmt.length?stmt:accCands;
+    var accent=accPool[Math.floor(Math.random()*accPool.length)];
+    found=[top,bottom,accent];
+  }
+  if(!found){
+    var base=NAMES[Math.floor(Math.random()*NAMES.length)];
+    var ps=shuffleArr((COMBOS[base]||[]).slice()).slice(0,2);
+    found=[ps[0],base,ps[1]];
+  }
+  var labels=['Top','Bottom','Accent'];
+  var h='<div class="outfit">';
+  found.forEach(function(n,idx){
+    h+='<div class="look"><div class="look-swatch" style="background:'+hex(n)+'"><span class="'+textOn(n)+'" style="font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:800">'+labels[idx]+'</span></div><div class="look-meta"><strong>'+n+'</strong><span>'+labels[idx]+'</span></div><div class="look-note">'+WEAR[n]+'</div></div>';
+  });
+  h+='</div><p style="color:var(--muted);font-size:13px;line-height:1.6;padding:4px 4px 0">Every pair in this trio checks out in the Checker. Tap any color in the Colors tab to see why it works.</p>';
+  h+='<div class="outfit-link-row"><a class="linkbtn" href="'+pinUrl(found[0]+' '+found[1]+' '+found[2]+' outfit men')+'" target="_blank" rel="noopener">See outfits like this ↗</a></div>';
+  document.getElementById('outfitWrap').innerHTML=h;
+  document.getElementById('rerollWrap').innerHTML='<button class="deal-btn dark" onclick="deal(true)">Re-roll outfit</button>';
+  if(scroll) document.getElementById('outfitWrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// Weather — Lindon, Utah (Open-Meteo, no key)
+function condWord(code){
+  if(code===0||code===1) return 'Clear';
+  if(code===2||code===3||code===45||code===48) return 'Cloudy';
+  if((code>=51&&code<=67)||(code>=80&&code<=82)) return 'Rain';
+  if((code>=71&&code<=77)||code===85||code===86) return 'Snow';
+  if(code>=95&&code<=99) return 'Storm';
+  return 'Cloudy';
+}
+function weatherLine(temp, code){
+  var line;
+  if(temp<40) line='Cold — layer up: a Base color on the bottom, statement top, neutral layer over it.';
+  else if(temp<60) line='Cool — light layers win. Hoodie or overshirt in a Top color over a neutral base.';
+  else if(temp<75) line='Mild — a single statement top with neutral pants is all you need.';
+  else line='Hot — light colors breathe best: White, Cream, Beige, Baby Blue, Sage.';
+  if(((code>=51&&code<=67)||(code>=80&&code<=82)||(code>=95&&code<=99))) line+=' Rain today — darker bottoms hide splashes.';
+  if(((code>=71&&code<=77)||code===85||code===86)) line+=' Snow today — dark bottoms, and skip the white shoes.';
+  return line;
+}
+(function(){
+  if(!window.fetch) return;
+  var done=false;
+  var timer=setTimeout(function(){done=true;},6000);
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=40.384&longitude=-111.799&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=America%2FDenver')
+    .then(function(r){ if(!r.ok) throw new Error('bad'); return r.json(); })
+    .then(function(d){
+      if(done) return; clearTimeout(timer);
+      var cur=d.current, day=d.daily;
+      if(!cur||!day||!day.temperature_2m_max||!day.temperature_2m_min) return;
+      var temp=Math.round(cur.temperature_2m);
+      var code=cur.weather_code;
+      var cond=condWord(code);
+      document.getElementById('todayTemp').textContent=temp+'°F';
+      document.getElementById('todayCond').textContent=cond;
+      document.getElementById('todayHilo').textContent='H '+Math.round(day.temperature_2m_max[0])+'° · L '+Math.round(day.temperature_2m_min[0])+'°';
+      document.getElementById('todayLine').textContent=weatherLine(temp, code);
+      document.getElementById('todayStrip').classList.add('show');
+      var sw=document.getElementById('shuffleWeather');
+      sw.textContent='Dressed for today: '+temp+'° and '+cond;
+      sw.classList.add('show');
+    })
+    .catch(function(){ /* strip stays hidden */ });
+})();
+</script>
+</body>
+</html>
