@@ -194,6 +194,28 @@ a{color:inherit}
 .ask-bar{display:flex;gap:8px}
 .ask-bar input{flex:1;min-width:0;font:inherit;font-size:15px;padding:12px 14px;border:1px solid rgba(255,255,255,.75);border-radius:999px;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--ink);min-height:50px;box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
 .ask-bar button{border:1px solid rgba(255,255,255,.85);border-radius:999px;background:rgba(255,255,255,.9);color:#1a1a1a;padding:12px 20px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;min-height:50px;box-shadow:0 4px 14px rgba(0,0,0,.06),inset 0 1px 0 #fff}
+.ask-bar button:disabled{opacity:.45}
+.ask-bar input:disabled{opacity:.55}
+/* ASK — real AI setup */
+.ai-card{background:rgba(255,255,255,.58);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border:1px solid rgba(255,255,255,.68);box-shadow:0 10px 28px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.9);border-radius:var(--radius);padding:18px;margin-bottom:12px}
+.ai-card h3{font-size:11px;letter-spacing:.26em;text-transform:uppercase;margin:0 0 6px;display:flex;align-items:center;gap:8px}
+.ai-card p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.6}
+.ai-steps{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.ai-steps li{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;line-height:1.5}
+.ai-steps b.num{flex:0 0 26px;width:26px;height:26px;border-radius:50%;background:#1a1a1a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;margin-top:1px}
+.key-row{display:flex;gap:8px;margin-top:16px}
+.key-row input{flex:1;min-width:0;font:inherit;font-size:14px;padding:12px 14px;border:1px solid rgba(255,255,255,.75);border-radius:999px;background:rgba(255,255,255,.78);color:var(--ink);min-height:50px;box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
+.key-row button{border:1px solid rgba(255,255,255,.85);border-radius:999px;background:#1a1a1a;color:#fff;padding:12px 18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;min-height:50px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.key-note{font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:10px}
+.key-err{display:none;margin-top:10px;font-size:13px;line-height:1.5;color:#8a1f1f;background:rgba(255,235,235,.75);border:1px solid rgba(180,60,60,.22);border-radius:12px;padding:10px 12px}
+.key-err.show{display:block}
+.ai-status{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ai-dot{width:10px;height:10px;border-radius:50%;background:#1f9d55;box-shadow:0 0 0 5px rgba(31,157,85,.14);flex:0 0 10px}
+.ai-status strong{font-size:14px;letter-spacing:.04em}
+.ai-status span{font-size:12px;color:var(--muted);line-height:1.45;flex:1;min-width:160px}
+.msg.typing{color:var(--muted);font-style:italic}
+.msg.error{background:rgba(255,240,240,.85);border-color:rgba(180,60,60,.22)}
+.getkey-row{margin-top:14px}
 </style>
 </head>
 <body>
@@ -294,15 +316,42 @@ a{color:inherit}
     <div id="closetOutfit"></div>
   </section>
 
-  <!-- ASK -->
+  <!-- ASK — real AI (Google Gemini, your own free key) -->
   <section id="view-ask" class="view">
-    <div class="view-head"><h2>Ask</h2><p>Style questions, answered from the playbook and your closet. Tap a question or type your own.</p></div>
+    <div class="view-head"><h2>Ask the AI</h2><p>A real AI stylist — not canned answers. It knows the whole playbook, today's weather, and whatever is in your closet. Ask it anything, in your own words.</p></div>
+
+    <div class="ai-card" id="aiSetup">
+      <h3>Turn on the real AI — free</h3>
+      <p>Google gives out free Gemini AI keys — no card, so it can never charge you. Grab one once, paste it here, and this tab becomes a real AI you can actually talk to.</p>
+      <ol class="ai-steps">
+        <li><b class="num">1</b><span>Tap <b>Get my free key</b> below and sign in with Google.</span></li>
+        <li><b class="num">2</b><span>Tap <b>Create API key</b> (make a new project if it asks), then copy the long key.</span></li>
+        <li><b class="num">3</b><span>Come back here, paste the key, and tap <b>Connect</b>.</span></li>
+      </ol>
+      <div class="getkey-row"><a class="linkbtn" href="https://aistudio.google.com" target="_blank" rel="noopener">Get my free key ↗</a></div>
+      <div class="key-row">
+        <input type="password" id="apiKeyInput" placeholder="Paste your Gemini key (starts with AIza…)" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Gemini API key">
+        <button type="button" id="connectBtn" onclick="connectAI()">Connect</button>
+      </div>
+      <div class="key-err" id="keyErr" role="alert"></div>
+      <p class="key-note">Your key is never in this app's code and is never sent anywhere except straight to Google when you chat. On this phone it saves on the phone itself, so you only paste it once. Don't share your key with anyone.</p>
+    </div>
+
+    <div class="ai-card" id="aiConnected" style="display:none">
+      <div class="ai-status">
+        <span class="ai-dot" aria-hidden="true"></span>
+        <strong>Real AI connected</strong>
+        <span>Powered by Google Gemini · knows the playbook, the weather &amp; your closet</span>
+        <button type="button" class="mini-btn danger" onclick="disconnectAI()">Disconnect</button>
+      </div>
+    </div>
+
     <div class="quick" id="quickRow"></div>
     <div class="chat-card">
       <div class="chat" id="chatLog" aria-live="polite"></div>
       <form class="ask-bar" onsubmit="return sendAsk(event)">
-        <input type="text" id="askInput" placeholder="Ask about a color, a combo, the weather…" autocomplete="off" maxlength="200" aria-label="Ask a style question">
-        <button type="submit">Ask</button>
+        <input type="text" id="askInput" placeholder="Connect the AI above to start chatting…" autocomplete="off" maxlength="600" aria-label="Chat with the AI stylist" disabled>
+        <button type="submit" id="askSendBtn" disabled>Send</button>
       </form>
     </div>
   </section>
@@ -736,117 +785,203 @@ function buildClosetOutfit(){
 function askAboutPiece(i){
   showTab('ask');
   var p=closet[i];
-  pushMsg('me','What goes with my '+p.name.toLowerCase()+'?');
-  pushMsg('bot',answerFor('what goes with '+p.color));
+  askAI('What goes with my '+p.name.toLowerCase()+'? It is '+p.color+', a '+p.type.toLowerCase()+'. What from the playbook — and from the rest of my closet — pairs elite with it, and how should I wear it?');
 }
 
-// ---------- ASK (built-in assistant — answers from the playbook + your closet) ----------
-var QUICK=['What goes with navy?','Is rust + cream elite?','Build me an outfit','What should I wear today?','What do I own that works together?','What pairs with olive?'];
+// ---------- ASK — real AI (Google Gemini, the user's own free key) ----------
+// The key lives ONLY in this variable, in memory, for this visit. It is never
+// written into the page, never stored, and is sent only to Google's API.
+var geminiKey='';
+try{ geminiKey=localStorage.getItem('eliteGeminiKey')||''; }catch(e){ geminiKey=''; }
+var geminiModel='gemini-2.5-flash';
+var chatHistory=[]; // {role:'user'|'model', text}
+var aiBusy=false;
+var QUICK=['What goes with navy?','Is rust + cream elite?','Build me an outfit from my closet','What should I wear today?','Roast my worst combo idea','What color should I buy next?'];
 (function(){
   var h='';
   QUICK.forEach(function(q){ h+='<button type="button" onclick="quickAsk(this)">'+q+'</button>'; });
   document.getElementById('quickRow').innerHTML=h;
-  pushMsg('bot','Hey — I answer from the playbook. Ask me what goes with a color, whether two colors are elite, what to wear today, or say "build me an outfit". Once you add clothes in the Closet tab, I can dress you from your own stuff too.');
+  pushMsg('bot','Hey — I\u2019m the real AI version. Connect your free Google key above (takes about 2 minutes, no card) and then ask me anything: outfits from your actual closet, whether a combo is actually elite, what to wear for today\u2019s weather, all of it. I answer from the playbook, but I can actually talk.');
+  var ki=document.getElementById('apiKeyInput');
+  ki.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); connectAI(); } });
+  if(geminiKey){
+    geminiCall('Say hi in one short sentence and confirm you know the Elite playbook.').then(function(reply){
+      document.getElementById('aiSetup').style.display='none';
+      document.getElementById('aiConnected').style.display='block';
+      setChatEnabled(true);
+      chatHistory.push({role:'user',text:'Say hi in one short sentence and confirm you know the Elite playbook.'});
+      chatHistory.push({role:'model',text:reply});
+      pushMsg('bot',reply);
+    }).catch(function(){
+      document.getElementById('apiKeyInput').value=geminiKey;
+      geminiKey='';
+    });
+  }
 })();
-function pushMsg(who,text){
+function pushMsg(who,text,extraClass){
   var log=document.getElementById('chatLog');
   var d=document.createElement('div');
-  d.className='msg '+who;
+  d.className='msg '+who+(extraClass?' '+extraClass:'');
   d.textContent=text;
   log.appendChild(d);
   d.scrollIntoView({behavior:'smooth',block:'nearest'});
+  return d;
 }
-function quickAsk(btn){ var q=btn.textContent; pushMsg('me',q); pushMsg('bot',answerFor(q)); }
+function setChatEnabled(on){
+  document.getElementById('askInput').disabled=!on;
+  document.getElementById('askSendBtn').disabled=!on;
+  document.getElementById('askInput').placeholder=on?'Ask anything \u2014 outfits, combos, your closet\u2026':'Connect the AI above to start chatting\u2026';
+}
+function showKeyErr(msg){
+  var e=document.getElementById('keyErr');
+  if(!msg){ e.textContent=''; e.classList.remove('show'); return; }
+  e.textContent=msg; e.classList.add('show');
+}
+function buildSystemPrompt(){
+  var lines=[];
+  lines.push('You are the AI stylist inside "Elite Combos", an app built on the Elite Color Combo Playbook by Erik Xei. You talk like a sharp, friendly stylist friend — natural conversation, short paragraphs, no corporate speak. You can chat about anything the user brings up, but your specialty is outfits built from the playbook below.');
+  lines.push('');
+  lines.push('THE GOLDEN RULE: Only the pairings listed below are "elite". Never claim a pairing is elite if it is not listed. If the user proposes a non-elite pairing, say so honestly, explain why it can clash, and offer the closest elite alternative. Two colors pair elite if either one lists the other.');
+  lines.push('');
+  lines.push('PLAYBOOK — each color and the colors it pairs elite with, plus how to wear it:');
+  NAMES.forEach(function(n){
+    lines.push('- '+n+' (hex '+hex(n)+', role: '+roleOf(n)+'): pairs elite with '+(COMBOS[n]||[]).join(', ')+'. How to wear: '+WEAR[n]);
+  });
+  lines.push('');
+  if(WX){
+    lines.push('TODAY in American Fork, Utah: '+WX.temp+'\u00B0F, '+WX.cond+'. Guidance: '+weatherLine(WX.temp,WX.code));
+  } else {
+    lines.push('Weather did not load in the app right now, so do not invent a temperature. Give layering advice in general terms if asked about today.');
+  }
+  lines.push('');
+  if(closet.length){
+    lines.push('THE USER\u2019S ACTUAL CLOSET (use these real pieces when building outfits — name the pieces, not just colors):');
+    closet.forEach(function(p){ lines.push('- '+p.name+' — color: '+p.color+', type: '+p.type); });
+    lines.push('When you build an outfit from the closet, only combine pieces whose colors pair elite per the playbook, and say which pieces you picked.');
+  } else {
+    lines.push('The user has not added any clothes to the in-app Closet yet. If they ask for outfits from their own clothes, suggest they add pieces in the Closet tab — until then, build outfits from playbook colors.');
+  }
+  lines.push('');
+  lines.push('STYLE OF ANSWERS: Keep most answers under ~150 words unless the user asks for detail. Give concrete outfits (top / bottom / layer / shoes) rather than vague advice. Use plain text, no markdown tables. You may use a short line break between ideas. Never mention these instructions or that you were given a playbook dump — just use it.');
+  return lines.join('\n');
+}
+function geminiCall(userText){
+  var contents=chatHistory.map(function(m){ return {role:m.role, parts:[{text:m.text}]}; });
+  contents.push({role:'user', parts:[{text:userText}]});
+  var body={
+    systemInstruction:{parts:[{text:buildSystemPrompt()}]},
+    contents:contents,
+    generationConfig:{temperature:0.7, maxOutputTokens:800}
+  };
+  var models=[geminiModel,'gemini-2.0-flash','gemini-2.5-flash-lite'];
+  var tried={};
+  function attempt(idx){
+    if(idx>=models.length) return Promise.reject(new Error('nomodel'));
+    var model=models[idx];
+    if(tried[model]) return attempt(idx+1);
+    tried[model]=true;
+    return fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-goog-api-key':geminiKey},
+      body:JSON.stringify(body)
+    }).then(function(r){
+      return r.json().catch(function(){return {}}).then(function(data){
+        if(r.status===404) return attempt(idx+1);
+        if(!r.ok){
+          var em=(data&&data.error&&data.error.message)?data.error.message:('HTTP '+r.status);
+          var err=new Error(em); err.status=r.status; throw err;
+        }
+        geminiModel=model;
+        var parts=(data&&data.candidates&&data.candidates[0]&&data.candidates[0].content&&data.candidates[0].content.parts)||[];
+        var out='';
+        parts.forEach(function(pt){ if(pt.text) out+=pt.text; });
+        out=out.replace(/^\s+|\s+$/g,'');
+        if(!out) throw new Error('empty');
+        return out;
+      });
+    });
+  }
+  return attempt(0);
+}
+function friendlyError(err){
+  var s=err&&err.status;
+  var m=(err&&err.message)||'';
+  if(s===400&&/API key not valid|API_KEY_INVALID/i.test(m)) return 'Google says that key isn\u2019t valid. Double-check you copied the whole thing — or create a fresh one in AI Studio and paste it again.';
+  if(s===400) return 'Google rejected that request ('+m+'). Check the key is complete and try again.';
+  if(s===401||s===403) return 'Google won\u2019t accept that key (it may be restricted or from a project without the Gemini API on). Try creating a brand-new key in a new project in AI Studio.';
+  if(s===429) return 'You\u2019ve hit Google\u2019s free-tier limit for the moment. Give it a minute and try again — the free tier refills.';
+  if(/Failed to fetch|NetworkError/i.test(m)) return 'Couldn\u2019t reach Google — check your connection and try again.';
+  return 'Something went wrong talking to the AI: '+m+'. Try again in a moment.';
+}
+function connectAI(){
+  var inp=document.getElementById('apiKeyInput');
+  var key=inp.value.replace(/\s+/g,'');
+  if(!key){ showKeyErr('Paste your key first — tap "Get my free key" above if you don\u2019t have one yet.'); inp.focus(); return; }
+  if(key.length<20){ showKeyErr('That looks too short to be a full key. Copy the entire key from AI Studio and paste it again.'); return; }
+  showKeyErr('');
+  var btn=document.getElementById('connectBtn');
+  btn.disabled=true; btn.textContent='Checking\u2026';
+  geminiKey=key;
+  geminiCall('Say hi in one short sentence and confirm you know the Elite playbook.').then(function(reply){
+    btn.disabled=false; btn.textContent='Connect';
+    inp.value='';
+    document.getElementById('aiSetup').style.display='none';
+    document.getElementById('aiConnected').style.display='block';
+    try{ localStorage.setItem('eliteGeminiKey', geminiKey); }catch(e){}
+    setChatEnabled(true);
+    chatHistory.push({role:'user',text:'Say hi in one short sentence and confirm you know the Elite playbook.'});
+    chatHistory.push({role:'model',text:reply});
+    pushMsg('bot',reply);
+    document.getElementById('askInput').focus();
+  }).catch(function(err){
+    btn.disabled=false; btn.textContent='Connect';
+    geminiKey='';
+    try{ localStorage.removeItem('eliteGeminiKey'); }catch(e){}
+    showKeyErr(friendlyError(err));
+  });
+}
+function disconnectAI(){
+  geminiKey=''; chatHistory=[];
+  try{ localStorage.removeItem('eliteGeminiKey'); }catch(e){}
+  document.getElementById('aiConnected').style.display='none';
+  document.getElementById('aiSetup').style.display='block';
+  setChatEnabled(false);
+  pushMsg('bot','Disconnected — the AI is off and your key is forgotten. Paste it again anytime to reconnect.');
+}
+function askAI(q){
+  pushMsg('me',q);
+  if(!geminiKey){
+    pushMsg('bot','I\u2019m not connected yet — grab your free key in the card above and tap Connect, then ask me again and I\u2019ll answer for real.');
+    document.getElementById('aiSetup').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  if(aiBusy) return;
+  aiBusy=true;
+  document.getElementById('askSendBtn').disabled=true;
+  var typing=pushMsg('bot','Thinking\u2026','typing');
+  geminiCall(q).then(function(reply){
+    typing.remove();
+    chatHistory.push({role:'user',text:q});
+    chatHistory.push({role:'model',text:reply});
+    if(chatHistory.length>24) chatHistory=chatHistory.slice(chatHistory.length-24);
+    pushMsg('bot',reply);
+  }).catch(function(err){
+    typing.remove();
+    pushMsg('bot',friendlyError(err),'error');
+  }).then(function(){
+    aiBusy=false;
+    document.getElementById('askSendBtn').disabled=false;
+  });
+}
+function quickAsk(btn){ askAI(btn.textContent); }
 function sendAsk(e){
   e.preventDefault();
   var inp=document.getElementById('askInput');
   var q=inp.value.replace(/^\s+|\s+$/g,'');
   if(!q) return false;
   inp.value='';
-  pushMsg('me',q);
-  pushMsg('bot',answerFor(q));
+  askAI(q);
   return false;
-}
-function findColors(text){
-  var low=' '+text.toLowerCase()+' ';
-  var sorted=NAMES.slice().sort(function(a,b){return b.length-a.length});
-  var found=[];
-  sorted.forEach(function(n){
-    if(low.indexOf(' '+n.toLowerCase()+' ')>=0||low.indexOf(' '+n.toLowerCase()+'?')>=0||low.indexOf(' '+n.toLowerCase()+'.')>=0) found.push(n);
-  });
-  return found;
-}
-function ownedColors(){
-  var owned={};
-  closet.forEach(function(p){ (owned[p.color]=owned[p.color]||[]).push(p); });
-  return owned;
-}
-function closetOutfitText(){
-  if(closet.length<2) return 'Your closet needs at least two pieces before I can build from it — add photos in the Closet tab. From the book alone: '+formulaFor('Navy','Camel')+' That\'s Navy + Camel, an elite pair.';
-  for(var bi=0;bi<closet.length;bi++){
-    for(var ti=0;ti<closet.length;ti++){
-      if(bi===ti) continue;
-      var b=closet[bi], t=closet[ti];
-      if(!pairs(b.color,t.color)) continue;
-      var third=null;
-      for(var ai=0;ai<closet.length;ai++){
-        if(ai===bi||ai===ti) continue;
-        var a=closet[ai];
-        if(pairs(b.color,a.color)&&pairs(t.color,a.color)){ third=a; break; }
-      }
-      var s='From your own closet: '+t.name+' ('+t.color+') with '+b.name+' ('+b.color+')';
-      if(third) s+=' and '+third.name+' ('+third.color+')';
-      return s+'. Every pair there is elite in the book.';
-    }
-  }
-  return 'Nothing in your closet pairs elite with each other yet. Check the Closet tab — it shows what color to add to unlock combos with what you own.';
-}
-function answerFor(raw){
-  var text=raw.toLowerCase();
-  var cols=findColors(raw);
-  var owned=ownedColors();
-  // weather / today
-  if(/today|weather|cold|hot|rain|snow|warm|cool/.test(text)&&!/goes with|pairs with/.test(text)){
-    if(WX) return 'Right now in American Fork it\'s '+WX.temp+'°F and '+WX.cond.toLowerCase()+'. '+weatherLine(WX.temp,WX.code)+' Want me to build the outfit? Just say "build me an outfit".';
-    return 'I couldn\'t load the weather just now, but the rule from the book: cold means layer a statement top over a neutral base, heat means light colors — White, Cream, Beige, Baby Blue, Sage. Say "build me an outfit" and I\'ll deal you one.';
-  }
-  // build an outfit
-  if(/outfit|build me|dress me|put together|deal/.test(text)){
-    if(/closet|own|my clothes|i have/.test(text)||closet.length>=2) return closetOutfitText();
-    return 'From the book: '+formulaFor('Navy','Camel')+' (Navy + Camel — elite.) Or open the Shuffle tab and I\'ll deal you a full trio. Add clothes in the Closet tab and I can build from what you own instead.';
-  }
-  // what's in / works in my closet
-  if(/closet|do i own|i own|my clothes|works together/.test(text)){
-    if(!closet.length) return 'Your closet is empty right now. Head to the Closet tab, tap "Take photo", and add your pieces — then I can tell you exactly which of your clothes pair elite.';
-    var lines=['You have '+closet.length+(closet.length===1?' piece':' pieces')+': '+closet.map(function(p){return p.name+' ('+p.color+')'}).join(', ')+'.'];
-    var any=false;
-    closet.forEach(function(p){
-      var ms=closet.filter(function(q){return q!==p&&pairs(p.color,q.color)});
-      if(ms.length){ any=true; lines.push(p.color+' pairs with your '+ms.map(function(m){return m.color}).join(', ')+'.'); }
-    });
-    if(!any) lines.push('None of them pair elite with each other yet — the Closet tab shows which colors would unlock combos.');
-    return lines.join('\n');
-  }
-  // two colors -> verdict
-  if(cols.length>=2){
-    var a=cols[0], b=cols[1];
-    if(pairs(a,b)) return 'Yes — '+a+' + '+b+' is an elite combo in the book. Wear it like this: '+formulaFor(a,b);
-    return 'No — '+a+' + '+b+' isn\'t listed as elite in the book. '+a+' pairs with: '+(COMBOS[a]||[]).join(', ')+'. '+b+' pairs with: '+(COMBOS[b]||[]).join(', ')+'.';
-  }
-  // one color -> partners + wear note + closet angle
-  if(cols.length===1){
-    var c=cols[0];
-    var s=c+' pairs elite with: '+(COMBOS[c]||[]).join(', ')+'.\nHow to wear it: '+WEAR[c];
-    if(owned[c]&&owned[c].length){
-      var ms=closet.filter(function(q){return q.color!==c&&pairs(c,q.color)});
-      s+='\nYou own '+owned[c].map(function(p){return p.name}).join(', ')+'.';
-      s+=ms.length?(' It pairs in your closet with your '+ms.map(function(m){return m.name+' ('+m.color+')'}).join(', ')+'.'):' Nothing else in your closet pairs with it yet.';
-    }
-    return s;
-  }
-  if(/hello|hey|hi\b/.test(text)) return 'Hey. Ask me about any color — "what goes with rust?" — or say "build me an outfit".';
-  if(/thank/.test(text)) return 'Anytime. That\'s what the playbook is for.';
-  return 'I answer from the playbook — try "what goes with '+NAMES[Math.floor(Math.random()*NAMES.length)].toLowerCase()+'?", "is black + butter elite?", "what should I wear today?", or "build me an outfit".';
 }
 </script>
 </body>
