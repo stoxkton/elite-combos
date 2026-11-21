@@ -21,10 +21,10 @@
   --radius:16px;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;overscroll-behavior:none;background-color:var(--grad1);overflow-x:hidden;max-width:100%}
-body{margin:0;background-color:var(--grad1);background:linear-gradient(180deg,var(--grad1) 0%,var(--grad2) 38%,var(--grad3) 100%);background-attachment:fixed;overscroll-behavior:none;overflow-x:hidden;max-width:100%;touch-action:manipulation;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:118px}
+html{scroll-behavior:smooth;overscroll-behavior:none;background-color:var(--grad3);background:linear-gradient(180deg,var(--grad1) 0%,var(--grad2) 38%,var(--grad3) 100%);background-attachment:fixed;min-height:100%;overflow-x:hidden;max-width:100%}
+body{margin:0;background-color:var(--grad3);background:linear-gradient(180deg,var(--grad1) 0%,var(--grad2) 38%,var(--grad3) 100%);background-attachment:fixed;min-height:100vh;min-height:100dvh;overscroll-behavior:none;overflow-x:hidden;max-width:100%;touch-action:manipulation;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:118px}
 img,svg{max-width:100%}
-button{font:inherit;cursor:pointer;min-height:44px;touch-action:manipulation}
+button{font:inherit;color:inherit;cursor:pointer;min-height:44px;touch-action:manipulation}
 a{color:inherit}
 /* HEADER — compact masthead, everything on one tidy band.
    The whole header sits BELOW the status-bar safe area and carries no blur,
@@ -120,10 +120,10 @@ body.theme-green .tabbar button.active,body.theme-dark .tabbar button.active{col
 .panel{background:var(--glass);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border:1px solid rgba(255,255,255,.68);box-shadow:0 10px 28px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.9);border-radius:var(--radius);padding:18px;margin-bottom:12px}
 .panel h3{font-size:11px;letter-spacing:.26em;text-transform:uppercase;margin:0 0 4px}
 .panel p{margin:0 0 14px;color:var(--muted);font-size:13px;line-height:1.5}
-.pick-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.pick{border:2px solid transparent;background:var(--field);border-radius:12px;padding:6px;min-height:56px}
-.pick i{display:block;height:28px;border-radius:8px;border:1px solid rgba(0,0,0,.08)}
-.pick span{display:block;font-size:8px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;margin-top:5px;line-height:1.2;overflow:hidden}
+.pick-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:stretch}
+.pick{border:2px solid transparent;background:var(--field);border-radius:12px;padding:6px;min-height:64px;min-width:0;width:100%;color:var(--ink);-webkit-text-fill-color:var(--ink);display:flex;flex-direction:column;align-items:stretch;text-align:center}
+.pick i{display:block;width:100%;height:28px;flex:0 0 28px;border-radius:8px;border:1px solid rgba(0,0,0,.08)}
+.pick span{display:flex;align-items:flex-start;justify-content:center;flex:1 1 auto;min-height:20px;font-size:8px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;margin-top:5px;line-height:1.25;color:var(--ink);-webkit-text-fill-color:var(--ink);text-align:center;white-space:normal;overflow-wrap:break-word;overflow:hidden}
 .pick.sel{border-color:var(--accent);background:var(--glass-strong);box-shadow:0 4px 12px rgba(0,0,0,.06)}
 .pair-preview{display:flex;border-radius:18px;overflow:hidden;height:150px;border:1px solid rgba(0,0,0,.08)}
 .pair-half{flex:1;display:flex;align-items:flex-end;padding:14px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:800}
@@ -254,9 +254,9 @@ body.theme-green .combo-link:active,body.theme-dark .combo-link:active{backgroun
 .key-err{display:none;margin-top:10px;font-size:13px;line-height:1.5;color:#8a1f1f;background:rgba(255,235,235,.75);border:1px solid rgba(180,60,60,.22);border-radius:12px;padding:10px 12px}
 .key-err.show{display:block}
 .ai-status{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.ai-dot{width:10px;height:10px;border-radius:50%;background:#1f9d55;box-shadow:0 0 0 5px rgba(31,157,85,.14);flex:0 0 10px}
+.ai-dot,.ai-status .ai-dot{display:block;width:10px;height:10px;min-width:10px;max-width:10px;min-height:10px;max-height:10px;border-radius:50%;background:#1f9d55;box-shadow:0 0 0 5px rgba(31,157,85,.14);flex:0 0 10px;flex:none;padding:0}
 .ai-status strong{font-size:14px;letter-spacing:.04em}
-.ai-status span{font-size:12px;color:var(--muted);line-height:1.45;flex:1;min-width:160px}
+.ai-status span:not(.ai-dot){font-size:12px;color:var(--muted);line-height:1.45;flex:1;min-width:160px}
 .msg.typing{color:var(--muted);font-style:italic}
 .msg.error{background:rgba(255,240,240,.85);border-color:rgba(180,60,60,.22)}
 .getkey-row{margin-top:14px}
@@ -267,19 +267,28 @@ body.theme-green .combo-link:active,body.theme-dark .combo-link:active{backgroun
 .fav-filter{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 4px}
 /* ASK — chat column: the view fills the space between the header and the tab bar.
    Card, then one scrolling chips row, then the log (scrolls itself), then the input bar in flow. */
-body.ask-on{height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
-body.ask-on .cover{flex:0 0 auto}
-body.ask-on .wrap{flex:1 1 auto;min-height:0;width:100%;display:flex;flex-direction:column}
+body.ask-on{height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px))}
+body.ask-on .cover{flex:0 0 auto;padding-top:calc(10px + env(safe-area-inset-top, 0px));padding-bottom:8px}
+body.ask-on .cover-row{margin-top:8px}
+body.ask-on .cover h1{font-size:28px}
+body.ask-on .cover-rule{margin-top:8px}
+body.ask-on .credit{margin-top:5px;font-size:10.5px}
+body.ask-on .wrap{flex:1 1 auto;min-height:0;width:100%;display:flex;flex-direction:column;padding-top:2px;padding-bottom:6px}
 body.ask-on .footer{display:none}
 #view-ask.active{display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
-#view-ask .view-head{flex:0 0 auto}
-#view-ask .ai-card{flex:0 1 auto;min-height:0;overflow-y:auto}
-#view-ask .quick{flex:0 0 auto;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;padding-bottom:6px;margin-bottom:8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#view-ask .view-head{flex:0 0 auto;margin:2px 4px 10px}
+#view-ask .view-head h2{font-size:21px}
+#view-ask .view-head p{margin-top:4px;font-size:12.5px;line-height:1.4}
+#view-ask .ai-card{flex:0 1 auto;min-height:0;overflow-y:auto;padding:12px 14px;margin-bottom:8px}
+#view-ask .ai-card p{font-size:12.5px}
+#view-ask .ai-steps{margin-top:8px;gap:6px}
+#view-ask .key-row{margin-top:10px}
+#view-ask .quick{flex:0 0 auto;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;padding-bottom:4px;margin-bottom:8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 #view-ask .quick::-webkit-scrollbar{display:none}
 #view-ask .quick button{flex:0 0 auto;white-space:nowrap}
-#view-ask .chat-card{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
-#view-ask .chat{flex:1 1 auto;min-height:0;overflow-y:auto;margin-bottom:0}
-#view-ask .ask-bar{flex:0 0 auto;margin-top:12px;background:var(--glass-strong);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.82);box-shadow:0 14px 34px rgba(0,0,0,.13),inset 0 1px 0 rgba(255,255,255,.95);border-radius:999px;padding:6px}
+#view-ask .chat-card{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;padding:12px}
+#view-ask .chat{flex:1 1 auto;min-height:0;overflow-y:auto;margin-bottom:0;align-content:start}
+#view-ask .ask-bar{flex:0 0 auto;margin-top:10px;background:var(--glass-strong);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.82);box-shadow:0 14px 34px rgba(0,0,0,.13),inset 0 1px 0 rgba(255,255,255,.95);border-radius:999px;padding:6px}
 /* SETTINGS — discreet gear tucked into the header corner; the screen itself is normal glass */
 .cover-top-right{display:inline-flex;align-items:center}
 .gear-btn{background:transparent;border:0;box-shadow:none;color:var(--ink);opacity:.6;width:32px;height:32px;min-height:32px;padding:6px;margin-left:9px;border-radius:50%;position:relative;z-index:61;flex:0 0 auto;-webkit-backdrop-filter:none;backdrop-filter:none;filter:none}
@@ -293,7 +302,14 @@ body.ask-on .footer{display:none}
 .accent-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
 .accent-dot{width:40px;height:40px;min-height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.85);box-shadow:0 2px 8px rgba(0,0,0,.18);padding:0}
 .accent-dot.sel{box-shadow:0 0 0 2px var(--grad2),0 0 0 4.5px var(--accent)}
-.fav-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.fav-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:stretch}
+.tile{color:var(--ink)}
+.tile-name{color:var(--ink);-webkit-text-fill-color:var(--ink)}
+.chip{color:var(--ink);-webkit-text-fill-color:var(--ink)}
+.type-chip{color:var(--ink)}
+.custom-dot{position:relative;overflow:hidden;background:conic-gradient(from 0deg,#ff5a5a,#ffb02e,#f7e94c,#57d977,#35a7ff,#8a6cff,#ff5ad0,#ff5a5a);display:inline-block;cursor:pointer;flex:0 0 40px}
+.custom-dot input[type=color]{position:absolute;inset:0;width:100%;height:100%;min-height:0;opacity:0;border:0;padding:0;margin:0;cursor:pointer;background:transparent}
+.custom-dot.sel{box-shadow:0 0 0 2px var(--grad2),0 0 0 4.5px var(--accent)}
 .settings-note{font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:10px}
 </style>
 </head>
@@ -470,6 +486,7 @@ body.ask-on .footer{display:none}
         <button type="button" class="accent-dot" data-accent="Forest" style="background:#1e4218" onclick="setAccent('Forest')" aria-label="Forest accent"></button>
         <button type="button" class="accent-dot" data-accent="Wine" style="background:#5b1028" onclick="setAccent('Wine')" aria-label="Wine accent"></button>
         <button type="button" class="accent-dot" data-accent="Cobalt" style="background:#064bbf" onclick="setAccent('Cobalt')" aria-label="Cobalt accent"></button>
+        <label class="accent-dot custom-dot" data-custom-accent="1" aria-label="Custom accent color" title="Custom — pick any accent color"><input type="color" id="accentCustomInput" value="#c5622d" oninput="setAccentCustom(this.value)" onchange="setAccentCustom(this.value)" aria-label="Pick any accent color"></label>
       </div>
       <p class="settings-note" id="accentLabel">Accent — Rust</p>
     </div>
@@ -483,6 +500,7 @@ body.ask-on .footer{display:none}
         <button type="button" class="accent-dot" data-text="#f5efe0" style="background:#f5efe0" onclick="setTextColor('#f5efe0')" aria-label="Cream text color"></button>
         <button type="button" class="accent-dot" data-text="#ffffff" style="background:#ffffff" onclick="setTextColor('#ffffff')" aria-label="White text color"></button>
         <button type="button" class="accent-dot" data-text="#5f6b76" style="background:#5f6b76" onclick="setTextColor('#5f6b76')" aria-label="Slate Grey text color"></button>
+        <label class="accent-dot custom-dot" data-custom-text="1" aria-label="Custom text color" title="Custom — pick any text color"><input type="color" id="textCustomInput" value="#26221e" oninput="setTextCustom(this.value)" onchange="setTextCustom(this.value)" aria-label="Pick any text color"></label>
       </div>
       <p class="settings-note" id="textLabel">Text — Auto (theme default)</p>
     </div>
@@ -1043,7 +1061,7 @@ function askAboutPiece(i){
 // All customization lives in this ONE object. applySettings() paints it onto
 // the page; saveSettings() is called on every change (in this build it just
 // applies — an outside patch adds persistence later). No storage here.
-var settings={theme:'warm',accent:'Rust',name:'',favColor:'',textColor:''};
+var settings={theme:'warm',accent:'Rust',accentCustom:'',name:'',favColor:'',textColor:'',textCustom:''};
 try{ var _s=JSON.parse(localStorage.getItem('eliteSettings')||'null'); if(_s){ for(var k in _s) settings[k]=_s[k]; } }catch(e){}
 var TEXT_COLORS={'':'Auto (theme default)','#26221e':'Ink Black','#000000':'Pure Black','#5a3a22':'Warm Brown','#f5efe0':'Cream','#ffffff':'White','#5f6b76':'Slate Grey'};
 var THEMES={
@@ -1059,12 +1077,15 @@ var ACCENTS={
   'Wine':{hex:'#5b1028',deep:'#420b1d',deepDark:'#e09bb4',soft:'rgba(91,16,40,.12)'},
   'Cobalt':{hex:'#064bbf',deep:'#043a94',deepDark:'#8db9ff',soft:'rgba(6,75,191,.12)'}
 };
+function hexToRgb(hexv){var c=(hexv||'').replace('#','');if(c.length===3)c=c.charAt(0)+c.charAt(0)+c.charAt(1)+c.charAt(1)+c.charAt(2)+c.charAt(2);var n=parseInt(c,16);if(isNaN(n))return{r:197,g:98,b:45};return{r:(n>>16)&255,g:(n>>8)&255,b:n&255}}
+function rgbToHex(r,g,b){function h(v){v=Math.max(0,Math.min(255,Math.round(v)));var s=v.toString(16);return s.length===1?'0'+s:s}return '#'+h(r)+h(g)+h(b)}
+function customAccent(hexv){var rgb=hexToRgb(hexv);return{hex:hexv,deep:rgbToHex(rgb.r*.72,rgb.g*.72,rgb.b*.72),deepDark:rgbToHex(rgb.r+(255-rgb.r)*.45,rgb.g+(255-rgb.g)*.45,rgb.b+(255-rgb.b)*.45),soft:'rgba('+rgb.r+','+rgb.g+','+rgb.b+',.14)'}}
 function applySettings(){
   var t=THEMES[settings.theme]||THEMES.warm;
-  var a=ACCENTS[settings.accent]||ACCENTS.Rust;
+  var a=settings.accentCustom?customAccent(settings.accentCustom):(ACCENTS[settings.accent]||ACCENTS.Rust);
   var r=document.documentElement.style;
   r.setProperty('--grad1',t.grad1); r.setProperty('--grad2',t.grad2); r.setProperty('--grad3',t.grad3);
-  r.setProperty('--ink',settings.textColor||t.ink); r.setProperty('--muted',t.muted); r.setProperty('--line',t.line);
+  r.setProperty('--ink',settings.textCustom||settings.textColor||t.ink); r.setProperty('--muted',t.muted); r.setProperty('--line',t.line);
   r.setProperty('--glass',t.glass); r.setProperty('--glass-strong',t.glassStrong); r.setProperty('--glass-border',t.glassBorder); r.setProperty('--field',t.field);
   r.setProperty('--accent',a.hex);
   r.setProperty('--accent-deep',(settings.theme==='green'||settings.theme==='dark')?a.deepDark:a.deep);
@@ -1073,29 +1094,34 @@ function applySettings(){
   document.body.classList.add('theme-'+settings.theme);
   var meta=document.querySelector('meta[name="theme-color"]');
   if(meta) meta.setAttribute('content',t.meta);
-  // Top strip (safe area / status bar / overscroll) paints the theme's top
-  // background color — never white. --grad1 already drives it via CSS; set it
-  // explicitly too so the html canvas matches before/without the variable.
-  document.documentElement.style.backgroundColor=t.grad1;
+  // Background runs continuously edge to edge: the html canvas carries the
+  // full theme gradient (top color at the top, bottom color at the bottom),
+  // so there is no two-tone seam below the tab bar or above the header.
+  document.documentElement.style.backgroundColor=t.grad3;
+  document.documentElement.style.backgroundImage='linear-gradient(180deg,'+t.grad1+' 0%,'+t.grad2+' 38%,'+t.grad3+' 100%)';
   var sb=document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
   if(sb) sb.setAttribute('content',(settings.theme==='green'||settings.theme==='dark')?'black-translucent':'default');
   renderSettings();
 }
 function saveSettings(){ try{ localStorage.setItem('eliteSettings',JSON.stringify(settings)); }catch(e){} applySettings(); }
 function setTheme(t){ settings.theme=t; saveSettings(); }
-function setAccent(a){ settings.accent=a; saveSettings(); }
-function setTextColor(c){ settings.textColor=c; saveSettings(); }
+function setAccent(a){ settings.accent=a; settings.accentCustom=''; saveSettings(); }
+function setAccentCustom(v){ if(v) settings.accentCustom=v; saveSettings(); }
+function setTextColor(c){ settings.textColor=c; settings.textCustom=''; saveSettings(); }
+function setTextCustom(v){ if(v) settings.textCustom=v; saveSettings(); }
 function setFavColor(n){ settings.favColor=(settings.favColor===n)?'':n; saveSettings(); }
 function setName(v){ settings.name=v; saveSettings(); }
 function renderSettings(){
   var tg=document.getElementById('themeGrid');
   if(tg){ for(var i=0;i<tg.children.length;i++) tg.children[i].classList.toggle('sel', tg.children[i].getAttribute('data-theme')===settings.theme); }
   var ar=document.getElementById('accentRow');
-  if(ar){ for(var j=0;j<ar.children.length;j++) ar.children[j].classList.toggle('sel', ar.children[j].getAttribute('data-accent')===settings.accent); }
-  var al=document.getElementById('accentLabel'); if(al) al.textContent='Accent — '+settings.accent;
+  if(ar){ for(var j=0;j<ar.children.length;j++){ var ach=ar.children[j]; if(ach.getAttribute('data-custom-accent')) ach.classList.toggle('sel', !!settings.accentCustom); else ach.classList.toggle('sel', !settings.accentCustom && ach.getAttribute('data-accent')===settings.accent); } }
+  var al=document.getElementById('accentLabel'); if(al) al.textContent=settings.accentCustom?('Accent — Custom '+settings.accentCustom.toUpperCase()):('Accent — '+settings.accent);
+  var aci=document.getElementById('accentCustomInput'); if(aci && document.activeElement!==aci) aci.value=settings.accentCustom||((ACCENTS[settings.accent]||ACCENTS.Rust).hex);
   var tr=document.getElementById('textRow');
-  if(tr){ for(var m=0;m<tr.children.length;m++) tr.children[m].classList.toggle('sel', tr.children[m].getAttribute('data-text')===settings.textColor); }
-  var tl=document.getElementById('textLabel'); if(tl) tl.textContent='Text — '+(TEXT_COLORS[settings.textColor]||'Auto (theme default)');
+  if(tr){ for(var m=0;m<tr.children.length;m++){ var tch=tr.children[m]; if(tch.getAttribute('data-custom-text')) tch.classList.toggle('sel', !!settings.textCustom); else tch.classList.toggle('sel', !settings.textCustom && tch.getAttribute('data-text')===settings.textColor); } }
+  var tl=document.getElementById('textLabel'); if(tl) tl.textContent=settings.textCustom?('Text — Custom '+settings.textCustom.toUpperCase()):('Text — '+(TEXT_COLORS[settings.textColor]||'Auto (theme default)'));
+  var tci=document.getElementById('textCustomInput'); if(tci && document.activeElement!==tci) tci.value=settings.textCustom||settings.textColor||((THEMES[settings.theme]||THEMES.warm).ink);
   var fg=document.getElementById('favGrid');
   if(fg){ for(var k=0;k<fg.children.length;k++) fg.children[k].classList.toggle('sel', fg.children[k].getAttribute('data-fav')===settings.favColor); }
   var fl=document.getElementById('favLabel'); if(fl) fl.textContent=settings.favColor?('Favorite — '+settings.favColor+'. The stylist favors it.'):'No favorite picked yet.';
@@ -1122,12 +1148,13 @@ try{ geminiKey=localStorage.getItem('eliteGeminiKey')||''; }catch(e){ geminiKey=
 var geminiModel=''; // discovered per-key via ListModels — never guessed blind
 var chatHistory=[]; // {role:'user'|'model', text}
 var aiBusy=false;
+var greetingEl=null;
 var QUICK=['What goes with navy?','Is rust + cream elite?','Build me an outfit from my closet','What should I wear today?','Roast my worst combo idea','What color should I buy next?'];
 (function(){
   var h='';
   QUICK.forEach(function(q){ h+='<button type="button" onclick="quickAsk(this)">'+q+'</button>'; });
   document.getElementById('quickRow').innerHTML=h;
-  pushMsg('bot','Connect your key, then ask me anything.');
+  greetingEl=pushMsg('bot','Connect your key, then ask me anything.');
   var ki=document.getElementById('apiKeyInput');
   ki.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); connectAI(); } });
   if(geminiKey){
@@ -1158,6 +1185,7 @@ function setChatEnabled(on){
   document.getElementById('askInput').disabled=!on;
   document.getElementById('askSendBtn').disabled=!on;
   document.getElementById('askInput').placeholder=on?'Ask anything\u2026':'Connect the AI above\u2026';
+  if(greetingEl) greetingEl.textContent=on?'Ask me anything.':'Connect your key, then ask me anything.';
 }
 function showKeyErr(msg){
   var e=document.getElementById('keyErr');
