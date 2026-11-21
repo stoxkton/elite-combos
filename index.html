@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#f3ecdf">
+<meta name="theme-color" content="#f8f3ea">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -21,8 +21,8 @@
   --radius:16px;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;overscroll-behavior:none}
-body{margin:0;background:linear-gradient(180deg,var(--grad1) 0%,var(--grad2) 38%,var(--grad3) 100%);background-attachment:fixed;overscroll-behavior:none;touch-action:manipulation;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:118px}
+html{scroll-behavior:smooth;overscroll-behavior:none;background-color:var(--grad1)}
+body{margin:0;background-color:var(--grad1);background:linear-gradient(180deg,var(--grad1) 0%,var(--grad2) 38%,var(--grad3) 100%);background-attachment:fixed;overscroll-behavior:none;touch-action:manipulation;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:118px}
 button{font:inherit;cursor:pointer;min-height:44px;touch-action:manipulation}
 a{color:inherit}
 /* HEADER — compact masthead, everything on one tidy band */
@@ -51,6 +51,17 @@ a{color:inherit}
 .tabbar button.active svg{opacity:1;transform:scale(1.14)}
 @media (prefers-reduced-motion: reduce){.tab-lens{transition:none}.tabbar button svg{transition:none}}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.tabbar{background:rgba(255,255,255,.92)}.tab-lens{background:rgba(255,255,255,.96)}}
+/* TAB BAR — smoky dark glass on the dark themes (Deep Green + Dark): no white blob, no white sheen.
+   Bar and sliding lens go dark-translucent with a subtle light edge; tab labels/icons turn light.
+   Warm + Classic keep the light glass above. */
+body.theme-green .tabbar,body.theme-dark .tabbar{background:linear-gradient(180deg,rgba(16,14,11,.58),rgba(16,14,11,.42) 52%,rgba(16,14,11,.5));-webkit-backdrop-filter:blur(30px) saturate(150%) brightness(.92);backdrop-filter:blur(30px) saturate(150%) brightness(.92);border-color:rgba(245,239,224,.24);box-shadow:0 20px 46px rgba(0,0,0,.42),0 4px 16px rgba(0,0,0,.3),inset 0 1px 0 rgba(245,239,224,.16),inset 0 -1px 0 rgba(0,0,0,.25),inset 1px 0 0 rgba(245,239,224,.07),inset -1px 0 0 rgba(245,239,224,.07)}
+body.theme-green .tabbar::before,body.theme-dark .tabbar::before{background:linear-gradient(180deg,rgba(245,239,224,.13),rgba(245,239,224,0))}
+body.theme-green .tab-lens,body.theme-dark .tab-lens{background:linear-gradient(180deg,rgba(245,239,224,.24),rgba(245,239,224,.11) 48%,rgba(245,239,224,.17));-webkit-backdrop-filter:blur(6px) saturate(150%) brightness(1.18);backdrop-filter:blur(6px) saturate(150%) brightness(1.18);border-color:rgba(245,239,224,.38);box-shadow:0 10px 26px rgba(0,0,0,.35),0 2px 8px rgba(0,0,0,.25),inset 0 1px 0 rgba(245,239,224,.28),inset 0 -1px 1px rgba(0,0,0,.18),inset 0 0 12px rgba(245,239,224,.06)}
+body.theme-green .tab-lens::before,body.theme-dark .tab-lens::before{opacity:.45}
+body.theme-green .tab-lens::after,body.theme-dark .tab-lens::after{background:linear-gradient(180deg,rgba(245,239,224,.22),rgba(245,239,224,0));opacity:.5}
+body.theme-green .tabbar button,body.theme-dark .tabbar button{color:rgba(245,239,224,.55)}
+body.theme-green .tabbar button.active,body.theme-dark .tabbar button.active{color:var(--ink)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){body.theme-green .tabbar,body.theme-dark .tabbar{background:rgba(18,15,12,.94)}body.theme-green .tab-lens,body.theme-dark .tab-lens{background:rgba(245,239,224,.18)}}
 /* VIEW HEAD — every tab opens with the same header, so no view feels bolted on */
 .view-head{margin:6px 4px 16px}
 .view-head h2{font-size:24px;line-height:1.05;margin:0;font-weight:900;text-transform:uppercase;letter-spacing:.01em}
@@ -1024,10 +1035,10 @@ var settings={theme:'warm',accent:'Rust',name:'',favColor:'',textColor:''};
 try{ var _s=JSON.parse(localStorage.getItem('eliteSettings')||'null'); if(_s){ for(var k in _s) settings[k]=_s[k]; } }catch(e){}
 var TEXT_COLORS={'':'Auto (theme default)','#26221e':'Ink Black','#000000':'Pure Black','#5a3a22':'Warm Brown','#f5efe0':'Cream','#ffffff':'White','#5f6b76':'Slate Grey'};
 var THEMES={
-  warm:{grad1:'#f8f3ea',grad2:'#f1e8d9',grad3:'#ebdfc9',ink:'#2d2013',muted:'#7e6f5e',line:'rgba(84,60,38,.16)',glass:'rgba(255,255,255,.52)',glassStrong:'rgba(255,255,255,.78)',glassBorder:'rgba(255,255,255,.72)',field:'#ffffff',meta:'#f3ecdf'},
-  classic:{grad1:'#f6f6f6',grad2:'#efefef',grad3:'#e5e5e5',ink:'#111111',muted:'#5f5f5c',line:'rgba(0,0,0,.14)',glass:'rgba(255,255,255,.85)',glassStrong:'rgba(255,255,255,.96)',glassBorder:'rgba(0,0,0,.08)',field:'#ffffff',meta:'#f0f0f0'},
-  green:{grad1:'#0e362a',grad2:'#0b2e25',grad3:'#07231b',ink:'#f5efe0',muted:'rgba(245,239,224,.62)',line:'rgba(245,239,224,.2)',glass:'rgba(245,239,224,.07)',glassStrong:'rgba(245,239,224,.13)',glassBorder:'rgba(245,239,224,.22)',field:'rgba(245,239,224,.1)',meta:'#0b2e25'},
-  dark:{grad1:'#2b2119',grad2:'#211a13',grad3:'#16120e',ink:'#f5efe0',muted:'rgba(245,239,224,.6)',line:'rgba(245,239,224,.18)',glass:'rgba(245,239,224,.06)',glassStrong:'rgba(245,239,224,.12)',glassBorder:'rgba(245,239,224,.2)',field:'rgba(245,239,224,.09)',meta:'#211a13'}
+  warm:{grad1:'#f8f3ea',grad2:'#f1e8d9',grad3:'#ebdfc9',ink:'#2d2013',muted:'#7e6f5e',line:'rgba(84,60,38,.16)',glass:'rgba(255,255,255,.52)',glassStrong:'rgba(255,255,255,.78)',glassBorder:'rgba(255,255,255,.72)',field:'#ffffff',meta:'#f8f3ea'},
+  classic:{grad1:'#f6f6f6',grad2:'#efefef',grad3:'#e5e5e5',ink:'#111111',muted:'#5f5f5c',line:'rgba(0,0,0,.14)',glass:'rgba(255,255,255,.85)',glassStrong:'rgba(255,255,255,.96)',glassBorder:'rgba(0,0,0,.08)',field:'#ffffff',meta:'#f6f6f6'},
+  green:{grad1:'#0e362a',grad2:'#0b2e25',grad3:'#07231b',ink:'#f5efe0',muted:'rgba(245,239,224,.62)',line:'rgba(245,239,224,.2)',glass:'rgba(245,239,224,.07)',glassStrong:'rgba(245,239,224,.13)',glassBorder:'rgba(245,239,224,.22)',field:'rgba(245,239,224,.1)',meta:'#0e362a'},
+  dark:{grad1:'#2b2119',grad2:'#211a13',grad3:'#16120e',ink:'#f5efe0',muted:'rgba(245,239,224,.6)',line:'rgba(245,239,224,.18)',glass:'rgba(245,239,224,.06)',glassStrong:'rgba(245,239,224,.12)',glassBorder:'rgba(245,239,224,.2)',field:'rgba(245,239,224,.09)',meta:'#2b2119'}
 };
 var ACCENTS={
   'Rust':{hex:'#c5622d',deep:'#a34e22',deepDark:'#e59a68',soft:'rgba(197,98,45,.12)'},
@@ -1050,6 +1061,12 @@ function applySettings(){
   document.body.classList.add('theme-'+settings.theme);
   var meta=document.querySelector('meta[name="theme-color"]');
   if(meta) meta.setAttribute('content',t.meta);
+  // Top strip (safe area / status bar / overscroll) paints the theme's top
+  // background color — never white. --grad1 already drives it via CSS; set it
+  // explicitly too so the html canvas matches before/without the variable.
+  document.documentElement.style.backgroundColor=t.grad1;
+  var sb=document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+  if(sb) sb.setAttribute('content',(settings.theme==='green'||settings.theme==='dark')?'black-translucent':'default');
   renderSettings();
 }
 function saveSettings(){ try{ localStorage.setItem('eliteSettings',JSON.stringify(settings)); }catch(e){} applySettings(); }
