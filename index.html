@@ -182,6 +182,33 @@ a{color:inherit}
 .build-card{background:rgba(255,255,255,.58);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border:1px solid rgba(255,255,255,.68);box-shadow:0 10px 28px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.9);border-radius:var(--radius);padding:18px;margin-top:4px}
 .build-card h3{font-size:11px;letter-spacing:.26em;text-transform:uppercase;margin:0 0 4px}
 .build-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+/* OCCASIONS + SAVED + TODAY'S FIT */
+.occ-label{font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:800;color:var(--muted);margin:18px 0 8px;text-align:left}
+.occ-row{display:flex;flex-wrap:wrap;gap:8px}
+.occ-chip{border:1.5px solid var(--line);background:rgba(255,255,255,.55);border-radius:999px;padding:9px 15px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;min-height:40px;color:var(--ink)}
+.occ-chip.sel{border-color:rgba(0,0,0,.3);background:rgba(255,255,255,.95);box-shadow:0 4px 12px rgba(0,0,0,.07),inset 0 1px 0 #fff}
+.occ-note{display:none;font-size:11.5px;color:var(--muted);line-height:1.5;text-align:center;margin:10px 4px 0}
+.occ-note.show{display:block}
+.save-row{margin-top:14px;text-align:center}
+.save-btn{border:1px solid rgba(255,255,255,.85);border-radius:999px;background:#1a1a1a;color:#fff;padding:12px 22px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:900;min-height:48px;box-shadow:0 6px 18px rgba(0,0,0,.14)}
+.save-btn.ghost{background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);color:#1a1a1a;border:1px solid rgba(255,255,255,.8);box-shadow:0 4px 14px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.95)}
+.save-btn:disabled{opacity:.55}
+.fit-card{background:rgba(255,255,255,.52);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 30px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.95);border-radius:var(--radius);padding:18px 20px;margin:0 0 6px}
+.fit-card .k{font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:800;color:#7a7a7a}
+.fit-trio{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}
+.fit-names{display:grid;gap:3px}
+.fit-names div{font-size:13px;line-height:1.35}
+.fit-names b{letter-spacing:.1em;text-transform:uppercase;font-size:13px}
+.fit-names span{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-left:6px}
+.fit-why{margin:12px 0 0;font-size:13.5px;line-height:1.55;color:#3d3d3d}
+.fit-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.saved-card{background:rgba(255,255,255,.68);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);border:1px solid rgba(255,255,255,.68);border-radius:var(--radius);padding:14px 16px;margin-top:12px;box-shadow:0 8px 22px rgba(0,0,0,.05)}
+.saved-top{display:flex;align-items:center;gap:14px}
+.saved-names{flex:1;min-width:0;display:grid;gap:3px}
+.saved-names div{font-size:13px;line-height:1.35}
+.saved-names b{letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+.saved-names span{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-left:6px}
+.saved-actions{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
 /* ASK */
 .chat-card{background:rgba(255,255,255,.52);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border:1px solid rgba(255,255,255,.68);box-shadow:0 10px 28px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.9);border-radius:var(--radius);padding:16px}
 .chat{display:grid;gap:10px;margin-bottom:14px}
@@ -238,6 +265,7 @@ a{color:inherit}
       <div class="today-main"><span class="today-temp" id="todayTemp"></span><span class="today-cond" id="todayCond"></span><span class="today-hilo" id="todayHilo"></span></div>
       <p class="today-line" id="todayLine"></p>
     </div>
+    <div id="todayFit"></div>
     <div id="sections"></div>
   </section>
 
@@ -267,11 +295,22 @@ a{color:inherit}
     <div class="shuffle-hero">
       <h2>Deal an outfit</h2>
       <p>Three colors — top, bottom, accent — where every pair is an elite combo in the playbook. No clashes, no filler.</p>
+      <div class="occ-label">Occasion</div>
+      <div class="occ-row" id="occRow">
+        <button type="button" class="occ-chip sel" onclick="setOccasion('ANY')">Any</button>
+        <button type="button" class="occ-chip" onclick="setOccasion('PARTY')">Party</button>
+        <button type="button" class="occ-chip" onclick="setOccasion('SCHOOL')">School</button>
+        <button type="button" class="occ-chip" onclick="setOccasion('CHURCH')">Church</button>
+        <button type="button" class="occ-chip" onclick="setOccasion('CHILL')">Chill</button>
+      </div>
       <button class="deal-btn" onclick="deal(true)">Deal an outfit</button>
     </div>
     <div id="outfitWrap"><div class="empty">Nothing dealt yet.<br>Tap “Deal an outfit” and get a ready-to-wear trio.</div></div>
+    <p class="occ-note" id="occasionNote"></p>
     <div id="rerollWrap"></div>
     <p class="shuffle-weather" id="shuffleWeather"></p>
+    <div class="section-head"><h2>Saved outfits</h2><div class="line"></div><span class="count" id="savedCount">0 saved</span></div>
+    <div id="savedWrap"></div>
   </section>
 
   <!-- CLOSET -->
@@ -560,7 +599,7 @@ function renderChecker(){
   var h='<div class="pair-preview"><div class="pair-half" style="background:'+hex(selA)+';color:'+(isLight(hex(selA))?'#111':'#fff')+'">'+selA+'</div><div class="pair-half" style="background:'+hex(selB)+';color:'+(isLight(hex(selB))?'#111':'#fff')+'">'+selB+'</div></div>';
   h+='<div class="verdict">';
   if(same){ h+='<div class="big">Pick two<br>different colors</div><div class="sub">You picked '+selA+' twice. Choose a second color to check the combo.</div>'; }
-  else if(elite){ h+='<div class="big">Elite Combo</div><div class="sub">'+selA+' + '+selB+' is in the playbook. Wear it with confidence.</div><div class="formula"><div class="k">Wear it like this</div><p>'+formulaFor(selA,selB)+'</p></div><div class="combo-link-row"><a class="linkbtn" href="'+pinUrl(selA+' and '+selB+' outfit men')+'" target="_blank" rel="noopener">See this combo ↗</a></div>'; }
+  else if(elite){ h+='<div class="big">Elite Combo</div><div class="sub">'+selA+' + '+selB+' is in the playbook. Wear it with confidence.</div><div class="formula"><div class="k">Wear it like this</div><p>'+formulaFor(selA,selB)+'</p></div><div class="combo-link-row"><a class="linkbtn" href="'+pinUrl(selA+' and '+selB+' outfit men')+'" target="_blank" rel="noopener">See this combo ↗</a></div><div class="save-row"><button type="button" class="save-btn" onclick="saveCheckerOutfit(this)">Save outfit</button></div>'; }
   else { h+='<div class="big">Not in the playbook</div><div class="sub">'+selA+' + '+selB+' is not listed as an elite combo. Here is what each one does pair with — tap a chip to try it instead.</div>'; }
   h+='</div>';
   if(!elite && !same){
@@ -574,28 +613,152 @@ function renderChecker(){
 }
 renderChecker();
 
+// ---------- SAVED OUTFITS (saved on this phone) ----------
+var savedOutfits=[]; // {top, bottom, accent}
+try{ savedOutfits=JSON.parse(localStorage.getItem('eliteSaved')||'[]'); }catch(e){ savedOutfits=[]; }
+function persistSaved(){ try{ localStorage.setItem('eliteSaved',JSON.stringify(savedOutfits)); }catch(e){} }
+var currentShuffle=null; // [top, bottom, accent]
+var currentTodayFit=null; // [top, bottom, accent]
+function sameOutfit(a,b){ return a&&b&&a.top===b.top&&a.bottom===b.bottom&&a.accent===b.accent; }
+function addSaved(outfit,btn){
+  if(!outfit) return;
+  var dupe=false;
+  savedOutfits.forEach(function(o){ if(sameOutfit(o,outfit)) dupe=true; });
+  if(!dupe){ savedOutfits.push(outfit); renderSaved(); }
+  if(btn){
+    var old=btn.textContent;
+    btn.textContent=dupe?'Already saved':'Saved';
+    btn.disabled=true;
+    setTimeout(function(){ btn.textContent=old; btn.disabled=false; },1600);
+  }
+}
+function removeSaved(i){
+  savedOutfits.splice(i,1);
+  renderSaved();
+}
+function renderSaved(){
+  persistSaved();
+  var cnt=document.getElementById('savedCount');
+  if(cnt) cnt.textContent=savedOutfits.length+(savedOutfits.length===1?' saved':' saved');
+  var w=document.getElementById('savedWrap');
+  if(!w) return;
+  if(!savedOutfits.length){
+    w.innerHTML='<div class="empty">No saved outfits yet.<br>Deal an outfit above, land an elite verdict in the Checker, or save Today\u2019s Fit — then tap \u201CSave outfit\u201D and it lands here.</div>';
+    return;
+  }
+  var labels=['Top','Bottom','Accent'];
+  var h='';
+  savedOutfits.forEach(function(o,i){
+    var trio=[o.top,o.bottom,o.accent];
+    h+='<div class="saved-card"><div class="saved-top"><span class="dots">'
+      +trio.map(function(n){return '<span class="dot" style="background:'+hex(n)+'"></span>'}).join('')
+      +'</span><span class="saved-names">'
+      +trio.map(function(n,idx){return '<div><b>'+n+'</b><span>'+labels[idx]+'</span></div>'}).join('')
+      +'</span></div><div class="saved-actions"><a class="linkbtn small" href="'+pinUrl(trio.join(' ')+' outfit men')+'" target="_blank" rel="noopener">See it worn \u2197</a><button type="button" class="mini-btn danger" onclick="removeSaved('+i+')">Remove</button></div></div>';
+  });
+  w.innerHTML=h;
+}
+function thirdForPair(a,b){
+  // A third color that pairs elite with BOTH a and b (one always exists in this book).
+  var cands=(COMBOS[a]||[]).filter(function(n){ return n!==b && pairs(b,n); });
+  if(!cands.length) cands=(COMBOS[b]||[]).filter(function(n){ return n!==a && pairs(a,n); });
+  if(!cands.length) return null;
+  var stmt=cands.filter(function(n){ var r=roleOf(n); return r==='accent'||r==='top'; });
+  var pool=stmt.length?stmt:cands;
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+function orderTrio(x,y,z){
+  // Sort three colors into [top, bottom, accent] using playbook roles.
+  var arr=[x,y,z];
+  var bottom=null, rest=[];
+  arr.forEach(function(n){ if(!bottom && roleOf(n)==='base') bottom=n; else rest.push(n); });
+  if(!bottom){
+    // No base color: the darker of the "anywhere" colors goes on the bottom.
+    var dark=arr[0];
+    arr.forEach(function(n){ if(!isLight(hex(n))) dark=n; });
+    bottom=dark; rest=arr.filter(function(n){ return n!==bottom; });
+  }
+  var accent=null, top=null;
+  rest.forEach(function(n){ if(!accent && roleOf(n)==='accent') accent=n; });
+  if(accent){ top=rest.filter(function(n){ return n!==accent; })[0]; }
+  else {
+    top=rest.filter(function(n){ return roleOf(n)==='top'; })[0]||rest[0];
+    accent=rest.filter(function(n){ return n!==top; })[0];
+  }
+  return [top,bottom,accent];
+}
+function saveShuffleOutfit(btn){
+  if(!currentShuffle) return;
+  addSaved({top:currentShuffle[0],bottom:currentShuffle[1],accent:currentShuffle[2]},btn);
+}
+function saveCheckerOutfit(btn){
+  if(selA===selB || !pairs(selA,selB)) return;
+  var third=thirdForPair(selA,selB);
+  if(!third) return;
+  var t=orderTrio(selA,selB,third);
+  addSaved({top:t[0],bottom:t[1],accent:t[2]},btn);
+}
+function saveTodayOutfit(btn){
+  if(!currentTodayFit) return;
+  addSaved({top:currentTodayFit[0],bottom:currentTodayFit[1],accent:currentTodayFit[2]},btn);
+}
+
 // Shuffle
 function shuffleArr(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
-function deal(scroll){
-  var bottoms=NAMES.filter(function(n){var r=roleOf(n);return r==='base'||r==='anywhere'});
-  var found=null;
-  for(var attempt=0; attempt<800 && !found; attempt++){
+// Deal one elite trio [top, bottom, accent]. `allowed` (array or null) restricts
+// which colors may appear; `wantStatement` prefers a bold statement color as
+// top or accent (Party mode). Returns null when no trio fits the filter.
+var STATEMENT_COLORS=['Red','Cobalt','Chartreuse','Wine','Rust'];
+function dealTrio(allowed, wantStatement){
+  var inSet=function(n){ return !allowed || allowed.indexOf(n)>-1; };
+  var bottoms=NAMES.filter(function(n){var r=roleOf(n);return (r==='base'||r==='anywhere') && inSet(n)});
+  var fallback=null;
+  for(var attempt=0; attempt<1200; attempt++){
+    if(!bottoms.length) break;
     var bottom=bottoms[Math.floor(Math.random()*bottoms.length)];
-    var topCands=(COMBOS[bottom]||[]).filter(function(n){var r=roleOf(n);return r==='top'||r==='anywhere'});
+    var topCands=(COMBOS[bottom]||[]).filter(function(n){var r=roleOf(n);return (r==='top'||r==='anywhere') && inSet(n)});
     if(!topCands.length) continue;
     var top=topCands[Math.floor(Math.random()*topCands.length)];
-    var accCands=(COMBOS[bottom]||[]).filter(function(n){return n!==top && pairs(top,n)});
+    var accCands=(COMBOS[bottom]||[]).filter(function(n){return n!==top && pairs(top,n) && inSet(n)});
     if(!accCands.length) continue;
     var stmt=accCands.filter(function(n){var r=roleOf(n);return r==='accent'||r==='top'});
     var accPool=stmt.length?stmt:accCands;
     var accent=accPool[Math.floor(Math.random()*accPool.length)];
-    found=[top,bottom,accent];
+    var trio=[top,bottom,accent];
+    if(!fallback) fallback=trio;
+    if(!wantStatement) return trio;
+    if(STATEMENT_COLORS.indexOf(top)>-1 || STATEMENT_COLORS.indexOf(accent)>-1) return trio;
   }
-  if(!found){
-    var base=NAMES[Math.floor(Math.random()*NAMES.length)];
-    var ps=shuffleArr((COMBOS[base]||[]).slice()).slice(0,2);
-    found=[ps[0],base,ps[1]];
-  }
+  if(fallback) return fallback;
+  if(allowed) return null;
+  var base=NAMES[Math.floor(Math.random()*NAMES.length)];
+  var ps=shuffleArr((COMBOS[base]||[]).slice()).slice(0,2);
+  return [ps[0],base,ps[1]];
+}
+// Occasion Shuffle — each occasion restricts the deal to its own color set,
+// and every pair in the trio still has to be elite.
+var currentOccasion='ANY';
+var OCCASION_SETS={
+  SCHOOL:['White','Black','Grey','Cream','Beige','Navy','Olive','Sage','Taupe','Camel','Slate Blue','Baby Blue','Dust Pink','Butter'],
+  CHURCH:['White','Cream','Navy','Grey','Black','Taupe','Dark Taupe','Camel','Wine','Brown','Espresso','Sage'],
+  CHILL:['Olive','Sage','Cream','Beige','Camel','Taupe','Brown','Dust Pink','Baby Blue','Butter','Grey','White']
+};
+function setOccasion(name){
+  currentOccasion=name;
+  var chips=document.getElementById('occRow').children;
+  for(var i=0;i<chips.length;i++) chips[i].classList.toggle('sel', chips[i].textContent.toUpperCase()===name);
+}
+function deal(scroll){
+  var allowed=OCCASION_SETS[currentOccasion]||null;
+  var found=dealTrio(allowed, currentOccasion==='PARTY');
+  var relaxed=false;
+  if(!found && allowed){ found=dealTrio(null,false); relaxed=true; }
+  currentShuffle=found;
+  var note=document.getElementById('occasionNote');
+  if(relaxed){
+    note.textContent='No elite trio fits '+currentOccasion.charAt(0)+currentOccasion.slice(1).toLowerCase()+' — dealt from the full playbook instead.';
+    note.classList.add('show');
+  } else { note.textContent=''; note.classList.remove('show'); }
   var labels=['Top','Bottom','Accent'];
   var h='<div class="outfit">';
   found.forEach(function(n,idx){
@@ -603,10 +766,60 @@ function deal(scroll){
   });
   h+='</div><p style="color:var(--muted);font-size:13px;line-height:1.6;padding:4px 4px 0">Every pair in this trio checks out in the Checker. Tap any color in the Colors tab to see why it works.</p>';
   h+='<div class="outfit-link-row"><a class="linkbtn" href="'+pinUrl(found[0]+' '+found[1]+' '+found[2]+' outfit men')+'" target="_blank" rel="noopener">See outfits like this ↗</a></div>';
+  h+='<div class="save-row"><button type="button" class="save-btn" onclick="saveShuffleOutfit(this)">Save outfit</button></div>';
   document.getElementById('outfitWrap').innerHTML=h;
   document.getElementById('rerollWrap').innerHTML='<button class="deal-btn dark" onclick="deal(true)">Re-roll outfit</button>';
   if(scroll) document.getElementById('outfitWrap').scrollIntoView({behavior:'smooth',block:'start'});
 }
+
+// ---------- OUTFIT OF THE DAY (Today's Fit, on the Colors view) ----------
+var todayFitWhy='';
+var todayFitTouched=false;
+function dealTodayFit(){
+  var found=null, why='';
+  if(typeof WX!=='undefined' && WX){
+    var cold=WX.temp<50, warm=WX.temp>=70;
+    for(var attempt=0; attempt<80 && !found; attempt++){
+      var trio=dealTrio(null,false);
+      if(!trio) break;
+      var lights=trio.filter(function(n){ return isLight(hex(n)); }).length;
+      if(cold && lights<=1) found=trio;
+      else if(warm && lights>=2) found=trio;
+      else if(!cold && !warm) found=trio;
+    }
+    if(!found) found=dealTrio(null,false);
+    if(cold) why='Cold at '+WX.temp+'\u00B0 \u2014 darker, heavier colors for layering up.';
+    else if(warm) why='Warm at '+WX.temp+'\u00B0 \u2014 lighter colors that breathe.';
+    else why='Mild at '+WX.temp+'\u00B0 \u2014 easy mid-tones with one statement piece.';
+    if(WX.code!==undefined && ((WX.code>=71&&WX.code<=77)||WX.code===85||WX.code===86)) why+=' Snow today \u2014 dark bottoms earn their keep.';
+    else if(WX.code!==undefined && (((WX.code>=51&&WX.code<=67)||(WX.code>=80&&WX.code<=82)||(WX.code>=95&&WX.code<=99)))) why+=' Rain today \u2014 darker bottoms hide splashes.';
+  }
+  if(!found) found=dealTrio(null,false);
+  currentTodayFit=found;
+  todayFitWhy=why;
+  renderTodayFit();
+}
+function renderTodayFit(){
+  var w=document.getElementById('todayFit');
+  if(!w || !currentTodayFit) return;
+  var labels=['Top','Bottom','Accent'];
+  var trio=currentTodayFit;
+  var h='<div class="fit-card"><div class="k">Today\u2019s Fit</div><div class="fit-trio"><span class="dots">'
+    +trio.map(function(n){return '<span class="dot" style="background:'+hex(n)+'"></span>'}).join('')
+    +'</span><span class="fit-names">'
+    +trio.map(function(n,idx){return '<div><b>'+n+'</b><span>'+labels[idx]+'</span></div>'}).join('')
+    +'</span></div>';
+  if(todayFitWhy) h+='<p class="fit-why">'+todayFitWhy+'</p>';
+  h+='<div class="fit-actions"><button type="button" class="save-btn ghost" onclick="rerollTodayFit()">New one</button><button type="button" class="save-btn" onclick="saveTodayOutfit(this)">Save outfit</button></div>';
+  h+='<div class="outfit-link-row" style="text-align:left"><a class="linkbtn small" href="'+pinUrl(trio.join(' ')+' outfit men')+'" target="_blank" rel="noopener">See it worn \u2197</a></div></div>';
+  w.innerHTML=h;
+}
+function rerollTodayFit(){
+  todayFitTouched=true;
+  dealTodayFit();
+}
+dealTodayFit();
+renderSaved();
 
 var WX=null;
 // Weather — American Fork, Utah (Open-Meteo, no key)
@@ -650,14 +863,15 @@ function weatherLine(temp, code){
       var sw=document.getElementById('shuffleWeather');
       sw.textContent='Dressed for today: '+temp+'° and '+cond;
       sw.classList.add('show');
+      if(!todayFitTouched) dealTodayFit();
     })
     .catch(function(){ /* strip stays hidden */ });
 })();
 
-// ---------- CLOSET (saved on this phone via localStorage) ----------
+// ---------- CLOSET (saved on this phone) ----------
 var closet=[]; // {img, color, type, name}
-try{ var savedCloset=localStorage.getItem('eliteCloset'); if(savedCloset) closet=JSON.parse(savedCloset)||[]; }catch(e){ closet=[]; }
-function persistCloset(){ try{ localStorage.setItem('eliteCloset', JSON.stringify(closet)); }catch(e){} }
+try{ closet=JSON.parse(localStorage.getItem('eliteCloset')||'[]'); }catch(e){ closet=[]; }
+function persistCloset(){ try{ localStorage.setItem('eliteCloset',JSON.stringify(closet)); }catch(e){} }
 var pendingImgData=null, pendingType='Top';
 var TYPES=['Top','Bottom','Layer','Shoes','Accessory'];
 (function(){
@@ -805,6 +1019,7 @@ var QUICK=['What goes with navy?','Is rust + cream elite?','Build me an outfit f
   var ki=document.getElementById('apiKeyInput');
   ki.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); connectAI(); } });
   if(geminiKey){
+    // Saved key on this phone — verify it silently and reconnect.
     geminiCall('Say hi in one short sentence and confirm you know the Elite playbook.').then(function(reply){
       document.getElementById('aiSetup').style.display='none';
       document.getElementById('aiConnected').style.display='block';
@@ -814,7 +1029,7 @@ var QUICK=['What goes with navy?','Is rust + cream elite?','Build me an outfit f
       pushMsg('bot',reply);
     }).catch(function(){
       document.getElementById('apiKeyInput').value=geminiKey;
-      geminiKey='';
+      showKeyErr('Your saved key did not connect — check it and tap Connect.');
     });
   }
 })();
@@ -1000,11 +1215,11 @@ function connectAI(){
   geminiKey=key;
   geminiModel=''; // re-discover which models THIS key can use
   geminiCall('Say hi in one short sentence and confirm you know the Elite playbook.').then(function(reply){
+    try{ localStorage.setItem('eliteGeminiKey',geminiKey); }catch(e){}
     btn.disabled=false; btn.textContent='Connect';
     inp.value='';
     document.getElementById('aiSetup').style.display='none';
     document.getElementById('aiConnected').style.display='block';
-    try{ localStorage.setItem('eliteGeminiKey', geminiKey); }catch(e){}
     setChatEnabled(true);
     chatHistory.push({role:'user',text:'Say hi in one short sentence and confirm you know the Elite playbook.'});
     chatHistory.push({role:'model',text:reply});
