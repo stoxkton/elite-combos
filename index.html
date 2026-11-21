@@ -328,7 +328,7 @@ a{color:inherit}
         <li><b class="num">2</b><span>Tap <b>Create API key</b> (make a new project if it asks), then copy the long key.</span></li>
         <li><b class="num">3</b><span>Come back here, paste the key, and tap <b>Connect</b>.</span></li>
       </ol>
-      <div class="getkey-row"><a class="linkbtn" href="https://aistudio.google.com" target="_blank" rel="noopener">Get my free key ↗</a></div>
+      <div class="getkey-row"><a class="linkbtn" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Get my free key ↗</a></div>
       <div class="key-row">
         <input type="password" id="apiKeyInput" placeholder="Paste your Gemini key (starts with AIza…)" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Gemini API key">
         <button type="button" id="connectBtn" onclick="connectAI()">Connect</button>
@@ -793,7 +793,7 @@ function askAboutPiece(i){
 // written into the page, never stored, and is sent only to Google's API.
 var geminiKey='';
 try{ geminiKey=localStorage.getItem('eliteGeminiKey')||''; }catch(e){ geminiKey=''; }
-var geminiModel='gemini-2.5-flash';
+var geminiModel='gemini-3.8-flash';
 var chatHistory=[]; // {role:'user'|'model', text}
 var aiBusy=false;
 var QUICK=['What goes with navy?','Is rust + cream elite?','Build me an outfit from my closet','What should I wear today?','Roast my worst combo idea','What color should I buy next?'];
@@ -871,34 +871,55 @@ function geminiCall(userText){
   var body={
     systemInstruction:{parts:[{text:buildSystemPrompt()}]},
     contents:contents,
-    generationConfig:{temperature:0.7, maxOutputTokens:800}
+    generationConfig:{maxOutputTokens:800}
   };
-  var models=[geminiModel,'gemini-2.0-flash','gemini-2.5-flash-lite'];
-  var tried={};
+  // Google retired the 2.x models for brand-new keys (404 "no longer available
+  // to new users") — a fresh key like the user's has never used them, so every
+  // 2.x name 404s. Try the current models that new keys CAN use first, keep the
+  // -latest aliases on v1beta as a moving fallback, and only then the old 2.5
+  // names for older keys that still have access to them.
+  var preferred=['gemini-3.8-flash','gemini-3.5-flash-lite','gemini-3.6-flash','gemini-flash-latest','gemini-flash-lite-latest','gemini-3.1-flash-lite','gemini-2.5-flash-lite','gemini-2.5-flash'];
+  var models=[]; var seen={};
+  [geminiModel].concat(preferred).forEach(function(m){ if(m&&!seen[m]){ seen[m]=true; models.push(m); } });
+  var last404=null;
   function attempt(idx){
-    if(idx>=models.length) return Promise.reject(new Error('nomodel'));
+    if(idx>=models.length){
+      var err=new Error(last404||'No Gemini model is available for this key.');
+      err.status=404; err.code='nomodel';
+      return Promise.reject(err);
+    }
     var model=models[idx];
-    if(tried[model]) return attempt(idx+1);
-    tried[model]=true;
     return fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{
       method:'POST',
       headers:{'Content-Type':'application/json','x-goog-api-key':geminiKey},
       body:JSON.stringify(body)
     }).then(function(r){
       return r.json().catch(function(){return {}}).then(function(data){
-        if(r.status===404) return attempt(idx+1);
+        if(r.status===404){
+          last404=(data&&data.error&&data.error.message)?data.error.message:last404;
+          return attempt(idx+1);
+        }
         if(!r.ok){
           var em=(data&&data.error&&data.error.message)?data.error.message:('HTTP '+r.status);
           var err=new Error(em); err.status=r.status; throw err;
         }
         geminiModel=model;
-        var parts=(data&&data.candidates&&data.candidates[0]&&data.candidates[0].content&&data.candidates[0].content.parts)||[];
+        var cand=data&&data.candidates&&data.candidates[0];
+        var parts=(cand&&cand.content&&cand.content.parts)||[];
         var out='';
         parts.forEach(function(pt){ if(pt.text) out+=pt.text; });
         out=out.replace(/^\s+|\s+$/g,'');
-        if(!out) throw new Error('empty');
+        if(!out){
+          var reason=(cand&&cand.finishReason)||(data&&data.promptFeedback&&data.promptFeedback.blockReason)||'';
+          var e2=new Error(reason?('empty:'+reason):'empty'); e2.status=200; throw e2;
+        }
         return out;
       });
+    }).catch(function(e){
+      // A network blip on one model shouldn't burn the whole chain only if it
+      // was a 404 fallthrough — real errors (bad key, quota) surface at once.
+      if(e&&e.code==='nomodel') throw e;
+      throw e;
     });
   }
   return attempt(0);
@@ -906,12 +927,15 @@ function geminiCall(userText){
 function friendlyError(err){
   var s=err&&err.status;
   var m=(err&&err.message)||'';
+  var code=err&&err.code;
+  if(code==='nomodel'||s===404||/^nomodel$/i.test(m)||/no longer available|not found for API version|is not found/i.test(m)) return 'That error was the app\u2019s fault, not your key\u2019s — Google retired the old AI models for new keys, so the app couldn\u2019t find one to talk to. This build now uses Google\u2019s current models. Keep the same key pasted in and tap Connect again.';
   if(s===400&&/API key not valid|API_KEY_INVALID/i.test(m)) return 'Google says that key isn\u2019t valid. Double-check you copied the whole thing — or create a fresh one in AI Studio and paste it again.';
   if(s===400) return 'Google rejected that request ('+m+'). Check the key is complete and try again.';
   if(s===401||s===403) return 'Google won\u2019t accept that key (it may be restricted or from a project without the Gemini API on). Try creating a brand-new key in a new project in AI Studio.';
   if(s===429) return 'You\u2019ve hit Google\u2019s free-tier limit for the moment. Give it a minute and try again — the free tier refills.';
+  if(/^empty/.test(m)) return 'The AI came back empty that time — try sending that again, or rephrase it a little.';
   if(/Failed to fetch|NetworkError/i.test(m)) return 'Couldn\u2019t reach Google — check your connection and try again.';
-  return 'Something went wrong talking to the AI: '+m+'. Try again in a moment.';
+  return 'Something went wrong talking to the AI. Try again in a moment.';
 }
 function connectAI(){
   var inp=document.getElementById('apiKeyInput');
