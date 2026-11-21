@@ -33,16 +33,22 @@ a{color:inherit}
 .cover-meta b{color:var(--ink);font-weight:800}
 .cover-rule{height:1px;background:rgba(0,0,0,.14);margin:16px 0 0}
 .credit{margin:10px 0 0;font-size:11px;color:var(--muted);line-height:1.5}
-/* TAB BAR — super glassy floating pill, no black, like frosted glass */
-.tabbar-wrap{position:fixed;left:0;right:0;bottom:0;z-index:80;padding:0 16px calc(18px + env(safe-area-inset-bottom, 0px));display:flex;justify-content:center;pointer-events:none}
-.tabbar{pointer-events:auto;width:100%;max-width:560px;background:rgba(255,255,255,.38);-webkit-backdrop-filter:blur(28px) saturate(200%) brightness(1.08);backdrop-filter:blur(28px) saturate(200%) brightness(1.08);border:1px solid rgba(255,255,255,.68);box-shadow:0 18px 44px rgba(0,0,0,.10),0 4px 16px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35);border-radius:999px;display:grid;grid-template-columns:repeat(5,1fr);padding:7px;gap:3px}
-.tabbar button{background:transparent;color:#7a7a7a;border:0;border-radius:999px;padding:10px 2px 9px;font-size:10px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;line-height:1;transition:background .22s ease,color .22s ease,box-shadow .22s ease}
-.tabbar button svg{width:21px;height:21px;flex:0 0 21px;display:block;opacity:.85}
+/* TAB BAR — iOS 26 Liquid Glass: floating capsule + sliding lens over the active tab */
+.tabbar-wrap{position:fixed;left:0;right:0;bottom:0;z-index:80;padding:0 18px calc(16px + env(safe-area-inset-bottom, 0px));display:flex;justify-content:center;pointer-events:none}
+.tabbar{pointer-events:auto;position:relative;isolation:isolate;width:100%;max-width:540px;background:linear-gradient(180deg,rgba(255,255,255,.46),rgba(255,255,255,.24) 52%,rgba(255,255,255,.32));-webkit-backdrop-filter:blur(30px) saturate(210%) brightness(1.06);backdrop-filter:blur(30px) saturate(210%) brightness(1.06);border:1px solid rgba(255,255,255,.65);box-shadow:0 20px 46px rgba(20,22,30,.14),0 4px 16px rgba(20,22,30,.06),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.28),inset 1px 0 0 rgba(255,255,255,.35),inset -1px 0 0 rgba(255,255,255,.35);border-radius:999px;display:grid;grid-template-columns:repeat(5,1fr);padding:6px;gap:2px}
+.tabbar::before{content:"";position:absolute;top:1px;left:10%;right:10%;height:22px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0));pointer-events:none;z-index:0}
+/* The lens — a clear glass droplet that slides to the active tab, taller than the bar's inner track, with the rainbow refraction fringe from iOS 26 */
+.tab-lens{position:absolute;top:-3px;bottom:-3px;left:0;width:100px;border-radius:999px;z-index:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(255,255,255,.46) 48%,rgba(255,255,255,.68));-webkit-backdrop-filter:blur(6px) saturate(190%) brightness(1.08);backdrop-filter:blur(6px) saturate(190%) brightness(1.08);border:1px solid rgba(255,255,255,.95);box-shadow:0 10px 26px rgba(20,22,30,.16),0 2px 8px rgba(20,22,30,.08),inset 0 1px 0 rgba(255,255,255,1),inset 0 -1px 1px rgba(255,255,255,.55),inset 0 0 12px rgba(255,255,255,.35);transition:transform .5s cubic-bezier(.32,.9,.24,1.18),width .5s cubic-bezier(.32,.9,.24,1.18);will-change:transform,width}
+.tab-lens::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;background:conic-gradient(from 200deg,rgba(255,90,90,.65),rgba(255,190,40,.5),rgba(90,230,150,.4),rgba(40,170,255,.6),rgba(170,110,255,.55),rgba(255,90,90,.65));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;opacity:.6}
+.tab-lens::after{content:"";position:absolute;top:1px;left:14%;right:14%;height:46%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,0));opacity:.85;pointer-events:none}
+.tabbar button{position:relative;z-index:1;background:transparent;color:#5f5f5c;border:0;border-radius:999px;padding:9px 2px 8px;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;line-height:1;transition:color .25s ease}
+.tabbar button svg{width:22px;height:22px;flex:0 0 22px;display:block;opacity:.78;transition:transform .35s cubic-bezier(.32,.9,.24,1.2),opacity .25s ease}
 .tabbar button span{display:block;line-height:1}
-.tabbar button:active{transform:scale(.96)}
-.tabbar button.active{background:rgba(255,255,255,.88);color:#1a1a1a;box-shadow:0 4px 16px rgba(0,0,0,.09),0 1px 4px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,1),inset 0 0 0 1px rgba(255,255,255,.9);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
-.tabbar button.active svg{opacity:1}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.tabbar{background:rgba(255,255,255,.92)}.tabbar button.active{background:#fff}}
+.tabbar button:active{transform:scale(.94)}
+.tabbar button.active{background:transparent;color:#111;box-shadow:none}
+.tabbar button.active svg{opacity:1;transform:scale(1.14)}
+@media (prefers-reduced-motion: reduce){.tab-lens{transition:none}.tabbar button svg{transition:none}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.tabbar{background:rgba(255,255,255,.92)}.tab-lens{background:rgba(255,255,255,.96)}}
 /* VIEW HEAD — every tab opens with the same header, so no view feels bolted on */
 .view-head{margin:6px 4px 16px}
 .view-head h2{font-size:24px;line-height:1.05;margin:0;font-weight:900;text-transform:uppercase;letter-spacing:.01em}
@@ -306,6 +312,7 @@ a{color:inherit}
 
 <div class="tabbar-wrap">
   <nav class="tabbar" aria-label="Main">
+    <span class="tab-lens" id="tabLens" aria-hidden="true"></span>
     <button id="nav-colors" class="active" onclick="showTab('colors')" aria-label="Colors"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="9.5" y="4" width="5" height="16" rx="1.5"/><rect x="16" y="4" width="5" height="16" rx="1.5"/></svg><span>Colors</span></button>
     <button id="nav-checker" onclick="showTab('checker')" aria-label="Checker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8.5 12.5l2.4 2.4 4.6-5.4"/></svg><span>Checker</span></button>
     <button id="nav-shuffle" onclick="showTab('shuffle')" aria-label="Shuffle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg><span>Shuffle</span></button>
@@ -413,15 +420,27 @@ SECTIONS.forEach(function(s){
 });
 document.getElementById('sections').innerHTML=secHtml;
 
-// Tabs
+// Tabs — iOS 26 style: a liquid-glass lens slides to the active tab
 var currentTab='colors';
+function positionLens(){
+  var lens=document.getElementById('tabLens');
+  var active=document.querySelector('.tabbar button.active');
+  if(!lens||!active) return;
+  var w=active.offsetWidth+12;
+  lens.style.width=w+'px';
+  lens.style.transform='translateX('+(active.offsetLeft-6)+'px)';
+}
 function showTab(t){
   currentTab=t;
   ['colors','checker','shuffle','detail','closet','ask'].forEach(function(v){document.getElementById('view-'+v).classList.remove('active')});
   document.getElementById('view-'+t).classList.add('active');
   ['colors','checker','shuffle','closet','ask'].forEach(function(v){document.getElementById('nav-'+v).classList.toggle('active', v===t || (t==='detail'&&v==='colors'))});
+  positionLens();
   window.scrollTo({top:0,behavior:'smooth'});
 }
+window.addEventListener('resize',positionLens);
+window.addEventListener('load',function(){positionLens();setTimeout(positionLens,120);});
+setTimeout(positionLens,60);
 function goColors(){showTab('colors')}
 function openDetail(name){
   var partners=COMBOS[name]||[];
