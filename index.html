@@ -15,27 +15,32 @@
 <style>
 :root{
   --bg:#e9e9e9; --bg2:#e2e2e0; --card:#ffffff; --ink:#111111; --muted:#6f6f6f; --line:#d8d8d8;
-  --radius:18px;
+  --radius:16px;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:92px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:28px}
 button{font:inherit;cursor:pointer;min-height:44px}
 a{color:inherit}
-/* HEADER */
-.cover{padding:34px 20px 18px;max-width:720px;margin:0 auto}
+/* HEADER — compact masthead, everything on one tidy band */
+.cover{padding:22px 20px 16px;max-width:720px;margin:0 auto}
 .cover-top{display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);font-weight:600}
-.cover h1{font-size:64px;line-height:.88;letter-spacing:.02em;margin:18px 0 0;font-weight:900;text-transform:uppercase}
-.cover h1 span{display:block}
-.cover h1 .thin{font-weight:300;letter-spacing:.14em;font-size:28px;line-height:1.1;margin-top:10px}
-.cover-rule{height:1px;background:#111;margin:22px 0 14px}
-.cover-sub{display:flex;justify-content:space-between;gap:16px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;line-height:1.6}
-.cover-sub b{font-weight:800}
-.credit{margin-top:14px;font-size:11px;letter-spacing:.04em;color:var(--muted);text-transform:none;line-height:1.5;letter-spacing:0}
-.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:20px}
-.stat{background:var(--card);border-radius:14px;padding:14px 12px}
-.stat strong{display:block;font-size:22px;line-height:1}
-.stat span{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.cover-row{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-top:14px}
+.cover h1{font-size:34px;line-height:.95;letter-spacing:.01em;margin:0;font-weight:900;text-transform:uppercase}
+.cover h1 .thin{display:block;font-weight:300;letter-spacing:.16em;font-size:13px;line-height:1.3;margin-top:6px}
+.cover-meta{text-align:right;font-size:11px;letter-spacing:.14em;text-transform:uppercase;line-height:1.7;color:var(--muted);white-space:nowrap}
+.cover-meta b{color:var(--ink);font-weight:800}
+.cover-rule{height:1px;background:#111;margin:16px 0 0}
+.credit{margin:10px 0 0;font-size:11px;color:var(--muted);line-height:1.5}
+/* TAB BAR — one integrated bar under the masthead, part of the layout (not a floating add-on) */
+.tabbar-wrap{position:sticky;top:0;z-index:60;background:var(--bg);padding:12px 16px 10px}
+.tabbar{max-width:720px;margin:0 auto;background:#111;color:#fff;border-radius:14px;display:grid;grid-template-columns:repeat(5,1fr);padding:4px}
+.tabbar button{background:transparent;color:#a8a8a8;border:0;border-radius:10px;padding:11px 2px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;min-height:44px}
+.tabbar button.active{background:#fff;color:#111}
+/* VIEW HEAD — every tab opens with the same header, so no view feels bolted on */
+.view-head{margin:6px 4px 16px}
+.view-head h2{font-size:24px;line-height:1.05;margin:0;font-weight:900;text-transform:uppercase;letter-spacing:.01em}
+.view-head p{margin:7px 0 0;color:var(--muted);font-size:13.5px;line-height:1.55;max-width:52ch}
 /* LAYOUT */
 .wrap{max-width:720px;margin:0 auto;padding:6px 16px 24px}
 .view{display:none}
@@ -57,7 +62,7 @@ a{color:inherit}
 .tile-meta{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:0 4px 6px;font-weight:600}
 /* DETAIL */
 .backbtn{background:#111;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;margin:8px 0 16px}
-.detail-hero{border-radius:22px;overflow:hidden;background:var(--card)}
+.detail-hero{border-radius:var(--radius);overflow:hidden;background:var(--card)}
 .detail-swatch{height:280px;position:relative}
 .detail-swatch-label{position:absolute;left:20px;bottom:18px;right:20px}
 .detail-swatch-label .k{font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;opacity:.75}
@@ -79,7 +84,7 @@ a{color:inherit}
 .dot{width:34px;height:34px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.18)}
 .dot+.dot{margin-left:-10px}
 /* CHECKER */
-.panel{background:var(--card);border-radius:20px;padding:18px;margin-bottom:14px}
+.panel{background:var(--card);border-radius:var(--radius);padding:18px;margin-bottom:12px}
 .panel h3{font-size:11px;letter-spacing:.26em;text-transform:uppercase;margin:0 0 4px}
 .panel p{margin:0 0 14px;color:var(--muted);font-size:13px;line-height:1.5}
 .pick-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
@@ -97,13 +102,13 @@ a{color:inherit}
 .chip i{width:20px;height:20px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.1)}
 .mini-head{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:18px 0 4px}
 /* SHUFFLE */
-.shuffle-hero{background:#111;color:#fff;border-radius:22px;padding:22px}
-.shuffle-hero h2{font-size:30px;line-height:.95;text-transform:uppercase;margin:0 0 8px;font-weight:900}
-.shuffle-hero p{color:#bdbdbd;margin:0;font-size:14px;line-height:1.6}
+.shuffle-hero{background:#111;color:#fff;border-radius:var(--radius);padding:20px}
+.shuffle-hero h2{font-size:22px;line-height:1.05;text-transform:uppercase;margin:0 0 6px;font-weight:900}
+.shuffle-hero p{color:#bdbdbd;margin:0;font-size:13.5px;line-height:1.6}
 .deal-btn{background:#fff;color:#111;border:0;border-radius:999px;padding:14px 22px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:900;width:100%;margin-top:18px;min-height:52px}
 .deal-btn.dark{background:#111;color:#fff}
 .outfit{display:grid;gap:12px;margin-top:16px}
-.look{border-radius:20px;overflow:hidden;background:var(--card)}
+.look{border-radius:var(--radius);overflow:hidden;background:var(--card)}
 .look-swatch{height:150px;display:flex;align-items:flex-end;padding:16px}
 .look-meta{padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
 .look-meta strong{font-size:16px;letter-spacing:.12em;text-transform:uppercase}
@@ -112,12 +117,8 @@ a{color:inherit}
 .formula{margin-top:18px;border-top:1px solid var(--line);padding-top:16px;text-align:left}
 .formula .k{font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:800;color:var(--muted);text-align:center}
 .formula p{margin:8px 0 0;font-size:15px;line-height:1.6;font-weight:700;text-align:center}
-.empty{border:1.5px dashed #bdbdbd;border-radius:20px;padding:28px 20px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6;margin-top:16px;background:rgba(255,255,255,.45)}
-/* BOTTOM NAV */
-.nav{position:fixed;left:12px;right:12px;bottom:12px;max-width:720px;margin:0 auto;background:#111;color:#fff;border-radius:999px;display:grid;grid-template-columns:repeat(5,1fr);padding:6px;z-index:50;box-shadow:0 12px 32px rgba(0,0,0,.22)}
-.nav button{background:transparent;color:#a8a8a8;border:0;border-radius:999px;padding:12px 2px;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;min-height:48px}
-.nav button.active{background:#fff;color:#111}
-.footer{max-width:720px;margin:0 auto;padding:10px 20px 8px;font-size:11px;color:var(--muted);line-height:1.6;text-align:center}
+.empty{border:1.5px dashed #bdbdbd;border-radius:var(--radius);padding:26px 20px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6;margin-top:14px;background:rgba(255,255,255,.45)}
+.footer{max-width:720px;margin:0 auto;padding:18px 20px 4px;font-size:11px;color:var(--muted);line-height:1.6;text-align:center;border-top:1px solid var(--line)}
 /* LINKS */
 .linkbtn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid #111;background:transparent;color:#111;border-radius:999px;padding:10px 18px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:800;text-decoration:none;min-height:44px}
 .linkbtn:active{background:#111;color:#fff}
@@ -127,7 +128,7 @@ a{color:inherit}
 .combo-link-row{margin-top:16px;text-align:center}
 .outfit-link-row{margin-top:16px;text-align:center}
 /* WEATHER */
-.today{display:none;background:#111;color:#fff;border-radius:20px;padding:18px 20px;margin:4px 0 6px}
+.today{display:none;background:#111;color:#fff;border-radius:var(--radius);padding:18px 20px;margin:0 0 6px}
 .today.show{display:block}
 .today .k{font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:800;color:#bdbdbd}
 .today-main{display:flex;align-items:baseline;gap:14px;margin-top:8px;flex-wrap:wrap}
@@ -166,7 +167,11 @@ a{color:inherit}
 .closet-look .ci{flex:1;min-width:0}
 .closet-look .ci strong{display:block;font-size:14px;letter-spacing:.08em;text-transform:uppercase}
 .closet-look .ci span{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.build-card{background:var(--card);border-radius:var(--radius);padding:18px;margin-top:4px}
+.build-card h3{font-size:11px;letter-spacing:.26em;text-transform:uppercase;margin:0 0 4px}
+.build-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
 /* ASK */
+.chat-card{background:var(--card);border-radius:var(--radius);padding:16px}
 .chat{display:grid;gap:10px;margin-bottom:14px}
 .msg{max-width:88%;padding:12px 15px;border-radius:18px;font-size:14px;line-height:1.55;white-space:pre-line;overflow-wrap:break-word}
 .msg.bot{background:var(--card);border:1px solid var(--line);border-bottom-left-radius:6px;justify-self:start}
@@ -182,20 +187,28 @@ a{color:inherit}
 <body>
 <header class="cover">
   <div class="cover-top"><span>Erik Xei</span><span>Playbook — Vol. 01</span></div>
-  <h1><span>Elite</span><span class="thin">Color Combo<br>Playbook</span></h1>
-  <div class="cover-rule"></div>
-  <div class="cover-sub"><span><b>25 colors</b><br>4 sections</span><span style="text-align:right"><b>Elite pairs only</b><br>No guessing</span></div>
-  <p class="credit">Combos from the Elite Color Combo Playbook by Erik Xei — personal use.</p>
-  <div class="stats">
-    <div class="stat"><strong>25</strong><span>Colors</span></div>
-    <div class="stat"><strong id="pairCount">—</strong><span>Pairings listed</span></div>
-    <div class="stat"><strong>5</strong><span>Ways to play</span></div>
+  <div class="cover-row">
+    <h1>Elite<span class="thin">Color Combo Playbook</span></h1>
+    <div class="cover-meta"><b>25</b> colors · <b id="pairCount">—</b> pairings<br>Elite pairs only — no guessing</div>
   </div>
+  <div class="cover-rule"></div>
+  <p class="credit">Combos from the Elite Color Combo Playbook by Erik Xei — personal use.</p>
 </header>
+
+<div class="tabbar-wrap">
+  <nav class="tabbar" aria-label="Main">
+    <button id="nav-colors" class="active" onclick="showTab('colors')">Colors</button>
+    <button id="nav-checker" onclick="showTab('checker')">Checker</button>
+    <button id="nav-shuffle" onclick="showTab('shuffle')">Shuffle</button>
+    <button id="nav-closet" onclick="showTab('closet')">Closet</button>
+    <button id="nav-ask" onclick="showTab('ask')">Ask</button>
+  </nav>
+</div>
 
 <main class="wrap">
   <!-- COLORS -->
   <section id="view-colors" class="view active">
+    <div class="view-head"><h2>Colors</h2><p>All 25 playbook colors in their four sections. Tap any color to see its elite pairs and how to wear it.</p></div>
     <div class="today" id="todayStrip" aria-live="polite">
       <div class="k">Today — American Fork, Utah</div>
       <div class="today-main"><span class="today-temp" id="todayTemp"></span><span class="today-cond" id="todayCond"></span><span class="today-hilo" id="todayHilo"></span></div>
@@ -212,6 +225,7 @@ a{color:inherit}
 
   <!-- CHECKER -->
   <section id="view-checker" class="view">
+    <div class="view-head"><h2>Checker</h2><p>Pick any two colors and find out instantly whether the playbook calls them elite — plus how to wear them if they are.</p></div>
     <div class="panel">
       <h3>Color A</h3><p>Tap a color for the first piece.</p>
       <div class="pick-grid" id="pickA"></div>
@@ -225,8 +239,9 @@ a{color:inherit}
 
   <!-- SHUFFLE -->
   <section id="view-shuffle" class="view">
+    <div class="view-head"><h2>Shuffle</h2><p>Don't want to think? Get a ready-to-wear trio dealt from the playbook.</p></div>
     <div class="shuffle-hero">
-      <h2>Deal an<br>outfit</h2>
+      <h2>Deal an outfit</h2>
       <p>Three colors — top, bottom, accent — where every pair is an elite combo in the playbook. No clashes, no filler.</p>
       <button class="deal-btn" onclick="deal(true)">Deal an outfit</button>
     </div>
@@ -237,9 +252,10 @@ a{color:inherit}
 
   <!-- CLOSET -->
   <section id="view-closet" class="view">
+    <div class="view-head"><h2>My Closet</h2><p>Your actual clothes, matched with the playbook. Add a piece, tag its color, and build outfits from what you own.</p></div>
     <div class="panel">
       <h3>Add a piece</h3>
-      <p>Take a photo of a shirt, pants, shoes — anything you wear. Tag its playbook color and the app builds outfits from your actual clothes.</p>
+      <p>Take a photo of a shirt, pants, shoes — anything you wear — and tag its playbook color.</p>
       <div class="add-row">
         <button class="add-btn" onclick="document.getElementById('fileCam').click()">Take photo</button>
         <button class="add-btn ghost" onclick="document.getElementById('fileLib').click()">Upload photo</button>
@@ -268,16 +284,19 @@ a{color:inherit}
     <div class="section-head"><h2>My closet</h2><div class="line"></div><span class="count" id="closetCount">0 pieces</span></div>
     <div id="closetWrap"></div>
     <div class="section-head"><h2>Outfit from my closet</h2><div class="line"></div></div>
-    <button class="deal-btn dark" onclick="buildClosetOutfit()">Build an outfit from my clothes</button>
+    <div class="build-card">
+      <h3>Build it for me</h3>
+      <p>Pulls an elite outfit together from the pieces above — every pair checked against the book.</p>
+      <button class="deal-btn dark" onclick="buildClosetOutfit()">Build an outfit from my clothes</button>
+    </div>
     <div id="closetOutfit"></div>
   </section>
 
   <!-- ASK -->
   <section id="view-ask" class="view">
-    <div class="panel">
-      <h3>Ask the playbook</h3>
-      <p>Style questions, answered from the playbook and your closet. Try one of these, or type your own.</p>
-      <div class="quick" id="quickRow"></div>
+    <div class="view-head"><h2>Ask</h2><p>Style questions, answered from the playbook and your closet. Tap a question or type your own.</p></div>
+    <div class="quick" id="quickRow"></div>
+    <div class="chat-card">
       <div class="chat" id="chatLog" aria-live="polite"></div>
       <form class="ask-bar" onsubmit="return sendAsk(event)">
         <input type="text" id="askInput" placeholder="Ask about a color, a combo, the weather…" autocomplete="off" maxlength="200" aria-label="Ask a style question">
@@ -288,14 +307,6 @@ a{color:inherit}
 </main>
 
 <p class="footer">Every pairing on this page comes straight from the book. If it is not listed, it is not called elite here.</p>
-
-<nav class="nav" aria-label="Main">
-  <button id="nav-colors" class="active" onclick="showTab('colors')">Colors</button>
-  <button id="nav-checker" onclick="showTab('checker')">Checker</button>
-  <button id="nav-shuffle" onclick="showTab('shuffle')">Shuffle</button>
-  <button id="nav-closet" onclick="showTab('closet')">Closet</button>
-  <button id="nav-ask" onclick="showTab('ask')">Ask</button>
-</nav>
 
 <script>
 var COLORS = {
