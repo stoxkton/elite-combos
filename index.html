@@ -9,8 +9,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Elite Combos">
-<link rel="icon" href="apple-touch-icon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="data:,">
 <title>Elite Combos</title>
 <style>
 :root{
@@ -114,8 +114,8 @@ a{color:inherit}
 .formula p{margin:8px 0 0;font-size:15px;line-height:1.6;font-weight:700;text-align:center}
 .empty{border:1.5px dashed #bdbdbd;border-radius:20px;padding:28px 20px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6;margin-top:16px;background:rgba(255,255,255,.45)}
 /* BOTTOM NAV */
-.nav{position:fixed;left:12px;right:12px;bottom:12px;max-width:720px;margin:0 auto;background:#111;color:#fff;border-radius:999px;display:grid;grid-template-columns:1fr 1fr 1fr;padding:6px;z-index:50;box-shadow:0 12px 32px rgba(0,0,0,.22)}
-.nav button{background:transparent;color:#a8a8a8;border:0;border-radius:999px;padding:12px 6px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;min-height:48px}
+.nav{position:fixed;left:12px;right:12px;bottom:12px;max-width:720px;margin:0 auto;background:#111;color:#fff;border-radius:999px;display:grid;grid-template-columns:repeat(5,1fr);padding:6px;z-index:50;box-shadow:0 12px 32px rgba(0,0,0,.22)}
+.nav button{background:transparent;color:#a8a8a8;border:0;border-radius:999px;padding:12px 2px;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;min-height:48px}
 .nav button.active{background:#fff;color:#111}
 .footer{max-width:720px;margin:0 auto;padding:10px 20px 8px;font-size:11px;color:var(--muted);line-height:1.6;text-align:center}
 /* LINKS */
@@ -137,6 +137,46 @@ a{color:inherit}
 .today-line{margin:12px 0 0;font-size:14px;line-height:1.6;color:#e8e8e8}
 .shuffle-weather{display:none;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-top:14px;text-align:center}
 .shuffle-weather.show{display:block}
+/* CLOSET */
+.add-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.add-btn{border:0;border-radius:999px;padding:14px 10px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:900;min-height:52px;background:#111;color:#fff}
+.add-btn.ghost{background:#fff;color:#111;border:1.5px solid #111}
+.session-note{font-size:11px;color:var(--muted);text-align:center;margin:10px 0 0;line-height:1.5}
+.pending{display:none}
+.pending.show{display:block}
+.pending-img{width:100%;height:220px;object-fit:cover;border-radius:14px;border:1px solid rgba(0,0,0,.08);background:#f3f3f3}
+.field{margin-top:14px}
+.field label{display:block;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:6px}
+.field select,.field input[type=text]{width:100%;font:inherit;font-size:15px;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);min-height:48px}
+.type-row{display:flex;flex-wrap:wrap;gap:8px}
+.type-chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;min-height:40px}
+.type-chip.sel{border-color:#111;background:#111;color:#fff}
+.closet-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+@media(min-width:560px){.closet-grid{grid-template-columns:1fr 1fr 1fr}}
+.item{background:var(--card);border-radius:var(--radius);padding:10px;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+.item img{width:100%;height:132px;object-fit:cover;border-radius:12px;border:1px solid rgba(0,0,0,.08);display:block;background:#f3f3f3}
+.item-name{font-size:13px;font-weight:800;letter-spacing:.06em;padding:10px 4px 2px;line-height:1.3}
+.item-meta{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:0 4px 4px}
+.item-meta i{width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.12);flex:0 0 14px}
+.item-actions{display:flex;gap:8px;padding:6px 4px 4px}
+.mini-btn{border:1.5px solid #111;background:#fff;color:#111;border-radius:999px;padding:7px 12px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;min-height:38px}
+.mini-btn.danger{border-color:var(--line);color:var(--muted)}
+.closet-look{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-top:12px}
+.closet-look img{width:72px;height:72px;object-fit:cover;border-radius:12px;border:1px solid rgba(0,0,0,.08);flex:0 0 72px;background:#f3f3f3}
+.closet-look .ci{flex:1;min-width:0}
+.closet-look .ci strong{display:block;font-size:14px;letter-spacing:.08em;text-transform:uppercase}
+.closet-look .ci span{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+/* ASK */
+.chat{display:grid;gap:10px;margin-bottom:14px}
+.msg{max-width:88%;padding:12px 15px;border-radius:18px;font-size:14px;line-height:1.55;white-space:pre-line;overflow-wrap:break-word}
+.msg.bot{background:var(--card);border:1px solid var(--line);border-bottom-left-radius:6px;justify-self:start}
+.msg.me{background:#111;color:#fff;border-bottom-right-radius:6px;justify-self:end}
+.msg b{font-weight:800}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.quick button{border:1.5px solid #111;background:#fff;color:#111;border-radius:999px;padding:9px 14px;font-size:11px;letter-spacing:.06em;font-weight:700;min-height:40px}
+.ask-bar{display:flex;gap:8px}
+.ask-bar input{flex:1;min-width:0;font:inherit;font-size:15px;padding:12px 14px;border:1.5px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);min-height:50px}
+.ask-bar button{border:0;border-radius:999px;background:#111;color:#fff;padding:12px 20px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;min-height:50px}
 </style>
 </head>
 <body>
@@ -149,7 +189,7 @@ a{color:inherit}
   <div class="stats">
     <div class="stat"><strong>25</strong><span>Colors</span></div>
     <div class="stat"><strong id="pairCount">—</strong><span>Pairings listed</span></div>
-    <div class="stat"><strong>3</strong><span>Ways to play</span></div>
+    <div class="stat"><strong>5</strong><span>Ways to play</span></div>
   </div>
 </header>
 
@@ -194,6 +234,57 @@ a{color:inherit}
     <div id="rerollWrap"></div>
     <p class="shuffle-weather" id="shuffleWeather"></p>
   </section>
+
+  <!-- CLOSET -->
+  <section id="view-closet" class="view">
+    <div class="panel">
+      <h3>Add a piece</h3>
+      <p>Take a photo of a shirt, pants, shoes — anything you wear. Tag its playbook color and the app builds outfits from your actual clothes.</p>
+      <div class="add-row">
+        <button class="add-btn" onclick="document.getElementById('fileCam').click()">Take photo</button>
+        <button class="add-btn ghost" onclick="document.getElementById('fileLib').click()">Upload photo</button>
+      </div>
+      <input type="file" id="fileCam" accept="image/*" capture="environment" hidden>
+      <input type="file" id="fileLib" accept="image/*" hidden>
+      <p class="session-note">Photos save on this phone — they'll still be here when you come back.</p>
+      <div class="pending" id="pendingWrap">
+        <div class="field"><img class="pending-img" id="pendingImg" alt="Photo of the clothing piece you just added"></div>
+        <div class="field">
+          <label for="pendingColor">Its playbook color</label>
+          <select id="pendingColor"></select>
+        </div>
+        <div class="field">
+          <label>What kind of piece is it?</label>
+          <div class="type-row" id="pendingTypes"></div>
+        </div>
+        <div class="field">
+          <label for="pendingName">Name it (optional)</label>
+          <input type="text" id="pendingName" maxlength="40" placeholder="e.g. Navy hoodie">
+        </div>
+        <button class="deal-btn dark" style="margin-top:16px" onclick="savePiece()">Add to my closet</button>
+        <button class="add-btn ghost" style="width:100%;margin-top:10px" onclick="cancelPending()">Cancel</button>
+      </div>
+    </div>
+    <div class="section-head"><h2>My closet</h2><div class="line"></div><span class="count" id="closetCount">0 pieces</span></div>
+    <div id="closetWrap"></div>
+    <div class="section-head"><h2>Outfit from my closet</h2><div class="line"></div></div>
+    <button class="deal-btn dark" onclick="buildClosetOutfit()">Build an outfit from my clothes</button>
+    <div id="closetOutfit"></div>
+  </section>
+
+  <!-- ASK -->
+  <section id="view-ask" class="view">
+    <div class="panel">
+      <h3>Ask the playbook</h3>
+      <p>Style questions, answered from the playbook and your closet. Try one of these, or type your own.</p>
+      <div class="quick" id="quickRow"></div>
+      <div class="chat" id="chatLog" aria-live="polite"></div>
+      <form class="ask-bar" onsubmit="return sendAsk(event)">
+        <input type="text" id="askInput" placeholder="Ask about a color, a combo, the weather…" autocomplete="off" maxlength="200" aria-label="Ask a style question">
+        <button type="submit">Ask</button>
+      </form>
+    </div>
+  </section>
 </main>
 
 <p class="footer">Every pairing on this page comes straight from the book. If it is not listed, it is not called elite here.</p>
@@ -202,6 +293,8 @@ a{color:inherit}
   <button id="nav-colors" class="active" onclick="showTab('colors')">Colors</button>
   <button id="nav-checker" onclick="showTab('checker')">Checker</button>
   <button id="nav-shuffle" onclick="showTab('shuffle')">Shuffle</button>
+  <button id="nav-closet" onclick="showTab('closet')">Closet</button>
+  <button id="nav-ask" onclick="showTab('ask')">Ask</button>
 </nav>
 
 <script>
@@ -307,9 +400,9 @@ document.getElementById('sections').innerHTML=secHtml;
 var currentTab='colors';
 function showTab(t){
   currentTab=t;
-  ['colors','checker','shuffle','detail'].forEach(function(v){document.getElementById('view-'+v).classList.remove('active')});
+  ['colors','checker','shuffle','detail','closet','ask'].forEach(function(v){document.getElementById('view-'+v).classList.remove('active')});
   document.getElementById('view-'+t).classList.add('active');
-  ['colors','checker','shuffle'].forEach(function(v){document.getElementById('nav-'+v).classList.toggle('active', v===t || (t==='detail'&&v==='colors'))});
+  ['colors','checker','shuffle','closet','ask'].forEach(function(v){document.getElementById('nav-'+v).classList.toggle('active', v===t || (t==='detail'&&v==='colors'))});
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function goColors(){showTab('colors')}
@@ -430,7 +523,8 @@ function deal(scroll){
   if(scroll) document.getElementById('outfitWrap').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// Weather — Lindon, Utah (Open-Meteo, no key)
+var WX=null;
+// Weather — American Fork, Utah (Open-Meteo, no key)
 function condWord(code){
   if(code===0||code===1) return 'Clear';
   if(code===2||code===3||code===45||code===48) return 'Cloudy';
@@ -462,6 +556,7 @@ function weatherLine(temp, code){
       var temp=Math.round(cur.temperature_2m);
       var code=cur.weather_code;
       var cond=condWord(code);
+      WX={temp:temp,code:code,cond:cond};
       document.getElementById('todayTemp').textContent=temp+'°F';
       document.getElementById('todayCond').textContent=cond;
       document.getElementById('todayHilo').textContent='H '+Math.round(day.temperature_2m_max[0])+'° · L '+Math.round(day.temperature_2m_min[0])+'°';
@@ -473,6 +568,250 @@ function weatherLine(temp, code){
     })
     .catch(function(){ /* strip stays hidden */ });
 })();
+
+// ---------- CLOSET (saved on this phone via localStorage) ----------
+var closet=[]; // {img, color, type, name}
+try{ var savedCloset=localStorage.getItem('eliteCloset'); if(savedCloset) closet=JSON.parse(savedCloset)||[]; }catch(e){ closet=[]; }
+function persistCloset(){ try{ localStorage.setItem('eliteCloset', JSON.stringify(closet)); }catch(e){} }
+var pendingImgData=null, pendingType='Top';
+var TYPES=['Top','Bottom','Layer','Shoes','Accessory'];
+(function(){
+  var sel=document.getElementById('pendingColor');
+  var h='';
+  NAMES.forEach(function(n){ h+='<option value="'+n+'">'+n+'</option>'; });
+  sel.innerHTML=h;
+  var tr=document.getElementById('pendingTypes');
+  var th='';
+  TYPES.forEach(function(t){ th+='<button type="button" class="type-chip'+(t===pendingType?' sel':'')+'" onclick="setPendingType(\''+t+'\')">'+t+'</button>'; });
+  tr.innerHTML=th;
+  document.getElementById('fileCam').addEventListener('change',function(){handleFile(this)});
+  document.getElementById('fileLib').addEventListener('change',function(){handleFile(this)});
+  renderCloset();
+})();
+function setPendingType(t){
+  pendingType=t;
+  var chips=document.getElementById('pendingTypes').children;
+  for(var i=0;i<chips.length;i++) chips[i].classList.toggle('sel', chips[i].textContent===t);
+}
+function handleFile(input){
+  var f=input.files&&input.files[0];
+  input.value='';
+  if(!f) return;
+  var url=URL.createObjectURL(f);
+  var img=new Image();
+  img.onload=function(){
+    var max=720, w=img.naturalWidth, hgt=img.naturalHeight;
+    var scale=Math.min(1, max/Math.max(w,hgt));
+    var c=document.createElement('canvas');
+    c.width=Math.round(w*scale); c.height=Math.round(hgt*scale);
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    URL.revokeObjectURL(url);
+    pendingImgData=c.toDataURL('image/jpeg',0.8);
+    document.getElementById('pendingImg').src=pendingImgData;
+    document.getElementById('pendingWrap').classList.add('show');
+    document.getElementById('pendingWrap').scrollIntoView({behavior:'smooth',block:'center'});
+  };
+  img.onerror=function(){ URL.revokeObjectURL(url); };
+  img.src=url;
+}
+function cancelPending(){
+  pendingImgData=null;
+  document.getElementById('pendingWrap').classList.remove('show');
+  document.getElementById('pendingName').value='';
+}
+function savePiece(){
+  if(!pendingImgData) return;
+  var color=document.getElementById('pendingColor').value;
+  var name=document.getElementById('pendingName').value.replace(/^\s+|\s+$/g,'');
+  closet.push({img:pendingImgData,color:color,type:pendingType,name:name||(color+' '+pendingType.toLowerCase())});
+  cancelPending();
+  renderCloset();
+  document.getElementById('closetOutfit').innerHTML='';
+  document.getElementById('closetWrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function removePiece(i){
+  closet.splice(i,1);
+  renderCloset();
+  document.getElementById('closetOutfit').innerHTML='';
+}
+function renderCloset(){
+  persistCloset();
+  document.getElementById('closetCount').textContent=closet.length+(closet.length===1?' piece':' pieces');
+  var w=document.getElementById('closetWrap');
+  if(!closet.length){
+    w.innerHTML='<div class="empty">Your closet is empty.<br>Take a photo of a piece above and it lands here — then the app can dress you from your own clothes.</div>';
+    return;
+  }
+  var h='<div class="closet-grid">';
+  closet.forEach(function(p,i){
+    var matchCount=0;
+    closet.forEach(function(q,j){ if(j!==i&&pairs(p.color,q.color)) matchCount++; });
+    h+='<div class="item"><img src="'+p.img+'" alt="Your '+p.name+'"><div class="item-name">'+esc(p.name)+'</div><div class="item-meta"><i style="background:'+hex(p.color)+'"></i>'+p.color+' · '+p.type+'</div><div class="item-meta" style="text-transform:none;letter-spacing:.02em">'+(matchCount?('Pairs with '+matchCount+(matchCount===1?' piece':' pieces')+' you own'):'No elite match in your closet yet')+'</div><div class="item-actions"><button class="mini-btn" onclick="askAboutPiece('+i+')">What goes with it?</button><button class="mini-btn danger" onclick="removePiece('+i+')">Remove</button></div></div>';
+  });
+  w.innerHTML=h+'</div>';
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function typeRank(t){return t==='Bottom'?0:(t==='Top'?1:(t==='Layer'?2:(t==='Shoes'?3:4)))}
+function buildClosetOutfit(){
+  var box=document.getElementById('closetOutfit');
+  if(closet.length<2){
+    box.innerHTML='<div class="empty">Add at least two pieces first — an outfit needs a top and a bottom that pair elite.</div>';
+    return;
+  }
+  var order=closet.map(function(p,i){return i});
+  shuffleArr(order);
+  var bottoms=order.filter(function(i){return closet[i].type==='Bottom'||closet[i].type==='Top'});
+  var found=null;
+  for(var bi=0;bi<bottoms.length&&!found;bi++){
+    var b=closet[bottoms[bi]];
+    for(var ti=0;ti<order.length&&!found;ti++){
+      if(order[ti]===bottoms[bi]) continue;
+      var t=closet[order[ti]];
+      if(!pairs(b.color,t.color)) continue;
+      var third=null;
+      for(var ai=0;ai<order.length;ai++){
+        if(order[ai]===bottoms[bi]||order[ai]===order[ti]) continue;
+        var a=closet[order[ai]];
+        if(pairs(b.color,a.color)&&pairs(t.color,a.color)){ third=a; break; }
+      }
+      found={bottom:b,top:t,third:third};
+    }
+  }
+  if(!found){
+    var owned={}; closet.forEach(function(p){owned[p.color]=true});
+    var tips=[];
+    closet.forEach(function(p){
+      (COMBOS[p.color]||[]).forEach(function(c){ if(!owned[c]) tips.push(c+' would unlock combos with your '+p.color.toLowerCase()+' piece'); });
+    });
+    box.innerHTML='<div class="empty">No elite combo in your closet yet — the pieces you own don\'t pair with each other in the book.<br><br>'+(tips.length?('Try adding: '+tips.slice(0,3).join(' · ')+'.'):'')+'</div>';
+    return;
+  }
+  var pieces=[found.top,found.bottom]; if(found.third) pieces.push(found.third);
+  pieces.sort(function(x,y){return typeRank(x.type)-typeRank(y.type)});
+  var h='';
+  pieces.forEach(function(p){
+    h+='<div class="closet-look"><img src="'+p.img+'" alt="Your '+p.name+'"><div class="ci"><strong>'+esc(p.name)+'</strong><span>'+p.color+' · '+p.type+'</span></div><span class="dot" style="background:'+hex(p.color)+'"></span></div>';
+  });
+  h+='<p style="color:var(--muted);font-size:13px;line-height:1.6;padding:10px 4px 0">Every pair in this outfit is an elite combo in the book — pulled from clothes you actually own.</p>';
+  h+='<div class="outfit-link-row"><a class="linkbtn" href="'+pinUrl(pieces.map(function(p){return p.color}).join(' ')+' outfit men')+'" target="_blank" rel="noopener">See outfits like this ↗</a></div>';
+  box.innerHTML=h;
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function askAboutPiece(i){
+  showTab('ask');
+  var p=closet[i];
+  pushMsg('me','What goes with my '+p.name.toLowerCase()+'?');
+  pushMsg('bot',answerFor('what goes with '+p.color));
+}
+
+// ---------- ASK (built-in assistant — answers from the playbook + your closet) ----------
+var QUICK=['What goes with navy?','Is rust + cream elite?','Build me an outfit','What should I wear today?','What do I own that works together?','What pairs with olive?'];
+(function(){
+  var h='';
+  QUICK.forEach(function(q){ h+='<button type="button" onclick="quickAsk(this)">'+q+'</button>'; });
+  document.getElementById('quickRow').innerHTML=h;
+  pushMsg('bot','Hey — I answer from the playbook. Ask me what goes with a color, whether two colors are elite, what to wear today, or say "build me an outfit". Once you add clothes in the Closet tab, I can dress you from your own stuff too.');
+})();
+function pushMsg(who,text){
+  var log=document.getElementById('chatLog');
+  var d=document.createElement('div');
+  d.className='msg '+who;
+  d.textContent=text;
+  log.appendChild(d);
+  d.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function quickAsk(btn){ var q=btn.textContent; pushMsg('me',q); pushMsg('bot',answerFor(q)); }
+function sendAsk(e){
+  e.preventDefault();
+  var inp=document.getElementById('askInput');
+  var q=inp.value.replace(/^\s+|\s+$/g,'');
+  if(!q) return false;
+  inp.value='';
+  pushMsg('me',q);
+  pushMsg('bot',answerFor(q));
+  return false;
+}
+function findColors(text){
+  var low=' '+text.toLowerCase()+' ';
+  var sorted=NAMES.slice().sort(function(a,b){return b.length-a.length});
+  var found=[];
+  sorted.forEach(function(n){
+    if(low.indexOf(' '+n.toLowerCase()+' ')>=0||low.indexOf(' '+n.toLowerCase()+'?')>=0||low.indexOf(' '+n.toLowerCase()+'.')>=0) found.push(n);
+  });
+  return found;
+}
+function ownedColors(){
+  var owned={};
+  closet.forEach(function(p){ (owned[p.color]=owned[p.color]||[]).push(p); });
+  return owned;
+}
+function closetOutfitText(){
+  if(closet.length<2) return 'Your closet needs at least two pieces before I can build from it — add photos in the Closet tab. From the book alone: '+formulaFor('Navy','Camel')+' That\'s Navy + Camel, an elite pair.';
+  for(var bi=0;bi<closet.length;bi++){
+    for(var ti=0;ti<closet.length;ti++){
+      if(bi===ti) continue;
+      var b=closet[bi], t=closet[ti];
+      if(!pairs(b.color,t.color)) continue;
+      var third=null;
+      for(var ai=0;ai<closet.length;ai++){
+        if(ai===bi||ai===ti) continue;
+        var a=closet[ai];
+        if(pairs(b.color,a.color)&&pairs(t.color,a.color)){ third=a; break; }
+      }
+      var s='From your own closet: '+t.name+' ('+t.color+') with '+b.name+' ('+b.color+')';
+      if(third) s+=' and '+third.name+' ('+third.color+')';
+      return s+'. Every pair there is elite in the book.';
+    }
+  }
+  return 'Nothing in your closet pairs elite with each other yet. Check the Closet tab — it shows what color to add to unlock combos with what you own.';
+}
+function answerFor(raw){
+  var text=raw.toLowerCase();
+  var cols=findColors(raw);
+  var owned=ownedColors();
+  // weather / today
+  if(/today|weather|cold|hot|rain|snow|warm|cool/.test(text)&&!/goes with|pairs with/.test(text)){
+    if(WX) return 'Right now in American Fork it\'s '+WX.temp+'°F and '+WX.cond.toLowerCase()+'. '+weatherLine(WX.temp,WX.code)+' Want me to build the outfit? Just say "build me an outfit".';
+    return 'I couldn\'t load the weather just now, but the rule from the book: cold means layer a statement top over a neutral base, heat means light colors — White, Cream, Beige, Baby Blue, Sage. Say "build me an outfit" and I\'ll deal you one.';
+  }
+  // build an outfit
+  if(/outfit|build me|dress me|put together|deal/.test(text)){
+    if(/closet|own|my clothes|i have/.test(text)||closet.length>=2) return closetOutfitText();
+    return 'From the book: '+formulaFor('Navy','Camel')+' (Navy + Camel — elite.) Or open the Shuffle tab and I\'ll deal you a full trio. Add clothes in the Closet tab and I can build from what you own instead.';
+  }
+  // what's in / works in my closet
+  if(/closet|do i own|i own|my clothes|works together/.test(text)){
+    if(!closet.length) return 'Your closet is empty right now. Head to the Closet tab, tap "Take photo", and add your pieces — then I can tell you exactly which of your clothes pair elite.';
+    var lines=['You have '+closet.length+(closet.length===1?' piece':' pieces')+': '+closet.map(function(p){return p.name+' ('+p.color+')'}).join(', ')+'.'];
+    var any=false;
+    closet.forEach(function(p){
+      var ms=closet.filter(function(q){return q!==p&&pairs(p.color,q.color)});
+      if(ms.length){ any=true; lines.push(p.color+' pairs with your '+ms.map(function(m){return m.color}).join(', ')+'.'); }
+    });
+    if(!any) lines.push('None of them pair elite with each other yet — the Closet tab shows which colors would unlock combos.');
+    return lines.join('\n');
+  }
+  // two colors -> verdict
+  if(cols.length>=2){
+    var a=cols[0], b=cols[1];
+    if(pairs(a,b)) return 'Yes — '+a+' + '+b+' is an elite combo in the book. Wear it like this: '+formulaFor(a,b);
+    return 'No — '+a+' + '+b+' isn\'t listed as elite in the book. '+a+' pairs with: '+(COMBOS[a]||[]).join(', ')+'. '+b+' pairs with: '+(COMBOS[b]||[]).join(', ')+'.';
+  }
+  // one color -> partners + wear note + closet angle
+  if(cols.length===1){
+    var c=cols[0];
+    var s=c+' pairs elite with: '+(COMBOS[c]||[]).join(', ')+'.\nHow to wear it: '+WEAR[c];
+    if(owned[c]&&owned[c].length){
+      var ms=closet.filter(function(q){return q.color!==c&&pairs(c,q.color)});
+      s+='\nYou own '+owned[c].map(function(p){return p.name}).join(', ')+'.';
+      s+=ms.length?(' It pairs in your closet with your '+ms.map(function(m){return m.name+' ('+m.color+')'}).join(', ')+'.'):' Nothing else in your closet pairs with it yet.';
+    }
+    return s;
+  }
+  if(/hello|hey|hi\b/.test(text)) return 'Hey. Ask me about any color — "what goes with rust?" — or say "build me an outfit".';
+  if(/thank/.test(text)) return 'Anytime. That\'s what the playbook is for.';
+  return 'I answer from the playbook — try "what goes with '+NAMES[Math.floor(Math.random()*NAMES.length)].toLowerCase()+'?", "is black + butter elite?", "what should I wear today?", or "build me an outfit".';
+}
 </script>
 </body>
 </html>
