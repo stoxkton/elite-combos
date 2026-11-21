@@ -185,7 +185,15 @@ body.theme-green .combo-link:active,body.theme-dark .combo-link:active{backgroun
 .pending-img{width:100%;height:220px;object-fit:cover;border-radius:14px;border:1px solid rgba(0,0,0,.08);background:var(--field)}
 .field{margin-top:14px}
 .field label{display:block;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:6px}
-.field select,.field input[type=text]{width:100%;font:inherit;font-size:16px;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:var(--field);color:var(--ink);min-height:48px}
+.field select,.field input[type=text],.field input[type=email],.field input[type=password]{width:100%;font:inherit;font-size:16px;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:var(--field);color:var(--ink);min-height:48px}
+/* PROFILE — sign-in card in Settings */
+.signin-btn{width:100%;margin-top:16px;border:1px solid var(--accent-deep);border-radius:999px;background:var(--accent);color:#fff7ec;padding:12px 18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;min-height:50px;box-shadow:0 6px 16px rgba(0,0,0,.14)}
+.signout-btn{width:100%;margin-top:16px;border:1px solid rgba(255,255,255,.8);border-radius:999px;background:var(--glass-strong);-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);color:var(--ink);padding:12px 18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;min-height:50px;box-shadow:0 4px 14px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.95)}
+.profile-head{display:flex;align-items:center;gap:14px;margin-top:4px}
+.avatar{flex:0 0 54px;width:54px;height:54px;border-radius:50%;background:var(--accent);color:#fff7ec;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;box-shadow:0 6px 16px rgba(0,0,0,.15)}
+.profile-meta{min-width:0;flex:1}
+.profile-meta strong{display:block;font-size:16px;letter-spacing:.02em;overflow-wrap:break-word}
+.profile-meta span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px;overflow-wrap:break-word}
 .type-row{display:flex;flex-wrap:wrap;gap:8px}
 .type-chip{border:1.5px solid var(--line);background:var(--field);color:var(--ink);border-radius:999px;padding:9px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;min-height:40px}
 .type-chip.sel{border-color:rgba(0,0,0,.22);background:rgba(255,255,255,.92);color:#2d2013;box-shadow:0 4px 12px rgba(0,0,0,.07),inset 0 1px 0 #fff}
@@ -505,15 +513,32 @@ body.ask-on .footer{display:none}
       <p class="settings-note" id="textLabel">Text — Auto (theme default)</p>
     </div>
     <div class="panel">
-      <h3 id="profileTitle">Profile</h3>
-      <div class="field" style="margin-top:4px">
-        <label for="setName">Your name</label>
-        <input type="text" id="setName" maxlength="30" placeholder="Your name" autocomplete="off" oninput="setName(this.value)">
+      <h3>Profile</h3>
+      <div id="profileOut">
+        <div class="field" style="margin-top:4px">
+          <label for="setName">Name</label>
+          <input type="text" id="setName" maxlength="30" placeholder="Your name" autocomplete="off" oninput="setName(this.value)">
+        </div>
+        <div class="field">
+          <label for="setEmail">Email</label>
+          <input type="email" id="setEmail" maxlength="60" placeholder="you@example.com" autocomplete="off" oninput="setEmail(this.value)">
+        </div>
+        <div class="field">
+          <label for="setPass">Password</label>
+          <input type="password" id="setPass" maxlength="60" placeholder="Password" autocomplete="off">
+        </div>
+        <p class="settings-note" id="signInNote" style="display:none">Add your name and email to sign in.</p>
+        <button type="button" class="signin-btn" onclick="signIn()">Sign in</button>
       </div>
-      <div class="field">
-        <label>Favorite color</label>
-        <div class="fav-grid" id="favGrid"></div>
-        <p class="settings-note" id="favLabel">No favorite picked yet.</p>
+      <div id="profileIn" style="display:none">
+        <div class="profile-head">
+          <span class="avatar" id="avatarLetter">?</span>
+          <div class="profile-meta">
+            <strong id="profileName"></strong>
+            <span id="profileEmail"></span>
+          </div>
+        </div>
+        <button type="button" class="signout-btn" onclick="signOut()">Sign out</button>
       </div>
     </div>
   </section>
@@ -1061,7 +1086,7 @@ function askAboutPiece(i){
 // All customization lives in this ONE object. applySettings() paints it onto
 // the page; saveSettings() is called on every change (in this build it just
 // applies — an outside patch adds persistence later). No storage here.
-var settings={theme:'warm',accent:'Rust',accentCustom:'',name:'',favColor:'',textColor:'',textCustom:''};
+var settings={theme:'warm',accent:'Rust',accentCustom:'',name:'',email:'',signedIn:false,textColor:'',textCustom:''};
 try{ var _s=JSON.parse(localStorage.getItem('eliteSettings')||'null'); if(_s){ for(var k in _s) settings[k]=_s[k]; } }catch(e){}
 var TEXT_COLORS={'':'Auto (theme default)','#26221e':'Ink Black','#000000':'Pure Black','#5a3a22':'Warm Brown','#f5efe0':'Cream','#ffffff':'White','#5f6b76':'Slate Grey'};
 var THEMES={
@@ -1109,8 +1134,17 @@ function setAccent(a){ settings.accent=a; settings.accentCustom=''; saveSettings
 function setAccentCustom(v){ if(v) settings.accentCustom=v; saveSettings(); }
 function setTextColor(c){ settings.textColor=c; settings.textCustom=''; saveSettings(); }
 function setTextCustom(v){ if(v) settings.textCustom=v; saveSettings(); }
-function setFavColor(n){ settings.favColor=(settings.favColor===n)?'':n; saveSettings(); }
 function setName(v){ settings.name=v; saveSettings(); }
+function setEmail(v){ settings.email=v; saveSettings(); }
+function signIn(){
+  var note=document.getElementById('signInNote');
+  if(!(settings.name||'').trim()||!(settings.email||'').trim()){ if(note) note.style.display='block'; return; }
+  if(note) note.style.display='none';
+  // The password is never stored anywhere — it is accepted, then cleared.
+  var pw=document.getElementById('setPass'); if(pw) pw.value='';
+  settings.signedIn=true; saveSettings();
+}
+function signOut(){ settings.signedIn=false; saveSettings(); }
 function renderSettings(){
   var tg=document.getElementById('themeGrid');
   if(tg){ for(var i=0;i<tg.children.length;i++) tg.children[i].classList.toggle('sel', tg.children[i].getAttribute('data-theme')===settings.theme); }
@@ -1122,17 +1156,14 @@ function renderSettings(){
   if(tr){ for(var m=0;m<tr.children.length;m++){ var tch=tr.children[m]; if(tch.getAttribute('data-custom-text')) tch.classList.toggle('sel', !!settings.textCustom); else tch.classList.toggle('sel', !settings.textCustom && tch.getAttribute('data-text')===settings.textColor); } }
   var tl=document.getElementById('textLabel'); if(tl) tl.textContent=settings.textCustom?('Text — Custom '+settings.textCustom.toUpperCase()):('Text — '+(TEXT_COLORS[settings.textColor]||'Auto (theme default)'));
   var tci=document.getElementById('textCustomInput'); if(tci && document.activeElement!==tci) tci.value=settings.textCustom||settings.textColor||((THEMES[settings.theme]||THEMES.warm).ink);
-  var fg=document.getElementById('favGrid');
-  if(fg){ for(var k=0;k<fg.children.length;k++) fg.children[k].classList.toggle('sel', fg.children[k].getAttribute('data-fav')===settings.favColor); }
-  var fl=document.getElementById('favLabel'); if(fl) fl.textContent=settings.favColor?('Favorite — '+settings.favColor+'. The stylist favors it.'):'No favorite picked yet.';
-  var pt=document.getElementById('profileTitle'); if(pt) pt.textContent=settings.name?('Profile — '+settings.name):'Profile';
+  var po=document.getElementById('profileOut'), pin=document.getElementById('profileIn');
+  if(po&&pin){ po.style.display=settings.signedIn?'none':''; pin.style.display=settings.signedIn?'':'none'; }
   var ni=document.getElementById('setName'); if(ni && document.activeElement!==ni && ni.value!==settings.name) ni.value=settings.name;
+  var ei=document.getElementById('setEmail'); if(ei && document.activeElement!==ei && ei.value!==settings.email) ei.value=settings.email;
+  var av=document.getElementById('avatarLetter'); if(av) av.textContent=((settings.name||'').trim().charAt(0)||'?').toUpperCase();
+  var pn=document.getElementById('profileName'); if(pn) pn.textContent=settings.name;
+  var pe=document.getElementById('profileEmail'); if(pe) pe.textContent=settings.email;
 }
-(function(){
-  var h='';
-  NAMES.forEach(function(n){ h+='<button type="button" class="pick" data-fav="'+n+'" onclick="setFavColor(\''+n+'\')"><i style="background:'+hex(n)+'"></i><span>'+n+'</span></button>'; });
-  document.getElementById('favGrid').innerHTML=h;
-})();
 var tabBeforeSettings='colors';
 function openSettings(){
   if(currentTab!=='settings') tabBeforeSettings=(currentTab==='detail')?'colors':currentTab;
@@ -1196,7 +1227,6 @@ function buildSystemPrompt(){
   var lines=[];
   lines.push('You are the AI stylist inside "Elite Combos", an app built on the Elite Color Combo Playbook by Erik Xei. You text like a friend — plain, casual, short. No corporate speak. You can chat about anything the user brings up, but your specialty is outfits built from the playbook below.');
   if(settings.name) lines.push('The user\u2019s name is '+settings.name+'. Greet him by name sometimes, naturally — not in every reply.');
-  if(settings.favColor) lines.push('His favorite color is '+settings.favColor+'. Favor it in outfit suggestions whenever it pairs elite per the playbook, and point it out when you use it.');
   lines.push('');
   lines.push('THE GOLDEN RULE: Only the pairings listed below are "elite". Never claim a pairing is elite if it is not listed. If the user proposes a non-elite pairing, say so honestly, explain why it can clash, and offer the closest elite alternative. Two colors pair elite if either one lists the other.');
   lines.push('');
