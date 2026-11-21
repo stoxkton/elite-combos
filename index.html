@@ -325,12 +325,12 @@ a{color:inherit}
       <p>Google gives out free Gemini AI keys — no card, so it can never charge you. Grab one once, paste it here, and this tab becomes a real AI you can actually talk to.</p>
       <ol class="ai-steps">
         <li><b class="num">1</b><span>Tap <b>Get my free key</b> below and sign in with Google.</span></li>
-        <li><b class="num">2</b><span>Tap <b>Create API key</b> (make a new project if it asks), then tap the <b>copy icon</b> on the key's row — the key shown on screen is shortened, so don't copy the text itself.</span></li>
+        <li><b class="num">2</b><span>Tap <b>Create API key</b> (make a new project if it asks), then tap the <b>copy icon</b> on the key's row — the key shown on screen is shortened, so don't copy the text itself. New keys start with <b>AQ.</b> — that's Google's new format, and the dot is part of the key.</span></li>
         <li><b class="num">3</b><span>Come back here, paste the key, and tap <b>Connect</b>.</span></li>
       </ol>
       <div class="getkey-row"><a class="linkbtn" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Get my free key ↗</a></div>
       <div class="key-row">
-        <input type="password" id="apiKeyInput" placeholder="Paste your Gemini key (starts with AIza…)" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Gemini API key">
+        <input type="password" id="apiKeyInput" placeholder="Paste your Gemini key (starts with AQ. or AIza…)" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Gemini API key">
         <button type="button" id="connectBtn" onclick="connectAI()">Connect</button>
       </div>
       <div class="key-err" id="keyErr" role="alert"></div>
@@ -977,7 +977,7 @@ function friendlyError(err){
   var code=err&&err.code;
   if((err&&err.name==='AbortError')||/aborted/i.test(m)) return 'That took too long — Google didn\u2019t answer in time, so the app stopped waiting. Check your connection and tap Connect again.';
   if(code==='nomodel'||s===404||/^nomodel$/i.test(m)||/no longer available|not found for API version|is not found/i.test(m)) return 'The app asked Google which AI models your key can use, and none of them answered. That\u2019s on Google\u2019s side of the key — try creating a brand-new key in a new project in AI Studio, then paste that one here.'+(m&&!/^nomodel$/i.test(m)?' Google\u2019s exact words: \u201C'+m+'\u201D':'');
-  if(s===400&&/API key not valid|API_KEY_INVALID/i.test(m)) return 'Google says that key isn\u2019t valid. Most common cause: the paste is the shortened version AI Studio shows on screen. On the key\u2019s row in AI Studio, tap the copy icon — that copies the real full key — then paste it here.';
+  if(s===400&&/API key not valid|API_KEY_INVALID/i.test(m)) return 'Google says that key isn\u2019t valid. Most common cause: the paste is the shortened version AI Studio shows on screen (the one with bullets or \u2026 in it). On the key\u2019s row in AI Studio, tap the copy icon — that copies the real full key — then paste it here. New keys start with AQ. — that dot is part of the real key, so don\u2019t remove it.';
   if(s===400) return 'Google rejected that request. Google\u2019s exact words: \u201C'+m+'\u201D Check the key is complete and try again.';
   if(s===401||s===403) return 'Google won\u2019t accept that key (it may be restricted, or from a project without the Gemini API on). Try creating a brand-new key in a new project in AI Studio.'+(m?' Google\u2019s exact words: \u201C'+m+'\u201D':'');
   if(s===429) return 'You\u2019ve hit Google\u2019s free-tier limit for the moment. Give it a minute and try again — the free tier refills.';
@@ -993,7 +993,7 @@ function connectAI(){
   var key=inp.value.replace(/\s+/g,'');
   if(!key){ showKeyErr('Paste your key first — tap "Get my free key" above if you don\u2019t have one yet.'); inp.focus(); return; }
   if(key.length<20){ showKeyErr('That looks too short to be a full key. Copy the entire key from AI Studio and paste it again.'); return; }
-  if(/[^\w\-]/.test(key)){ showKeyErr('That paste has characters a real key never has (dots or bullets) — that\u2019s the shortened version AI Studio shows on screen, not the real key. In AI Studio, tap the copy icon on the key\u2019s row to copy the real full key, then paste that here.'); return; }
+  if(/[•●…]/.test(key)||/[^\w\-.]/.test(key)){ showKeyErr('That paste has characters a real key never has (bullets like \u2022 or \u2026) — that\u2019s the shortened version AI Studio shows on screen, not the real key. A real key starts with AQ. (the dot right after AQ is normal and part of the key) or with AIza. In AI Studio, tap the copy icon on the key\u2019s row to copy the real full key, then paste that here.'); return; }
   showKeyErr('');
   var btn=document.getElementById('connectBtn');
   btn.disabled=true; btn.textContent='Checking\u2026';
