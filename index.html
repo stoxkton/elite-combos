@@ -319,7 +319,7 @@ body.ask-on .footer{display:none}
 .custom-dot input[type=color]{position:absolute;inset:0;width:100%;height:100%;min-height:0;opacity:0;border:0;padding:0;margin:0;cursor:pointer;background:transparent}
 .custom-dot.sel{box-shadow:0 0 0 2px var(--grad2),0 0 0 4.5px var(--accent)}
 .settings-note{font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:10px}
-/* PINTEREST — profile embed in Settings */
+/* PINTEREST — board embed in Settings */
 .pin-update-btn{width:100%;margin-top:14px;border:1px solid var(--accent-deep);border-radius:999px;background:var(--accent);color:#fff7ec;padding:11px 18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;min-height:46px;box-shadow:0 6px 16px rgba(0,0,0,.14)}
 .pin-card{margin-top:14px;border:1px solid var(--line);border-radius:14px;background:var(--field);padding:12px;overflow:hidden}
 .pin-embed{text-align:center}
@@ -557,15 +557,19 @@ body.ask-on .footer{display:none}
         <label for="setPinterest">Username</label>
         <input type="text" id="setPinterest" maxlength="30" placeholder="chibbynugget" autocomplete="off" oninput="setPinterestUser(this.value)">
       </div>
+      <div class="field">
+        <label for="setPinterestBoard">Board link</label>
+        <input type="text" id="setPinterestBoard" maxlength="200" placeholder="https://www.pinterest.com/chibbynugget/elite-combos/" autocomplete="off" oninput="setPinterestBoard(this.value)">
+      </div>
       <button type="button" class="pin-update-btn" onclick="applyPinterest()">Update</button>
       <div class="pin-card">
         <div class="pin-embed" id="pinEmbedWrap"></div>
         <div class="pin-fallback" id="pinFallback" style="display:none">
           <strong>Your boards</strong>
-          <a class="pin-fallback-btn" id="pinFallbackBtn" href="https://www.pinterest.com/chibbynugget/" target="_blank" rel="noopener">Open Pinterest</a>
+          <a class="pin-fallback-btn" id="pinFallbackBtn" href="https://www.pinterest.com/chibbynugget/elite-combos/" target="_blank" rel="noopener">Open board</a>
         </div>
       </div>
-      <a class="pin-open" id="pinOpenLink" href="https://www.pinterest.com/chibbynugget/" target="_blank" rel="noopener">Open in Pinterest</a>
+      <a class="pin-open" id="pinOpenLink" href="https://www.pinterest.com/chibbynugget/elite-combos/" target="_blank" rel="noopener">Open in Pinterest</a>
       <p class="settings-note">Only public boards show.</p>
     </div>
   </section>
@@ -1172,27 +1176,29 @@ function signIn(){
   settings.signedIn=true; saveSettings();
 }
 function signOut(){ settings.signedIn=false; saveSettings(); }
-// ---------- PINTEREST — official profile embed in Settings ----------
+// ---------- PINTEREST — official board embed in Settings ----------
 // Public boards only: the embed is Pinterest's own widget (pinit.js), pointed
-// at the saved username. If the widget can't render, a link card takes over.
+// at the saved board URL. If the widget can't render, a link card takes over.
 var pinScriptState='idle', pinTimer=null;
 function pinUser(){ return (settings.pinterestUser||'').replace(/^\s+|\s+$/g,'').replace(/^@+/,'').replace(/[^A-Za-z0-9_]/g,''); }
 function pinProfileUrl(){ return 'https://www.pinterest.com/'+(pinUser()||'chibbynugget')+'/'; }
+function pinBoardUrl(){ return (settings.pinterestBoard||'').replace(/^\s+|\s+$/g,'')||'https://www.pinterest.com/chibbynugget/elite-combos/'; }
 function setPinterestUser(v){ settings.pinterestUser=v; saveSettings(); }
+function setPinterestBoard(v){ settings.pinterestBoard=v; saveSettings(); }
 function applyPinterest(){ saveSettings(); renderPinterest(); }
 function showPinFallback(){
   var wrap=document.getElementById('pinEmbedWrap'); if(wrap) wrap.style.display='none';
   var fb=document.getElementById('pinFallback'); if(!fb) return;
-  var b=document.getElementById('pinFallbackBtn'); if(b) b.href=pinProfileUrl();
+  var b=document.getElementById('pinFallbackBtn'); if(b) b.href=pinBoardUrl();
   fb.style.display='';
 }
 function renderPinterest(){
   var wrap=document.getElementById('pinEmbedWrap'); if(!wrap) return;
-  var link=document.getElementById('pinOpenLink'); if(link) link.href=pinProfileUrl();
-  if(!pinUser()){ wrap.innerHTML=''; showPinFallback(); return; }
+  var link=document.getElementById('pinOpenLink'); if(link) link.href=pinBoardUrl();
+  if(!pinBoardUrl()){ wrap.innerHTML=''; showPinFallback(); return; }
   var fb=document.getElementById('pinFallback'); if(fb) fb.style.display='none';
   wrap.style.display='';
-  wrap.innerHTML='<a data-pin-do="embedUser" data-pin-board-width="350" data-pin-scale-height="240" data-pin-scale-width="80" href="'+pinProfileUrl()+'"></a>';
+  wrap.innerHTML='<a data-pin-do="embedBoard" data-pin-board-width="350" data-pin-scale-height="300" data-pin-scale-width="80" href="'+pinBoardUrl()+'"></a>';
   if(pinTimer) clearTimeout(pinTimer);
   pinTimer=setTimeout(function(){
     // Widget swaps the anchor for its own markup; a surviving anchor (or an
@@ -1229,7 +1235,8 @@ function renderSettings(){
   var pn=document.getElementById('profileName'); if(pn) pn.textContent=settings.name;
   var pe=document.getElementById('profileEmail'); if(pe) pe.textContent=settings.email;
   var pu=document.getElementById('setPinterest'); if(pu && document.activeElement!==pu && pu.value!==settings.pinterestUser) pu.value=settings.pinterestUser;
-  var pol=document.getElementById('pinOpenLink'); if(pol) pol.href=pinProfileUrl();
+  var pb=document.getElementById('setPinterestBoard'); if(pb && document.activeElement!==pb && pb.value!==settings.pinterestBoard) pb.value=settings.pinterestBoard;
+  var pol=document.getElementById('pinOpenLink'); if(pol) pol.href=pinBoardUrl();
 }
 var tabBeforeSettings='colors';
 function openSettings(){
