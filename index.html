@@ -243,6 +243,18 @@ a{color:inherit}
 .msg.typing{color:var(--muted);font-style:italic}
 .msg.error{background:rgba(255,240,240,.85);border-color:rgba(180,60,60,.22)}
 .getkey-row{margin-top:14px}
+/* SAVED JUMP + CLOSET FAVORITES */
+.saved-jump-row{margin:-2px 4px 14px}
+.saved-jump{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.8);background:rgba(255,255,255,.58);-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);box-shadow:0 4px 14px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.9);color:#a21724;border-radius:999px;padding:8px 14px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;min-height:40px}
+#savedSection{scroll-margin-top:12px}
+.item.fav{border-color:rgba(162,23,36,.6);box-shadow:0 0 0 1.5px rgba(162,23,36,.35),0 8px 22px rgba(0,0,0,.05)}
+.fav-btn{font-size:16px;line-height:1;padding:6px 11px}
+.fav-btn.on{color:#a21724;border-color:rgba(162,23,36,.45);background:rgba(162,23,36,.07)}
+.fav-filter{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 4px}
+/* ASK — input bar pinned just above the tab bar; newest message always scrolls into view above it */
+#view-ask{padding-bottom:108px}
+.ask-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom,0px));width:calc(100% - 32px);max-width:688px;z-index:60;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.82);box-shadow:0 14px 34px rgba(0,0,0,.13),inset 0 1px 0 rgba(255,255,255,.95);border-radius:999px;padding:6px}
+.msg{scroll-margin-bottom:180px}
 </style>
 </head>
 <body>
@@ -259,7 +271,8 @@ a{color:inherit}
 <main class="wrap">
   <!-- COLORS -->
   <section id="view-colors" class="view active">
-    <div class="view-head"><h2>Colors</h2><p>All 25 playbook colors in their four sections. Tap any color to see its elite pairs and how to wear it.</p></div>
+    <div class="view-head"><h2>Colors</h2><p>Tap a color. See its pairs.</p></div>
+    <div class="saved-jump-row"><button type="button" class="saved-jump" onclick="goSaved()">♥ Saved (<span class="saved-num">0</span>)</button></div>
     <div class="today" id="todayStrip" aria-live="polite">
       <div class="k">Today — American Fork, Utah</div>
       <div class="today-main"><span class="today-temp" id="todayTemp"></span><span class="today-cond" id="todayCond"></span><span class="today-hilo" id="todayHilo"></span></div>
@@ -277,13 +290,13 @@ a{color:inherit}
 
   <!-- CHECKER -->
   <section id="view-checker" class="view">
-    <div class="view-head"><h2>Checker</h2><p>Pick any two colors and find out instantly whether the playbook calls them elite — plus how to wear them if they are.</p></div>
+    <div class="view-head"><h2>Checker</h2><p>Pick two colors. Get the verdict.</p></div>
     <div class="panel">
-      <h3>Color A</h3><p>Tap a color for the first piece.</p>
+      <h3>Color A</h3>
       <div class="pick-grid" id="pickA"></div>
     </div>
     <div class="panel">
-      <h3>Color B</h3><p>Tap a color for the second piece.</p>
+      <h3>Color B</h3>
       <div class="pick-grid" id="pickB"></div>
     </div>
     <div class="panel" id="verdictPanel"></div>
@@ -291,10 +304,11 @@ a{color:inherit}
 
   <!-- SHUFFLE -->
   <section id="view-shuffle" class="view">
-    <div class="view-head"><h2>Shuffle</h2><p>Don't want to think? Get a ready-to-wear trio dealt from the playbook.</p></div>
+    <div class="view-head"><h2>Shuffle</h2><p>A ready-to-wear trio, dealt for you.</p></div>
+    <div class="saved-jump-row"><button type="button" class="saved-jump" onclick="goSaved()">♥ Saved (<span class="saved-num">0</span>)</button></div>
     <div class="shuffle-hero">
       <h2>Deal an outfit</h2>
-      <p>Three colors — top, bottom, accent — where every pair is an elite combo in the playbook. No clashes, no filler.</p>
+      <p>Three colors. Every pair elite.</p>
       <div class="occ-label">Occasion</div>
       <div class="occ-row" id="occRow">
         <button type="button" class="occ-chip sel" onclick="setOccasion('ANY')">Any</button>
@@ -305,27 +319,27 @@ a{color:inherit}
       </div>
       <button class="deal-btn" onclick="deal(true)">Deal an outfit</button>
     </div>
-    <div id="outfitWrap"><div class="empty">Nothing dealt yet.<br>Tap “Deal an outfit” and get a ready-to-wear trio.</div></div>
+    <div id="outfitWrap"><div class="empty">Nothing dealt yet.</div></div>
     <p class="occ-note" id="occasionNote"></p>
     <div id="rerollWrap"></div>
     <p class="shuffle-weather" id="shuffleWeather"></p>
-    <div class="section-head"><h2>Saved outfits</h2><div class="line"></div><span class="count" id="savedCount">0 saved</span></div>
+    <div class="section-head" id="savedSection"><h2>Saved outfits</h2><div class="line"></div><span class="count" id="savedCount">0 saved</span></div>
     <div id="savedWrap"></div>
   </section>
 
   <!-- CLOSET -->
   <section id="view-closet" class="view">
-    <div class="view-head"><h2>My Closet</h2><p>Your actual clothes, matched with the playbook. Add a piece, tag its color, and build outfits from what you own.</p></div>
+    <div class="view-head"><h2>My Closet</h2><p>Your clothes, matched with the playbook.</p></div>
     <div class="panel">
       <h3>Add a piece</h3>
-      <p>Take a photo of a shirt, pants, shoes — anything you wear — and tag its playbook color.</p>
+      <p>Photo a piece. Tag its color.</p>
       <div class="add-row">
         <button class="add-btn" onclick="document.getElementById('fileCam').click()">Take photo</button>
         <button class="add-btn ghost" onclick="document.getElementById('fileLib').click()">Upload photo</button>
       </div>
       <input type="file" id="fileCam" accept="image/*" capture="environment" hidden>
       <input type="file" id="fileLib" accept="image/*" hidden>
-      <p class="session-note">Photos save on this phone — they'll still be here when you come back.</p>
+      <p class="session-note">Photos save on this phone.</p>
       <div class="pending" id="pendingWrap">
         <div class="field"><img class="pending-img" id="pendingImg" alt="Photo of the clothing piece you just added"></div>
         <div class="field">
@@ -345,11 +359,15 @@ a{color:inherit}
       </div>
     </div>
     <div class="section-head"><h2>My closet</h2><div class="line"></div><span class="count" id="closetCount">0 pieces</span></div>
+    <div class="fav-filter" id="favFilter">
+      <button type="button" class="occ-chip sel" onclick="setClosetFilter('ALL')">All</button>
+      <button type="button" class="occ-chip" onclick="setClosetFilter('FAV')">♥ Favorites</button>
+    </div>
     <div id="closetWrap"></div>
     <div class="section-head"><h2>Outfit from my closet</h2><div class="line"></div></div>
     <div class="build-card">
       <h3>Build it for me</h3>
-      <p>Pulls an elite outfit together from the pieces above — every pair checked against the book.</p>
+      <p>An elite outfit from your pieces.</p>
       <button class="deal-btn dark" onclick="buildClosetOutfit()">Build an outfit from my clothes</button>
     </div>
     <div id="closetOutfit"></div>
@@ -357,15 +375,15 @@ a{color:inherit}
 
   <!-- ASK — real AI (Google Gemini, your own free key) -->
   <section id="view-ask" class="view">
-    <div class="view-head"><h2>Ask the AI</h2><p>A real AI stylist — not canned answers. It knows the whole playbook, today's weather, and whatever is in your closet. Ask it anything, in your own words.</p></div>
+    <div class="view-head"><h2>Ask the AI</h2><p>Ask anything — playbook, weather, closet.</p></div>
 
     <div class="ai-card" id="aiSetup">
       <h3>Turn on the real AI — free</h3>
-      <p>Google gives out free Gemini AI keys — no card, so it can never charge you. Grab one once, paste it here, and this tab becomes a real AI you can actually talk to.</p>
+      <p>Free Google key. No card needed.</p>
       <ol class="ai-steps">
-        <li><b class="num">1</b><span>Tap <b>Get my free key</b> below and sign in with Google.</span></li>
-        <li><b class="num">2</b><span>Tap <b>Create API key</b> (make a new project if it asks), then tap the <b>copy icon</b> on the key's row — the key shown on screen is shortened, so don't copy the text itself. New keys start with <b>AQ.</b> — that's Google's new format, and the dot is part of the key.</span></li>
-        <li><b class="num">3</b><span>Come back here, paste the key, and tap <b>Connect</b>.</span></li>
+        <li><b class="num">1</b><span>Tap <b>Get my free key</b>. Sign in.</span></li>
+        <li><b class="num">2</b><span>Tap <b>Create API key</b>, then the <b>copy icon</b>.</span></li>
+        <li><b class="num">3</b><span>Paste it here. Tap <b>Connect</b>.</span></li>
       </ol>
       <div class="getkey-row"><a class="linkbtn" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Get my free key ↗</a></div>
       <div class="key-row">
@@ -373,14 +391,14 @@ a{color:inherit}
         <button type="button" id="connectBtn" onclick="connectAI()">Connect</button>
       </div>
       <div class="key-err" id="keyErr" role="alert"></div>
-      <p class="key-note">Your key is never in this app's code and is never sent anywhere except straight to Google when you chat. On this phone it saves on the phone itself, so you only paste it once. Don't share your key with anyone.</p>
+      <p class="key-note">Only sent to Google. Saves on this phone — paste once.</p>
     </div>
 
     <div class="ai-card" id="aiConnected" style="display:none">
       <div class="ai-status">
         <span class="ai-dot" aria-hidden="true"></span>
         <strong>Real AI connected</strong>
-        <span>Powered by Google Gemini · knows the playbook, the weather &amp; your closet</span>
+        <span>Knows the playbook, weather, closet.</span>
         <button type="button" class="mini-btn danger" onclick="disconnectAI()">Disconnect</button>
       </div>
     </div>
@@ -389,14 +407,14 @@ a{color:inherit}
     <div class="chat-card">
       <div class="chat" id="chatLog" aria-live="polite"></div>
       <form class="ask-bar" onsubmit="return sendAsk(event)">
-        <input type="text" id="askInput" placeholder="Connect the AI above to start chatting…" autocomplete="off" maxlength="600" aria-label="Chat with the AI stylist" disabled>
+        <input type="text" id="askInput" placeholder="Connect the AI above…" autocomplete="off" maxlength="600" aria-label="Chat with the AI stylist" disabled>
         <button type="submit" id="askSendBtn" disabled>Send</button>
       </form>
     </div>
   </section>
 </main>
 
-<p class="footer">Every pairing on this page comes straight from the book. If it is not listed, it is not called elite here.</p>
+<p class="footer">Not in the book? Not elite.</p>
 
 <div class="tabbar-wrap">
   <nav class="tabbar" aria-label="Main">
@@ -450,31 +468,31 @@ var COMBOS = {
   "Teal":["White","Black","Camel","Taupe","Grey","Brown","Rust","Navy"]
 };
 var WEAR = {
-  "White":"Clean base or top. Makes every other color pop; white sneakers finish almost any combo.",
-  "Black":"The base for everything. Black pants + a colored top is the easy formula; go all black and add ONE accent color.",
-  "Grey":"Neutral middle ground. Hoodies and sweats live here; bridges bright colors so they don't clash.",
-  "Cream":"Softer than white. Use it anywhere you'd use white when white feels too harsh.",
-  "Beige":"Warm neutral base. Pants or an overshirt; tones down loud colors.",
-  "Camel":"Statement neutral. Coats, overshirts, pants. Best with navy, white, black.",
-  "Olive":"Earthy mid-tone. Cargos, overshirts, tees. Never head-to-toe — break it with cream or white.",
-  "Sage":"Soft top color. Calm and clean with white or cream bottoms.",
-  "Taupe":"Quiet neutral. Pants or a layer when black feels too harsh.",
-  "Dark Taupe":"Deep neutral base. Pants or a jacket; like black but softer.",
-  "Brown":"Warm base. Pants, boots, belts. Killer with navy and cream.",
-  "Espresso":"The deepest brown. Wear it like black, but warmer — jacket, pants, shoes.",
-  "Rust":"Statement color. ONE rust piece per outfit (top or overshirt); neutrals carry the rest.",
-  "Navy":"The workhorse. Navy top + almost anything works; navy + white is the cleanest combo in the book.",
-  "Wine":"Rich statement. One piece only — sweater or overshirt — keep the rest dark or neutral.",
-  "Forest":"Deep green statement. Jacket or top; cream and black calm it down.",
-  "Cobalt":"The loudest blue. ONE piece only, everything else neutral — black, white, grey.",
-  "Slate Blue":"Soft blue top. Almost a neutral; easy with white and grey.",
-  "Chartreuse":"Bold accent only. Small doses — shoes, hat, graphic tee. A black base makes it work.",
-  "Red":"Statement. One red piece max; black, white and camel keep it clean.",
-  "Baby Blue":"Soft top. White bottoms keep it clean; navy deepens it.",
-  "Dust Violet":"Soft statement. Tops and layers; grey and white keep it calm.",
-  "Butter":"Pale and soft. A top color; olive, navy and brown ground it.",
-  "Dust Pink":"Soft accent or top. Grey, white and navy stop it looking sweet.",
-  "Teal":"Rich mid-tone. Top or layer; white and navy are safe, rust is the bold move."
+  "White":"Clean base. Makes colors pop.",
+  "Black":"Base for everything. One accent.",
+  "Grey":"Neutral middle. Bridges bright colors.",
+  "Cream":"Softer than white.",
+  "Beige":"Warm base. Calms loud colors.",
+  "Camel":"Statement neutral. Best with navy.",
+  "Olive":"Earthy mid-tone. Break with cream.",
+  "Sage":"Soft top. Clean with white.",
+  "Taupe":"Quiet neutral. Softer than black.",
+  "Dark Taupe":"Deep base. Like black, softer.",
+  "Brown":"Warm base. Killer with navy.",
+  "Espresso":"Deepest brown. Wear like black.",
+  "Rust":"Statement. One piece per outfit.",
+  "Navy":"The workhorse. Cleanest with white.",
+  "Wine":"Rich statement. One piece only.",
+  "Forest":"Deep green. Cream calms it.",
+  "Cobalt":"Loudest blue. One piece only.",
+  "Slate Blue":"Soft blue. Almost a neutral.",
+  "Chartreuse":"Accent only. Small doses.",
+  "Red":"Statement. One piece max.",
+  "Baby Blue":"Soft top. White bottoms cleanest.",
+  "Dust Violet":"Soft statement. Grey keeps calm.",
+  "Butter":"Pale top. Navy grounds it.",
+  "Dust Pink":"Soft top. Grey tones it down.",
+  "Teal":"Rich mid-tone. White, navy safe."
 };
 var ROLES = {
   "Black":"base","Beige":"base","Taupe":"base","Dark Taupe":"base","Brown":"base","Espresso":"base",
@@ -535,7 +553,7 @@ function openDetail(name){
   var h='<div class="detail-hero"><div class="detail-swatch" style="background:'+hex(name)+'"><div class="detail-swatch-label '+textOn(name)+'"><div class="k">Section '+COLORS[name].section+' &nbsp;·&nbsp; '+partners.length+' elite pairs</div><h2>'+name+'</h2></div></div>'
     +'<div class="wear-note"><div class="k">How to wear it</div><p>'+WEAR[name]+'</p></div>'
     +'<div class="worn-wrap"><a class="linkbtn" href="'+pinUrl(name+' outfit men')+'" target="_blank" rel="noopener">See it worn ↗</a></div>'
-    +'<div class="detail-body"><h3>Pairs with</h3><p>These are '+name+'’s elite partners in the book — tap any one to jump straight to it.</p><div class="partner-list">';
+    +'<div class="detail-body"><h3>Pairs with</h3><p>'+name+'’s elite partners. Tap one to jump.</p><div class="partner-list">';
   partners.forEach(function(p){
     h+='<div class="partner"><button style="background:none;border:0;padding:0;display:flex;align-items:center;gap:14px;flex:1;min-width:0;text-align:left;min-height:44px" onclick="openDetail(\''+p+'\')"><span class="partner-swatch" style="background:'+hex(p)+'"></span><span class="partner-info"><strong>'+p+'</strong><span>View its combos</span></span><span class="dots"><span class="dot" style="background:'+hex(name)+'"></span><span class="dot" style="background:'+hex(p)+'"></span></span></button><a class="linkbtn small" href="'+pinUrl(name+' and '+p+' outfit men')+'" target="_blank" rel="noopener" aria-label="See '+name+' and '+p+' worn together">See this combo ↗</a></div>';
   });
@@ -568,7 +586,7 @@ function formulaFor(a,b){
   var ra=roleOf(a), rb=roleOf(b);
   if(ra==='accent'||rb==='accent'){
     var acc=ra==='accent'?a:b, main=ra==='accent'?b:a;
-    return 'Keep '+acc+' as the accent — shoes, hat or tee detail. '+main+' carries the outfit as the main piece.';
+    return acc+' as accent only. '+main+' carries the outfit.';
   }
   var pants, top;
   if(ra==='base'&&rb!=='base'){pants=a;top=b;}
@@ -589,7 +607,7 @@ function formulaFor(a,b){
     var pa=COMBOS[a]||[];
     for(var j=0;j<pa.length;j++){ if(pa[j]!==b&&pairs(b,pa[j])){third=pa[j];break;} }
   }
-  if(third) line+=' · '+third+' shoes if you add a third';
+  if(third) line+=' · '+third+' shoes';
   return line+'.';
 }
 function renderChecker(){
@@ -598,9 +616,9 @@ function renderChecker(){
   var same = selA===selB;
   var h='<div class="pair-preview"><div class="pair-half" style="background:'+hex(selA)+';color:'+(isLight(hex(selA))?'#111':'#fff')+'">'+selA+'</div><div class="pair-half" style="background:'+hex(selB)+';color:'+(isLight(hex(selB))?'#111':'#fff')+'">'+selB+'</div></div>';
   h+='<div class="verdict">';
-  if(same){ h+='<div class="big">Pick two<br>different colors</div><div class="sub">You picked '+selA+' twice. Choose a second color to check the combo.</div>'; }
-  else if(elite){ h+='<div class="big">Elite Combo</div><div class="sub">'+selA+' + '+selB+' is in the playbook. Wear it with confidence.</div><div class="formula"><div class="k">Wear it like this</div><p>'+formulaFor(selA,selB)+'</p></div><div class="combo-link-row"><a class="linkbtn" href="'+pinUrl(selA+' and '+selB+' outfit men')+'" target="_blank" rel="noopener">See this combo ↗</a></div><div class="save-row"><button type="button" class="save-btn" onclick="saveCheckerOutfit(this)">Save outfit</button></div>'; }
-  else { h+='<div class="big">Not in the playbook</div><div class="sub">'+selA+' + '+selB+' is not listed as an elite combo. Here is what each one does pair with — tap a chip to try it instead.</div>'; }
+  if(same){ h+='<div class="big">Pick two<br>different colors</div><div class="sub">Picked '+selA+' twice. Choose another.</div>'; }
+  else if(elite){ h+='<div class="big">Elite Combo</div><div class="sub">'+selA+' + '+selB+' is elite. Wear it.</div><div class="formula"><div class="k">Wear it like this</div><p>'+formulaFor(selA,selB)+'</p></div><div class="combo-link-row"><a class="linkbtn" href="'+pinUrl(selA+' and '+selB+' outfit men')+'" target="_blank" rel="noopener">See this combo ↗</a></div><div class="save-row"><button type="button" class="save-btn" onclick="saveCheckerOutfit(this)">Save outfit</button></div>'; }
+  else { h+='<div class="big">Not in the playbook</div><div class="sub">'+selA+' + '+selB+' is not elite. Try a chip below.</div>'; }
   h+='</div>';
   if(!elite && !same){
     h+='<div class="mini-head">'+selA+' pairs with</div>'+chipsFor(selA,'A');
@@ -640,10 +658,12 @@ function renderSaved(){
   persistSaved();
   var cnt=document.getElementById('savedCount');
   if(cnt) cnt.textContent=savedOutfits.length+(savedOutfits.length===1?' saved':' saved');
+  var nums=document.querySelectorAll('.saved-num');
+  for(var si=0;si<nums.length;si++) nums[si].textContent=savedOutfits.length;
   var w=document.getElementById('savedWrap');
   if(!w) return;
   if(!savedOutfits.length){
-    w.innerHTML='<div class="empty">No saved outfits yet.<br>Deal an outfit above, land an elite verdict in the Checker, or save Today\u2019s Fit — then tap \u201CSave outfit\u201D and it lands here.</div>';
+    w.innerHTML='<div class="empty">Nothing saved yet.</div>';
     return;
   }
   var labels=['Top','Bottom','Accent'];
@@ -657,6 +677,13 @@ function renderSaved(){
       +'</span></div><div class="saved-actions"><a class="linkbtn small" href="'+pinUrl(trio.join(' ')+' outfit men')+'" target="_blank" rel="noopener">See it worn \u2197</a><button type="button" class="mini-btn danger" onclick="removeSaved('+i+')">Remove</button></div></div>';
   });
   w.innerHTML=h;
+}
+function goSaved(){
+  showTab('shuffle');
+  setTimeout(function(){
+    var el=document.getElementById('savedSection');
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  },400);
 }
 function thirdForPair(a,b){
   // A third color that pairs elite with BOTH a and b (one always exists in this book).
@@ -756,7 +783,7 @@ function deal(scroll){
   currentShuffle=found;
   var note=document.getElementById('occasionNote');
   if(relaxed){
-    note.textContent='No elite trio fits '+currentOccasion.charAt(0)+currentOccasion.slice(1).toLowerCase()+' — dealt from the full playbook instead.';
+    note.textContent='No '+currentOccasion.charAt(0)+currentOccasion.slice(1).toLowerCase()+' trio — full playbook instead.';
     note.classList.add('show');
   } else { note.textContent=''; note.classList.remove('show'); }
   var labels=['Top','Bottom','Accent'];
@@ -764,7 +791,7 @@ function deal(scroll){
   found.forEach(function(n,idx){
     h+='<div class="look"><div class="look-swatch" style="background:'+hex(n)+'"><span class="'+textOn(n)+'" style="font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:800">'+labels[idx]+'</span></div><div class="look-meta"><strong>'+n+'</strong><span>'+labels[idx]+'</span></div><div class="look-note">'+WEAR[n]+'</div></div>';
   });
-  h+='</div><p style="color:var(--muted);font-size:13px;line-height:1.6;padding:4px 4px 0">Every pair in this trio checks out in the Checker. Tap any color in the Colors tab to see why it works.</p>';
+  h+='</div><p style="color:var(--muted);font-size:13px;line-height:1.6;padding:4px 4px 0">Every pair is elite.</p>';
   h+='<div class="outfit-link-row"><a class="linkbtn" href="'+pinUrl(found[0]+' '+found[1]+' '+found[2]+' outfit men')+'" target="_blank" rel="noopener">See outfits like this ↗</a></div>';
   h+='<div class="save-row"><button type="button" class="save-btn" onclick="saveShuffleOutfit(this)">Save outfit</button></div>';
   document.getElementById('outfitWrap').innerHTML=h;
@@ -788,11 +815,11 @@ function dealTodayFit(){
       else if(!cold && !warm) found=trio;
     }
     if(!found) found=dealTrio(null,false);
-    if(cold) why='Cold at '+WX.temp+'\u00B0 \u2014 darker, heavier colors for layering up.';
-    else if(warm) why='Warm at '+WX.temp+'\u00B0 \u2014 lighter colors that breathe.';
-    else why='Mild at '+WX.temp+'\u00B0 \u2014 easy mid-tones with one statement piece.';
-    if(WX.code!==undefined && ((WX.code>=71&&WX.code<=77)||WX.code===85||WX.code===86)) why+=' Snow today \u2014 dark bottoms earn their keep.';
-    else if(WX.code!==undefined && (((WX.code>=51&&WX.code<=67)||(WX.code>=80&&WX.code<=82)||(WX.code>=95&&WX.code<=99)))) why+=' Rain today \u2014 darker bottoms hide splashes.';
+    if(cold) why='Cold — darker layers.';
+    else if(warm) why='Warm — lighter colors.';
+    else why='Mild — easy mid-tones.';
+    if(WX.code!==undefined && ((WX.code>=71&&WX.code<=77)||WX.code===85||WX.code===86)) why='Snow — dark bottoms.';
+    else if(WX.code!==undefined && (((WX.code>=51&&WX.code<=67)||(WX.code>=80&&WX.code<=82)||(WX.code>=95&&WX.code<=99)))) why='Rain — darker bottoms.';
   }
   if(!found) found=dealTrio(null,false);
   currentTodayFit=found;
@@ -833,12 +860,12 @@ function condWord(code){
 }
 function weatherLine(temp, code){
   var line;
-  if(temp<40) line='Cold — layer up: a Base color on the bottom, statement top, neutral layer over it.';
-  else if(temp<60) line='Cool — light layers win. Hoodie or overshirt in a Top color over a neutral base.';
-  else if(temp<75) line='Mild — a single statement top with neutral pants is all you need.';
-  else line='Hot — light colors breathe best: White, Cream, Beige, Baby Blue, Sage.';
-  if(((code>=51&&code<=67)||(code>=80&&code<=82)||(code>=95&&code<=99))) line+=' Rain today — darker bottoms hide splashes.';
-  if(((code>=71&&code<=77)||code===85||code===86)) line+=' Snow today — dark bottoms, and skip the white shoes.';
+  if(temp<40) line='Cold — layer up.';
+  else if(temp<60) line='Cool — light layers.';
+  else if(temp<75) line='Mild — one statement top.';
+  else line='Hot — light colors breathe.';
+  if(((code>=51&&code<=67)||(code>=80&&code<=82)||(code>=95&&code<=99))) line+=' Rain — dark bottoms.';
+  if(((code>=71&&code<=77)||code===85||code===86)) line+=' Snow — dark bottoms.';
   return line;
 }
 (function(){
@@ -869,9 +896,10 @@ function weatherLine(temp, code){
 })();
 
 // ---------- CLOSET (saved on this phone) ----------
-var closet=[]; // {img, color, type, name}
+var closet=[]; // {img, color, type, name, fav}
 try{ closet=JSON.parse(localStorage.getItem('eliteCloset')||'[]'); }catch(e){ closet=[]; }
 function persistCloset(){ try{ localStorage.setItem('eliteCloset',JSON.stringify(closet)); }catch(e){} }
+var closetFilter='ALL';
 var pendingImgData=null, pendingType='Top';
 var TYPES=['Top','Bottom','Layer','Shoes','Accessory'];
 (function(){
@@ -922,7 +950,7 @@ function savePiece(){
   if(!pendingImgData) return;
   var color=document.getElementById('pendingColor').value;
   var name=document.getElementById('pendingName').value.replace(/^\s+|\s+$/g,'');
-  closet.push({img:pendingImgData,color:color,type:pendingType,name:name||(color+' '+pendingType.toLowerCase())});
+  closet.push({img:pendingImgData,color:color,type:pendingType,name:name||(color+' '+pendingType.toLowerCase()),fav:false});
   cancelPending();
   renderCloset();
   document.getElementById('closetOutfit').innerHTML='';
@@ -933,20 +961,34 @@ function removePiece(i){
   renderCloset();
   document.getElementById('closetOutfit').innerHTML='';
 }
+function toggleFav(i){
+  closet[i].fav=!closet[i].fav;
+  renderCloset();
+}
+function setClosetFilter(f){
+  closetFilter=f;
+  var chips=document.getElementById('favFilter').children;
+  for(var i=0;i<chips.length;i++) chips[i].classList.toggle('sel', (f==='ALL'&&i===0)||(f==='FAV'&&i===1));
+  renderCloset();
+}
 function renderCloset(){
   persistCloset();
   document.getElementById('closetCount').textContent=closet.length+(closet.length===1?' piece':' pieces');
   var w=document.getElementById('closetWrap');
   if(!closet.length){
-    w.innerHTML='<div class="empty">Your closet is empty.<br>Take a photo of a piece above and it lands here — then the app can dress you from your own clothes.</div>';
+    w.innerHTML='<div class="empty">Closet’s empty.</div>';
     return;
   }
+  var shown=0;
   var h='<div class="closet-grid">';
   closet.forEach(function(p,i){
+    if(closetFilter==='FAV' && !p.fav) return;
+    shown++;
     var matchCount=0;
     closet.forEach(function(q,j){ if(j!==i&&pairs(p.color,q.color)) matchCount++; });
-    h+='<div class="item"><img src="'+p.img+'" alt="Your '+p.name+'"><div class="item-name">'+esc(p.name)+'</div><div class="item-meta"><i style="background:'+hex(p.color)+'"></i>'+p.color+' · '+p.type+'</div><div class="item-meta" style="text-transform:none;letter-spacing:.02em">'+(matchCount?('Pairs with '+matchCount+(matchCount===1?' piece':' pieces')+' you own'):'No elite match in your closet yet')+'</div><div class="item-actions"><button class="mini-btn" onclick="askAboutPiece('+i+')">What goes with it?</button><button class="mini-btn danger" onclick="removePiece('+i+')">Remove</button></div></div>';
+    h+='<div class="item'+(p.fav?' fav':'')+'"><img src="'+p.img+'" alt="Your '+p.name+'"><div class="item-name">'+esc(p.name)+'</div><div class="item-meta"><i style="background:'+hex(p.color)+'"></i>'+p.color+' · '+p.type+'</div><div class="item-meta" style="text-transform:none;letter-spacing:.02em">'+(matchCount?('Pairs with '+matchCount+(matchCount===1?' piece':' pieces')+' you own'):'No elite match yet')+'</div><div class="item-actions"><button class="mini-btn fav-btn'+(p.fav?' on':'')+'" onclick="toggleFav('+i+')" aria-label="Favorite this piece">'+(p.fav?'♥':'♡')+'</button><button class="mini-btn" onclick="askAboutPiece('+i+')">What goes with it?</button><button class="mini-btn danger" onclick="removePiece('+i+')">Remove</button></div></div>';
   });
+  if(!shown){ w.innerHTML='<div class="empty">No favorites yet.</div>'; return; }
   w.innerHTML=h+'</div>';
 }
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
@@ -954,11 +996,14 @@ function typeRank(t){return t==='Bottom'?0:(t==='Top'?1:(t==='Layer'?2:(t==='Sho
 function buildClosetOutfit(){
   var box=document.getElementById('closetOutfit');
   if(closet.length<2){
-    box.innerHTML='<div class="empty">Add at least two pieces first — an outfit needs a top and a bottom that pair elite.</div>';
+    box.innerHTML='<div class="empty">Add two pieces first.</div>';
     return;
   }
   var order=closet.map(function(p,i){return i});
   shuffleArr(order);
+  // Favorites first (stable sort keeps the shuffle inside each group), so a
+  // hearted piece wins whenever it can be part of an elite outfit.
+  order.sort(function(a,b){ return (closet[b].fav?1:0)-(closet[a].fav?1:0); });
   var bottoms=order.filter(function(i){return closet[i].type==='Bottom'||closet[i].type==='Top'});
   var found=null;
   for(var bi=0;bi<bottoms.length&&!found;bi++){
@@ -980,9 +1025,9 @@ function buildClosetOutfit(){
     var owned={}; closet.forEach(function(p){owned[p.color]=true});
     var tips=[];
     closet.forEach(function(p){
-      (COMBOS[p.color]||[]).forEach(function(c){ if(!owned[c]) tips.push(c+' would unlock combos with your '+p.color.toLowerCase()+' piece'); });
+      (COMBOS[p.color]||[]).forEach(function(c){ if(!owned[c] && tips.indexOf(c)===-1) tips.push(c); });
     });
-    box.innerHTML='<div class="empty">No elite combo in your closet yet — the pieces you own don\'t pair with each other in the book.<br><br>'+(tips.length?('Try adding: '+tips.slice(0,3).join(' · ')+'.'):'')+'</div>';
+    box.innerHTML='<div class="empty">No elite combo yet.'+(tips.length?('<br>Try adding: '+tips.slice(0,3).join(' · ')+'.'):'')+'</div>';
     return;
   }
   var pieces=[found.top,found.bottom]; if(found.third) pieces.push(found.third);
@@ -991,7 +1036,7 @@ function buildClosetOutfit(){
   pieces.forEach(function(p){
     h+='<div class="closet-look"><img src="'+p.img+'" alt="Your '+p.name+'"><div class="ci"><strong>'+esc(p.name)+'</strong><span>'+p.color+' · '+p.type+'</span></div><span class="dot" style="background:'+hex(p.color)+'"></span></div>';
   });
-  h+='<p style="color:var(--muted);font-size:13px;line-height:1.6;padding:10px 4px 0">Every pair in this outfit is an elite combo in the book — pulled from clothes you actually own.</p>';
+  h+='<p style="color:var(--muted);font-size:13px;line-height:1.6;padding:10px 4px 0">Every pair is elite.</p>';
   h+='<div class="outfit-link-row"><a class="linkbtn" href="'+pinUrl(pieces.map(function(p){return p.color}).join(' ')+' outfit men')+'" target="_blank" rel="noopener">See outfits like this ↗</a></div>';
   box.innerHTML=h;
   box.scrollIntoView({behavior:'smooth',block:'start'});
@@ -1015,7 +1060,7 @@ var QUICK=['What goes with navy?','Is rust + cream elite?','Build me an outfit f
   var h='';
   QUICK.forEach(function(q){ h+='<button type="button" onclick="quickAsk(this)">'+q+'</button>'; });
   document.getElementById('quickRow').innerHTML=h;
-  pushMsg('bot','Hey — I\u2019m the real AI version. Connect your free Google key above (takes about 2 minutes, no card) and then ask me anything: outfits from your actual closet, whether a combo is actually elite, what to wear for today\u2019s weather, all of it. I answer from the playbook, but I can actually talk.');
+  pushMsg('bot','Connect your key, then ask me anything.');
   var ki=document.getElementById('apiKeyInput');
   ki.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); connectAI(); } });
   if(geminiKey){
@@ -1039,13 +1084,13 @@ function pushMsg(who,text,extraClass){
   d.className='msg '+who+(extraClass?' '+extraClass:'');
   d.textContent=text;
   log.appendChild(d);
-  d.scrollIntoView({behavior:'smooth',block:'nearest'});
+  d.scrollIntoView({behavior:'smooth',block:'end'});
   return d;
 }
 function setChatEnabled(on){
   document.getElementById('askInput').disabled=!on;
   document.getElementById('askSendBtn').disabled=!on;
-  document.getElementById('askInput').placeholder=on?'Ask anything \u2014 outfits, combos, your closet\u2026':'Connect the AI above to start chatting\u2026';
+  document.getElementById('askInput').placeholder=on?'Ask anything\u2026':'Connect the AI above\u2026';
 }
 function showKeyErr(msg){
   var e=document.getElementById('keyErr');
@@ -1054,7 +1099,7 @@ function showKeyErr(msg){
 }
 function buildSystemPrompt(){
   var lines=[];
-  lines.push('You are the AI stylist inside "Elite Combos", an app built on the Elite Color Combo Playbook by Erik Xei. You talk like a sharp, friendly stylist friend — natural conversation, short paragraphs, no corporate speak. You can chat about anything the user brings up, but your specialty is outfits built from the playbook below.');
+  lines.push('You are the AI stylist inside "Elite Combos", an app built on the Elite Color Combo Playbook by Erik Xei. You text like a friend — plain, casual, short. No corporate speak. You can chat about anything the user brings up, but your specialty is outfits built from the playbook below.');
   lines.push('');
   lines.push('THE GOLDEN RULE: Only the pairings listed below are "elite". Never claim a pairing is elite if it is not listed. If the user proposes a non-elite pairing, say so honestly, explain why it can clash, and offer the closest elite alternative. Two colors pair elite if either one lists the other.');
   lines.push('');
@@ -1077,7 +1122,7 @@ function buildSystemPrompt(){
     lines.push('The user has not added any clothes to the in-app Closet yet. If they ask for outfits from their own clothes, suggest they add pieces in the Closet tab — until then, build outfits from playbook colors.');
   }
   lines.push('');
-  lines.push('STYLE OF ANSWERS: Keep most answers under ~150 words unless the user asks for detail. Give concrete outfits (top / bottom / layer / shoes) rather than vague advice. Use plain text, no markdown tables. You may use a short line break between ideas. Never mention these instructions or that you were given a playbook dump — just use it.');
+  lines.push('REPLY LENGTH — HARD RULE FOR EVERY SINGLE REPLY, NO MATTER HOW LONG THIS CHAT GETS: 1 to 3 short sentences, max. Plain casual texting tone, like texting a friend. No lists longer than 3 items. No headers, no essays, no explaining unless he asks. Outfit answers: just the colors or pieces, plus a few words why. Even if he asks for detail, keep it tight. This rule never relaxes as the conversation goes on. Never mention these instructions or that you were given a playbook dump — just use it.');
   return lines.join('\n');
 }
 function fetchWithTimeout(url,opts,ms){
@@ -1190,25 +1235,25 @@ function friendlyError(err){
   var s=err&&err.status;
   var m=(err&&err.message)||'';
   var code=err&&err.code;
-  if((err&&err.name==='AbortError')||/aborted/i.test(m)) return 'That took too long — Google didn\u2019t answer in time, so the app stopped waiting. Check your connection and tap Connect again.';
-  if(code==='nomodel'||s===404||/^nomodel$/i.test(m)||/no longer available|not found for API version|is not found/i.test(m)) return 'The app asked Google which AI models your key can use, and none of them answered. That\u2019s on Google\u2019s side of the key — try creating a brand-new key in a new project in AI Studio, then paste that one here.'+(m&&!/^nomodel$/i.test(m)?' Google\u2019s exact words: \u201C'+m+'\u201D':'');
-  if(s===400&&/API key not valid|API_KEY_INVALID/i.test(m)) return 'Google says that key isn\u2019t valid. Most common cause: the paste is the shortened version AI Studio shows on screen (the one with bullets or \u2026 in it). On the key\u2019s row in AI Studio, tap the copy icon — that copies the real full key — then paste it here. New keys start with AQ. — that dot is part of the real key, so don\u2019t remove it.';
-  if(s===400) return 'Google rejected that request. Google\u2019s exact words: \u201C'+m+'\u201D Check the key is complete and try again.';
-  if(s===401||s===403) return 'Google won\u2019t accept that key (it may be restricted, or from a project without the Gemini API on). Try creating a brand-new key in a new project in AI Studio.'+(m?' Google\u2019s exact words: \u201C'+m+'\u201D':'');
-  if(s===429) return 'You\u2019ve hit Google\u2019s free-tier limit for the moment. Give it a minute and try again — the free tier refills.';
-  if(/^empty/.test(m)) return 'The AI came back empty that time — try sending that again, or rephrase it a little.';
-  if(/Failed to fetch|NetworkError/i.test(m)) return 'Couldn\u2019t reach Google — check your connection and try again.';
+  if((err&&err.name==='AbortError')||/aborted/i.test(m)) return 'That took too long. Check your connection, try again.';
+  if(code==='nomodel'||s===404||/^nomodel$/i.test(m)||/no longer available|not found for API version|is not found/i.test(m)) return 'No AI model answered for this key. Make a new key in a new AI Studio project.';
+  if(s===400&&/API key not valid|API_KEY_INVALID/i.test(m)) return 'That\u2019s the shortened display version — tap the copy icon in AI Studio for the real key.';
+  if(s===400) return 'Google rejected it. Google\u2019s words: \u201C'+m+'\u201D';
+  if(s===401||s===403) return 'Google won\u2019t accept that key. Make a new one in a new AI Studio project.';
+  if(s===429) return 'Free-tier limit. Wait a minute, try again.';
+  if(/^empty/.test(m)) return 'Empty reply. Send it again.';
+  if(/Failed to fetch|NetworkError/i.test(m)) return 'Couldn\u2019t reach Google. Check your connection.';
   // Never hide the real reason again: show Google's own words verbatim so a
   // screenshot of the error says exactly what went wrong.
-  if(m) return 'Something went wrong talking to the AI. Google\u2019s exact words: \u201C'+m+'\u201D'+(s?' (error '+s+')':'')+' — if it keeps happening, screenshot this message.';
-  return 'Something went wrong talking to the AI, and Google didn\u2019t say why. Try again in a moment.';
+  if(m) return 'Something went wrong. Google\u2019s words: \u201C'+m+'\u201D'+(s?' (error '+s+')':'')+' Screenshot it if it keeps happening.';
+  return 'Something went wrong. Try again in a moment.';
 }
 function connectAI(){
   var inp=document.getElementById('apiKeyInput');
   var key=inp.value.replace(/\s+/g,'');
-  if(!key){ showKeyErr('Paste your key first — tap "Get my free key" above if you don\u2019t have one yet.'); inp.focus(); return; }
-  if(key.length<20){ showKeyErr('That looks too short to be a full key. Copy the entire key from AI Studio and paste it again.'); return; }
-  if(/[•●…]/.test(key)||/[^\w\-.]/.test(key)){ showKeyErr('That paste has characters a real key never has (bullets like \u2022 or \u2026) — that\u2019s the shortened version AI Studio shows on screen, not the real key. A real key starts with AQ. (the dot right after AQ is normal and part of the key) or with AIza. In AI Studio, tap the copy icon on the key\u2019s row to copy the real full key, then paste that here.'); return; }
+  if(!key){ showKeyErr('Paste your key first.'); inp.focus(); return; }
+  if(key.length<20){ showKeyErr('Too short. Copy the full key from AI Studio.'); return; }
+  if(/[•●…]/.test(key)||/[^\w\-.]/.test(key)){ showKeyErr('That\u2019s the shortened display version — tap the copy icon in AI Studio for the real key.'); return; }
   showKeyErr('');
   var btn=document.getElementById('connectBtn');
   btn.disabled=true; btn.textContent='Checking\u2026';
@@ -1238,12 +1283,12 @@ function disconnectAI(){
   document.getElementById('aiConnected').style.display='none';
   document.getElementById('aiSetup').style.display='block';
   setChatEnabled(false);
-  pushMsg('bot','Disconnected — the AI is off and your key is forgotten. Paste it again anytime to reconnect.');
+  pushMsg('bot','Disconnected. Key forgotten.');
 }
 function askAI(q){
   pushMsg('me',q);
   if(!geminiKey){
-    pushMsg('bot','I\u2019m not connected yet — grab your free key in the card above and tap Connect, then ask me again and I\u2019ll answer for real.');
+    pushMsg('bot','Not connected yet. Connect your key above, then ask again.');
     document.getElementById('aiSetup').scrollIntoView({behavior:'smooth',block:'center'});
     return;
   }
