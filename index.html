@@ -1117,8 +1117,8 @@ function askAboutPiece(i){
 // All customization lives in this ONE object. applySettings() paints it onto
 // the page; saveSettings() is called on every change (in this build it just
 // applies — an outside patch adds persistence later). No storage here.
-var settings={theme:'warm',accent:'Rust',accentCustom:'',name:'',email:'',signedIn:false,textColor:'',textCustom:'',pinterestUser:'chibbynugget'};
-try{ var _s=JSON.parse(localStorage.getItem('eliteSettings')||'null'); if(_s){ for(var k in _s) settings[k]=_s[k]; } }catch(e){}
+var settings={theme:'warm',accent:'Rust',accentCustom:'',name:'',email:'',signedIn:false,textColor:'',textCustom:'',pinterestUser:'chibbynugget',pinterestBoard:'https://www.pinterest.com/chibbynugget/elite-combos/'};
+try{ var _s=JSON.parse(localStorage.getItem('eliteSettings')||'null'); if(_s){ for(var k in _s){ if(_s[k]!==undefined) settings[k]=_s[k]; } if(!settings.pinterestBoard) settings.pinterestBoard='https://www.pinterest.com/chibbynugget/elite-combos/'; } }catch(e){}
 var TEXT_COLORS={'':'Auto (theme default)','#26221e':'Ink Black','#000000':'Pure Black','#5a3a22':'Warm Brown','#f5efe0':'Cream','#ffffff':'White','#5f6b76':'Slate Grey'};
 var THEMES={
   warm:{grad1:'#f8f3ea',grad2:'#f1e8d9',grad3:'#ebdfc9',ink:'#2d2013',muted:'#7e6f5e',line:'rgba(84,60,38,.16)',glass:'rgba(255,255,255,.52)',glassStrong:'rgba(255,255,255,.78)',glassBorder:'rgba(255,255,255,.72)',field:'#ffffff',meta:'#f8f3ea'},
