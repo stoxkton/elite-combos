@@ -26,9 +26,12 @@ body{margin:0;background-color:var(--grad1);background:linear-gradient(180deg,va
 img,svg{max-width:100%}
 button{font:inherit;cursor:pointer;min-height:44px;touch-action:manipulation}
 a{color:inherit}
-/* HEADER — compact masthead, everything on one tidy band */
-.cover{padding:22px 20px 16px;max-width:720px;margin:0 auto}
-.cover-top{display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);font-weight:600}
+/* HEADER — compact masthead, everything on one tidy band.
+   The whole header sits BELOW the status-bar safe area and carries no blur,
+   filter, or backdrop effect of any kind, so the top line always renders
+   crisp — never ghosted behind a frosted strip. */
+.cover{padding:calc(22px + env(safe-area-inset-top, 0px)) 20px 16px;max-width:720px;margin:0 auto;position:relative;z-index:60;-webkit-backdrop-filter:none;backdrop-filter:none;filter:none}
+.cover-top{display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);font-weight:600;-webkit-backdrop-filter:none;backdrop-filter:none;filter:none;text-shadow:none}
 .cover-row{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-top:14px}
 .cover h1{font-size:34px;line-height:.95;letter-spacing:.01em;margin:0;font-weight:900;text-transform:uppercase}
 .cover h1 .thin{display:block;font-weight:300;letter-spacing:.16em;font-size:13px;line-height:1.3;margin-top:6px}
@@ -279,9 +282,9 @@ body.ask-on .footer{display:none}
 #view-ask .ask-bar{flex:0 0 auto;margin-top:12px;background:var(--glass-strong);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.82);box-shadow:0 14px 34px rgba(0,0,0,.13),inset 0 1px 0 rgba(255,255,255,.95);border-radius:999px;padding:6px}
 /* SETTINGS — discreet gear tucked into the header corner; the screen itself is normal glass */
 .cover-top-right{display:inline-flex;align-items:center}
-.gear-btn{background:transparent;border:0;box-shadow:none;color:var(--muted);opacity:.42;width:30px;height:30px;min-height:30px;padding:5px;margin-left:9px;border-radius:50%}
-.gear-btn:active{opacity:.95}
-.gear-btn svg{width:19px;height:19px;display:block}
+.gear-btn{background:transparent;border:0;box-shadow:none;color:var(--ink);opacity:.6;width:32px;height:32px;min-height:32px;padding:6px;margin-left:9px;border-radius:50%;position:relative;z-index:61;flex:0 0 auto;-webkit-backdrop-filter:none;backdrop-filter:none;filter:none}
+.gear-btn:active{opacity:1}
+.gear-btn svg{width:20px;height:20px;display:block}
 .theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
 .theme-swatch{border:2px solid var(--line);border-radius:14px;padding:10px;text-align:left;background:var(--glass);min-height:0;color:var(--ink)}
 .theme-swatch .ts-chip{display:block;height:42px;border-radius:9px;border:1px solid rgba(0,0,0,.12);margin-bottom:8px}
