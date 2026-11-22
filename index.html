@@ -305,7 +305,11 @@ body.ask-on .footer{display:none}
 #view-ask .chat{flex:1 1 auto;min-height:0;overflow-y:auto;margin-bottom:0;align-content:start}
 #view-ask .ask-bar{flex:0 0 auto;margin-top:10px;background:var(--glass-strong);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.82);box-shadow:0 14px 34px rgba(0,0,0,.13),inset 0 1px 0 rgba(255,255,255,.95);border-radius:999px;padding:6px}
 /* SETTINGS — discreet gear tucked into the header corner; the screen itself is normal glass */
+.cover-top-left{display:inline-flex;align-items:center;gap:6px}
 .cover-top-right{display:inline-flex;align-items:center}
+.menu-btn{background:transparent;border:0;box-shadow:none;color:var(--ink);opacity:.7;width:32px;height:32px;min-height:32px;padding:6px;margin-left:-6px;border-radius:50%;position:relative;z-index:61;flex:0 0 auto;-webkit-backdrop-filter:none;backdrop-filter:none;filter:none}
+.menu-btn:active{opacity:1}
+.menu-btn svg{width:20px;height:20px;display:block}
 .gear-btn{background:transparent;border:0;box-shadow:none;color:var(--ink);opacity:.6;width:32px;height:32px;min-height:32px;padding:6px;margin-left:9px;border-radius:50%;position:relative;z-index:61;flex:0 0 auto;-webkit-backdrop-filter:none;backdrop-filter:none;filter:none}
 .gear-btn:active{opacity:1}
 .gear-btn svg{width:20px;height:20px;display:block}
@@ -335,11 +339,39 @@ body.ask-on .footer{display:none}
 .pin-fallback strong{display:block;font-size:15px;letter-spacing:.04em;margin-bottom:12px}
 .pin-fallback-btn{display:block;border:1px solid var(--accent-deep);border-radius:999px;background:var(--accent);color:#fff7ec;padding:12px 18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;text-decoration:none;min-height:46px;box-sizing:border-box}
 .pin-open{display:inline-block;margin-top:10px;font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--accent-deep);text-decoration:none}
+/* DRAWER — slide-in side panel from the left, glassy, follows theme vars */
+.drawer-scrim{position:fixed;inset:0;background:rgba(18,14,10,.44);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .32s ease;z-index:110}
+body.drawer-open .drawer-scrim{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:min(320px,86vw);z-index:120;display:flex;flex-direction:column;background:var(--glass-strong);-webkit-backdrop-filter:blur(26px) saturate(170%);backdrop-filter:blur(26px) saturate(170%);border-right:1px solid var(--glass-border);border-radius:0 22px 22px 0;box-shadow:18px 0 44px rgba(0,0,0,.18);color:var(--ink);padding:calc(18px + env(safe-area-inset-top, 0px)) 18px calc(18px + env(safe-area-inset-bottom, 0px));transform:translateX(-106%);transition:transform .38s cubic-bezier(.32,.9,.24,1),visibility 0s linear .38s;visibility:hidden;overflow-y:auto;overscroll-behavior:contain}
+body.drawer-open .drawer{transform:translateX(0);visibility:visible;transition:transform .38s cubic-bezier(.32,.9,.24,1),visibility 0s}
+@media (prefers-reduced-motion: reduce){.drawer{transition:none}.drawer-scrim{transition:none}}
+.drawer-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.drawer-profile{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+.drawer-avatar{flex:0 0 46px;width:46px;height:46px;border-radius:50%;background:var(--accent);color:#fff7ec;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;box-shadow:0 6px 16px rgba(0,0,0,.16)}
+.drawer-profile-meta{min-width:0;flex:1}
+.drawer-profile-meta strong{display:block;font-size:15.5px;line-height:1.2;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drawer-profile-meta span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.drawer-close{flex:0 0 36px;width:36px;height:36px;min-height:36px;border-radius:50%;border:1px solid var(--glass-border);background:var(--glass);color:var(--ink);font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+.drawer-section{margin-top:22px}
+.drawer-k{font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:800;color:var(--muted);margin:0 0 10px}
+.drawer-today-card{border:1px solid var(--glass-border);background:var(--glass);border-radius:16px;padding:14px}
+.drawer-weather{font-size:14px;font-weight:800;letter-spacing:.02em;line-height:1.3}
+.drawer-weather-line{font-size:12.5px;color:var(--muted);line-height:1.45;margin-top:3px}
+.drawer-fit{display:flex;align-items:center;gap:12px;margin-top:13px;padding-top:13px;border-top:1px solid var(--line)}
+.drawer-fit-names{display:grid;gap:2px}
+.drawer-fit-names div{font-size:12px;line-height:1.3}
+.drawer-fit-names b{letter-spacing:.08em;text-transform:uppercase;font-size:12px}
+.drawer-fit-names span{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-left:5px}
+.drawer-nav{display:grid;gap:8px}
+.drawer-nav-btn{width:100%;text-align:left;border:1px solid var(--glass-border);background:var(--glass);color:var(--ink);border-radius:14px;padding:13px 14px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 3px 10px rgba(0,0,0,.04)}
+.drawer-nav-btn span:last-child{color:var(--muted);font-size:16px;line-height:1}
+.drawer-board{margin-top:auto;padding-top:22px}
+.drawer-board-btn{width:100%;border:1px solid var(--accent-deep);border-radius:999px;background:var(--accent);color:#fff7ec;padding:13px 18px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;min-height:50px;box-shadow:0 8px 20px rgba(0,0,0,.16);display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
 </style>
 </head>
 <body>
 <header class="cover">
-  <div class="cover-top"><span>Erik Xei</span><span class="cover-top-right">Playbook — Vol. 01<button type="button" class="gear-btn" onclick="openSettings()" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33 1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82 1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></span></div>
+  <div class="cover-top"><span class="cover-top-left"><button type="button" class="menu-btn" onclick="openDrawer()" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><span>Erik Xei</span></span><span class="cover-top-right">Playbook — Vol. 01<button type="button" class="gear-btn" onclick="openSettings()" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33 1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82 1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></span></div>
   <div class="cover-row">
     <h1>Elite<span class="thin">Color Combo Playbook</span></h1>
     <div class="cover-meta"><b>25</b> colors · <b id="pairCount">—</b> pairings<br>Elite pairs only — no guessing</div>
@@ -583,6 +615,39 @@ body.ask-on .footer{display:none}
 </main>
 
 <p class="footer">Not in the book? Not elite.</p>
+
+<div class="drawer-scrim" id="drawerScrim" onclick="closeDrawer()" aria-hidden="true"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Menu">
+  <div class="drawer-top">
+    <div class="drawer-profile">
+      <span class="drawer-avatar" id="drawerAvatar">E</span>
+      <div class="drawer-profile-meta"><strong id="drawerName">Elite Combos</strong><span id="drawerSub">Playbook — Vol. 01</span></div>
+    </div>
+    <button type="button" class="drawer-close" onclick="closeDrawer()" aria-label="Close menu">×</button>
+  </div>
+  <div class="drawer-section">
+    <p class="drawer-k">Today</p>
+    <div class="drawer-today-card">
+      <div class="drawer-weather" id="drawerWeather">American Fork, Utah</div>
+      <div class="drawer-weather-line" id="drawerWeatherLine"></div>
+      <div class="drawer-fit" id="drawerFit"></div>
+    </div>
+  </div>
+  <div class="drawer-section">
+    <p class="drawer-k">Go to</p>
+    <nav class="drawer-nav" aria-label="Drawer">
+      <button type="button" class="drawer-nav-btn" onclick="drawerGo('colors')"><span>Colors</span><span aria-hidden="true">›</span></button>
+      <button type="button" class="drawer-nav-btn" onclick="drawerGo('checker')"><span>Checker</span><span aria-hidden="true">›</span></button>
+      <button type="button" class="drawer-nav-btn" onclick="drawerGo('shuffle')"><span>Shuffle</span><span aria-hidden="true">›</span></button>
+      <button type="button" class="drawer-nav-btn" onclick="drawerGo('closet')"><span>Closet</span><span aria-hidden="true">›</span></button>
+      <button type="button" class="drawer-nav-btn" onclick="drawerGo('ask')"><span>Ask</span><span aria-hidden="true">›</span></button>
+      <button type="button" class="drawer-nav-btn" onclick="drawerGo('settings')"><span>Settings</span><span aria-hidden="true">›</span></button>
+    </nav>
+  </div>
+  <div class="drawer-board">
+    <button type="button" class="drawer-board-btn" onclick="openDrawerBoard()">Your board ↗</button>
+  </div>
+</aside>
 
 <div class="tabbar-wrap">
   <nav class="tabbar" aria-label="Main">
@@ -1271,6 +1336,68 @@ function openSettings(){
   renderPinterest();
 }
 function closeSettings(){ showTab(tabBeforeSettings); }
+
+// ---------- DRAWER ----------
+function renderDrawer(){
+  var isIn=!!(typeof settings!=='undefined' && settings.signedIn && (settings.name||'').trim());
+  var nameEl=document.getElementById('drawerName');
+  var avEl=document.getElementById('drawerAvatar');
+  var subEl=document.getElementById('drawerSub');
+  if(nameEl) nameEl.textContent=isIn?settings.name:'Elite Combos';
+  if(avEl) avEl.textContent=isIn?((settings.name||'E').trim().charAt(0).toUpperCase()||'E'):'E';
+  if(subEl) subEl.textContent=isIn?(settings.email||'Signed in'):'Playbook — Vol. 01';
+  var wEl=document.getElementById('drawerWeather');
+  var wlEl=document.getElementById('drawerWeatherLine');
+  if(typeof WX!=='undefined' && WX){
+    var hiloEl=document.getElementById('todayHilo');
+    var hilo=(hiloEl&&hiloEl.textContent)?' · '+hiloEl.textContent:'';
+    if(wEl) wEl.textContent=WX.temp+'°F · '+WX.cond+' — American Fork'+hilo;
+    if(wlEl) wlEl.textContent=(typeof weatherLine==='function')?weatherLine(WX.temp,WX.code):'';
+  } else {
+    var tt=document.getElementById('todayTemp');
+    var tc=document.getElementById('todayCond');
+    var tl=document.getElementById('todayLine');
+    if(tt&&tt.textContent){
+      if(wEl) wEl.textContent=tt.textContent+' · '+(tc?tc.textContent:'')+' — American Fork';
+      if(wlEl) wlEl.textContent=tl?tl.textContent:'';
+    } else {
+      if(wEl) wEl.textContent='American Fork, Utah';
+      if(wlEl) wlEl.textContent='';
+    }
+  }
+  var fitEl=document.getElementById('drawerFit');
+  if(fitEl){
+    if(typeof currentTodayFit!=='undefined' && currentTodayFit && currentTodayFit.length===3){
+      var labels=['Top','Bottom','Accent'];
+      var dots=currentTodayFit.map(function(n){return '<span class="dot" style="background:'+hex(n)+'"></span>'}).join('');
+      var names=currentTodayFit.map(function(n,idx){return '<div><b>'+n+'</b><span>'+labels[idx]+'</span></div>'}).join('');
+      fitEl.innerHTML='<span class="dots">'+dots+'</span><span class="drawer-fit-names">'+names+'</span>';
+      fitEl.style.display='';
+    } else {
+      fitEl.innerHTML='';
+      fitEl.style.display='none';
+    }
+  }
+}
+function openDrawer(){
+  renderDrawer();
+  document.body.classList.add('drawer-open');
+  var d=document.getElementById('drawer'); if(d) d.setAttribute('aria-hidden','false');
+}
+function closeDrawer(){
+  document.body.classList.remove('drawer-open');
+  var d=document.getElementById('drawer'); if(d) d.setAttribute('aria-hidden','true');
+}
+function drawerGo(t){
+  closeDrawer();
+  if(t==='settings'){ openSettings(); return; }
+  showTab(t);
+}
+function openDrawerBoard(){
+  var u=(typeof pinBoardUrl==='function')?pinBoardUrl():'https://www.pinterest.com/chibbynugget/elite-combos/';
+  if(u) window.open(u,'_blank','noopener');
+}
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeDrawer(); });
 
 // ---------- ASK — real AI (Google Gemini, the user's own free key) ----------
 // The key lives ONLY in this variable, in memory, for this visit. It is never
