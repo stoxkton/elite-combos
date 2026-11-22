@@ -58,14 +58,14 @@ a{color:inherit}
 /* TAB BAR — smoky dark glass on the dark themes (Deep Green + Dark): no white blob, no white sheen.
    Bar and sliding lens go dark-translucent with a subtle light edge; tab labels/icons turn light.
    Warm + Classic keep the light glass above. */
-body.theme-green .tabbar,body.theme-dark .tabbar{background:linear-gradient(180deg,rgba(16,14,11,.58),rgba(16,14,11,.42) 52%,rgba(16,14,11,.5));-webkit-backdrop-filter:blur(30px) saturate(150%) brightness(.92);backdrop-filter:blur(30px) saturate(150%) brightness(.92);border-color:rgba(245,239,224,.24);box-shadow:0 20px 46px rgba(0,0,0,.42),0 4px 16px rgba(0,0,0,.3),inset 0 1px 0 rgba(245,239,224,.16),inset 0 -1px 0 rgba(0,0,0,.25),inset 1px 0 0 rgba(245,239,224,.07),inset -1px 0 0 rgba(245,239,224,.07)}
-body.theme-green .tabbar::before,body.theme-dark .tabbar::before{background:linear-gradient(180deg,rgba(245,239,224,.13),rgba(245,239,224,0))}
-body.theme-green .tab-lens,body.theme-dark .tab-lens{background:linear-gradient(180deg,rgba(245,239,224,.24),rgba(245,239,224,.11) 48%,rgba(245,239,224,.17));-webkit-backdrop-filter:blur(6px) saturate(150%) brightness(1.18);backdrop-filter:blur(6px) saturate(150%) brightness(1.18);border-color:rgba(245,239,224,.38);box-shadow:0 10px 26px rgba(0,0,0,.35),0 2px 8px rgba(0,0,0,.25),inset 0 1px 0 rgba(245,239,224,.28),inset 0 -1px 1px rgba(0,0,0,.18),inset 0 0 12px rgba(245,239,224,.06)}
-body.theme-green .tab-lens::before,body.theme-dark .tab-lens::before{opacity:.45}
-body.theme-green .tab-lens::after,body.theme-dark .tab-lens::after{background:linear-gradient(180deg,rgba(245,239,224,.22),rgba(245,239,224,0));opacity:.5}
-body.theme-green .tabbar button,body.theme-dark .tabbar button{color:rgba(245,239,224,.55)}
-body.theme-green .tabbar button.active,body.theme-dark .tabbar button.active{color:var(--ink)}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){body.theme-green .tabbar,body.theme-dark .tabbar{background:rgba(18,15,12,.94)}body.theme-green .tab-lens,body.theme-dark .tab-lens{background:rgba(245,239,224,.18)}}
+body.theme-green .tabbar,body.theme-dark .tabbar,body.theme-mustarddark .tabbar{background:linear-gradient(180deg,rgba(16,14,11,.58),rgba(16,14,11,.42) 52%,rgba(16,14,11,.5));-webkit-backdrop-filter:blur(30px) saturate(150%) brightness(.92);backdrop-filter:blur(30px) saturate(150%) brightness(.92);border-color:rgba(245,239,224,.24);box-shadow:0 20px 46px rgba(0,0,0,.42),0 4px 16px rgba(0,0,0,.3),inset 0 1px 0 rgba(245,239,224,.16),inset 0 -1px 0 rgba(0,0,0,.25),inset 1px 0 0 rgba(245,239,224,.07),inset -1px 0 0 rgba(245,239,224,.07)}
+body.theme-green .tabbar::before,body.theme-dark .tabbar::before,body.theme-mustarddark .tabbar::before{background:linear-gradient(180deg,rgba(245,239,224,.13),rgba(245,239,224,0))}
+body.theme-green .tab-lens,body.theme-dark .tab-lens,body.theme-mustarddark .tab-lens{background:linear-gradient(180deg,rgba(245,239,224,.24),rgba(245,239,224,.11) 48%,rgba(245,239,224,.17));-webkit-backdrop-filter:blur(6px) saturate(150%) brightness(1.18);backdrop-filter:blur(6px) saturate(150%) brightness(1.18);border-color:rgba(245,239,224,.38);box-shadow:0 10px 26px rgba(0,0,0,.35),0 2px 8px rgba(0,0,0,.25),inset 0 1px 0 rgba(245,239,224,.28),inset 0 -1px 1px rgba(0,0,0,.18),inset 0 0 12px rgba(245,239,224,.06)}
+body.theme-green .tab-lens::before,body.theme-dark .tab-lens::before,body.theme-mustarddark .tab-lens::before{opacity:.45}
+body.theme-green .tab-lens::after,body.theme-dark .tab-lens::after,body.theme-mustarddark .tab-lens::after{background:linear-gradient(180deg,rgba(245,239,224,.22),rgba(245,239,224,0));opacity:.5}
+body.theme-green .tabbar button,body.theme-dark .tabbar button,body.theme-mustarddark .tabbar button{color:rgba(245,239,224,.55)}
+body.theme-green .tabbar button.active,body.theme-dark .tabbar button.active,body.theme-mustarddark .tabbar button.active{color:var(--ink)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){body.theme-green .tabbar,body.theme-dark .tabbar,body.theme-mustarddark .tabbar{background:rgba(18,15,12,.94)}body.theme-green .tab-lens,body.theme-dark .tab-lens,body.theme-mustarddark .tab-lens{background:rgba(245,239,224,.18)}}
 /* LIGHT THEMES (Warm + Classic) — the lens here is ALWAYS light glass: translucent
    white with a subtle border and top sheen. The smoky dark lens above belongs to
    Deep Green + Dark ONLY and must never show on a light theme. Tab buttons keep
@@ -147,6 +147,21 @@ body.theme-warm .tab-lens::after,body.theme-classic .tab-lens::after{background:
 .shuffle-hero p{color:var(--muted);margin:0;font-size:13.5px;line-height:1.6}
 .deal-btn{background:var(--accent);color:#fff7ec;border:1px solid var(--accent-deep);box-shadow:0 8px 20px rgba(163,78,34,.28),inset 0 1px 0 rgba(255,255,255,.35);border-radius:999px;padding:14px 22px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:900;width:100%;margin-top:18px;min-height:52px}
 .deal-btn.dark{background:var(--glass-strong);-webkit-backdrop-filter:blur(16px) saturate(170%);backdrop-filter:blur(16px) saturate(170%);color:var(--ink);border:1px solid rgba(255,255,255,.75);box-shadow:0 6px 18px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.95)}
+/* OUTFIT FIGURE — self-contained: delete this block + outfitFigureSVG() + its two call sites to remove the feature */
+.figure-card{background:var(--glass-strong);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);border:1px solid var(--glass-border);border-radius:var(--radius);box-shadow:0 8px 22px rgba(0,0,0,.05);padding:18px;display:flex;align-items:center;gap:20px}
+.figure-card .figure-svg{width:132px;flex:0 0 132px;height:auto;display:block}
+.figure-side{flex:1;min-width:0}
+.figure-side .k{font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+.figure-side h3{font-size:17px;line-height:1.15;margin:6px 0 0;text-transform:uppercase;letter-spacing:.02em;font-weight:900}
+.figure-rows{display:grid;gap:8px;margin-top:12px}
+.figure-row{display:flex;align-items:center;gap:9px;font-size:13px;line-height:1.3;min-width:0}
+.figure-row i{width:18px;height:18px;flex:0 0 18px;border-radius:50%;border:1px solid rgba(0,0,0,.14);display:block}
+.figure-row b{letter-spacing:.08em;text-transform:uppercase;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.figure-row span{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:800;flex:0 0 auto}
+.fit-figure{display:flex;justify-content:center;padding:14px 0 2px}
+.fit-figure .figure-svg{width:92px;height:auto;display:block}
+@media(max-width:380px){.figure-card{gap:14px;padding:14px}.figure-card .figure-svg{width:108px;flex-basis:108px}}
+/* /OUTFIT FIGURE */
 .outfit{display:grid;gap:12px;margin-top:16px}
 .look{border-radius:var(--radius);overflow:hidden;background:var(--glass-strong);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);border:1px solid rgba(255,255,255,.68);box-shadow:0 8px 22px rgba(0,0,0,.05)}
 .look-swatch{height:150px;display:flex;align-items:flex-end;padding:16px}
@@ -165,8 +180,8 @@ body.theme-warm .tab-lens::after,body.theme-classic .tab-lens::after{background:
 .linkbtn.small{padding:7px 13px;min-height:38px;font-size:9px;letter-spacing:.18em;flex:0 0 auto}
 .combo-link{white-space:nowrap;flex:0 1 auto;min-width:0}
 /* SEE THIS COMBO on the dark themes: dark accent-tinted glass + light text, never the washed-out pale pill */
-body.theme-green .combo-link,body.theme-dark .combo-link{background:rgba(14,11,8,.55);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);border-color:var(--accent);color:#f8f2e4;box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(245,239,224,.14)}
-body.theme-green .combo-link:active,body.theme-dark .combo-link:active{background:rgba(14,11,8,.78);color:#f8f2e4}
+body.theme-green .combo-link,body.theme-dark .combo-link,body.theme-mustarddark .combo-link{background:rgba(14,11,8,.55);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);border-color:var(--accent);color:#f8f2e4;box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(245,239,224,.14)}
+body.theme-green .combo-link:active,body.theme-dark .combo-link:active,body.theme-mustarddark .combo-link:active{background:rgba(14,11,8,.78);color:#f8f2e4}
 .linkbtn.light{border-color:#fff;color:#fff}
 .worn-wrap{padding:16px 20px 20px;border-top:1px solid var(--line)}
 .combo-link-row{margin-top:16px;text-align:center}
@@ -370,19 +385,13 @@ body.drawer-open .drawer{transform:translateX(0);visibility:visible;transition:t
 .drawer-top-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}
 .drawer-gear{flex:0 0 36px;width:36px;height:36px;min-height:36px;border-radius:50%;border:1px solid var(--glass-border);background:var(--glass);color:var(--ink);display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 3px 10px rgba(0,0,0,.05)}
 .drawer-gear svg{width:19px;height:19px;display:block}
-.drawer-quick-card{border:1px solid var(--glass-border);background:var(--glass);border-radius:16px;padding:14px}
-.drawer-quick-empty{font-size:12.5px;color:var(--muted);line-height:1.45}
-.drawer-quick-fit{display:flex;align-items:center;gap:12px}
-.drawer-quick-names{display:grid;gap:2px}
-.drawer-quick-names div{font-size:12px;line-height:1.3}
-.drawer-quick-names b{letter-spacing:.08em;text-transform:uppercase;font-size:12px}
-.drawer-quick-names span{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-left:5px}
-.drawer-deal-btn{width:100%;margin-top:13px;border:1px solid rgba(255,255,255,.85);border-radius:999px;background:var(--glass-strong);color:var(--ink);padding:11px 16px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;min-height:46px;box-shadow:0 4px 14px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.9)}
+
+
 </style>
 </head>
 <body>
 <header class="cover">
-  <div class="cover-top"><span class="cover-top-left"><button type="button" class="menu-btn" onclick="openDrawer()" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><span>Erik Xei</span></span><span class="cover-top-right">Playbook — Vol. 01<button type="button" class="gear-btn" onclick="openSettings()" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33 1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82 1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></span></div>
+  <div class="cover-top"><span class="cover-top-left"><button type="button" class="menu-btn" onclick="openDrawer()" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><span>Erik Xei</span></span><span class="cover-top-right">Playbook — Vol. 01</span></div>
   <div class="cover-row">
     <h1>Elite<span class="thin">Color Combo Playbook</span></h1>
     <div class="cover-meta"><b>25</b> colors · <b id="pairCount">—</b> pairings<br>Elite pairs only — no guessing</div>
@@ -543,6 +552,7 @@ body.drawer-open .drawer{transform:translateX(0);visibility:visible;transition:t
         <button type="button" class="theme-swatch" data-theme="classic" onclick="setTheme('classic')"><span class="ts-chip" style="background:linear-gradient(135deg,#f7f7f7,#e2e2e2)"></span><span class="ts-name">Classic</span></button>
         <button type="button" class="theme-swatch" data-theme="green" onclick="setTheme('green')"><span class="ts-chip" style="background:linear-gradient(135deg,#0e362a,#07231b)"></span><span class="ts-name">Deep Green</span></button>
         <button type="button" class="theme-swatch" data-theme="dark" onclick="setTheme('dark')"><span class="ts-chip" style="background:linear-gradient(135deg,#2b2119,#16120e)"></span><span class="ts-name">Dark</span></button>
+        <button type="button" class="theme-swatch" data-theme="mustarddark" onclick="setTheme('mustarddark')"><span class="ts-chip" style="background:linear-gradient(135deg,#d9a821,#3a2f10 58%,#171408)"></span><span class="ts-name">Mustard Dark</span></button>
       </div>
     </div>
     <div class="panel">
@@ -648,10 +658,10 @@ body.drawer-open .drawer{transform:translateX(0);visibility:visible;transition:t
     </div>
   </div>
   <div class="drawer-section">
-    <p class="drawer-k">Quick outfit</p>
-    <div class="drawer-quick-card">
-      <div id="drawerQuickOutfit"><div class="drawer-quick-empty">A fresh elite trio, right here — no tab hopping.</div></div>
-      <button type="button" class="drawer-deal-btn" id="drawerDealBtn" onclick="drawerDeal()">Deal an outfit</button>
+    <p class="drawer-k">Your closet</p>
+    <div class="drawer-today-card">
+      <div class="drawer-weather" id="drawerClosetCount">0 pieces</div>
+      <div class="drawer-weather-line" id="drawerClosetLine">Add pieces in Closet to see matches here.</div>
     </div>
   </div>
   <div class="drawer-board">
@@ -898,6 +908,32 @@ var currentShuffle=null; // [top, bottom, accent]
 var currentTodayFit=null; // [top, bottom, accent]
 
 // Shuffle
+/* OUTFIT FIGURE — self-contained helper. Top = trio[0], Bottoms = trio[1], Shoes + cap + stripe = trio[2] (Accent). */
+function outfitFigureSVG(trio){
+  if(!trio||trio.length<3) return '';
+  var top=trio[0], bottom=trio[1], accent=trio[2];
+  var ht=hex(top), hb=hex(bottom), ha=hex(accent);
+  var stroke='rgba(0,0,0,.16)';
+  var label='Outfit figure wearing a '+top+' top, '+bottom+' bottoms, and '+accent+' shoes and accents';
+  return '<svg class="figure-svg" viewBox="0 0 120 196" role="img" aria-label="'+label+'" xmlns="http://www.w3.org/2000/svg">'
+    +'<ellipse cx="60" cy="188" rx="30" ry="4.5" fill="rgba(0,0,0,.08)"/>'
+    +'<circle cx="60" cy="20" r="13" fill="var(--muted)" opacity=".5"/>'
+    +'<path d="M47 16a13 13 0 0 1 26 0z" fill="'+ha+'" stroke="'+stroke+'" stroke-width="1.1" stroke-linejoin="round"/>'
+    +'<rect x="55" y="31" width="10" height="9" rx="2" fill="var(--muted)" opacity=".5"/>'
+    +'<path d="M40 42 Q60 51 80 42 L97 55 L88.5 75 L80 68.5 L80 103 L40 103 L40 68.5 L31.5 75 L23 55 Z" fill="'+ht+'" stroke="'+stroke+'" stroke-width="1.2" stroke-linejoin="round"/>'
+    +'<rect x="40" y="93" width="40" height="5.5" fill="'+ha+'" opacity=".92"/>'
+    +'<path d="M40 105 L80 105 L84.5 168 L66.5 168 L60 119 L53.5 168 L35.5 168 Z" fill="'+hb+'" stroke="'+stroke+'" stroke-width="1.2" stroke-linejoin="round"/>'
+    +'<rect x="31" y="170" width="27" height="11" rx="5.5" fill="'+ha+'" stroke="'+stroke+'" stroke-width="1.1"/>'
+    +'<rect x="62" y="170" width="27" height="11" rx="5.5" fill="'+ha+'" stroke="'+stroke+'" stroke-width="1.1"/>'
+    +'</svg>';
+}
+function outfitFigureCard(trio){
+  if(!trio||trio.length<3) return '';
+  var labels=['Top','Bottom','Accent'];
+  var rows=trio.map(function(n,idx){ return '<div class="figure-row"><i style="background:'+hex(n)+'"></i><b>'+n+'</b><span>'+labels[idx]+'</span></div>'; }).join('');
+  return '<div class="figure-card">'+outfitFigureSVG(trio)+'<div class="figure-side"><div class="k">On the figure</div><h3>See the fit</h3><div class="figure-rows">'+rows+'</div></div></div>';
+}
+/* /OUTFIT FIGURE */
 function shuffleArr(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
 // Deal one elite trio [top, bottom, accent]. `allowed` (array or null) restricts
 // which colors may appear; `wantStatement` prefers a bold statement color as
@@ -955,6 +991,7 @@ function deal(scroll){
   } else { note.textContent=''; note.classList.remove('show'); }
   var labels=['Top','Bottom','Accent'];
   var h='<div class="outfit">';
+  h+=outfitFigureCard(found);
   found.forEach(function(n,idx){
     h+='<div class="look"><div class="look-swatch" style="background:'+hex(n)+'"><span class="'+textOn(n)+'" style="font-size:10px;letter-spacing:.26em;text-transform:uppercase;font-weight:800">'+labels[idx]+'</span></div><div class="look-meta"><strong>'+n+'</strong><span>'+labels[idx]+'</span></div><div class="look-note">'+WEAR[n]+'</div></div>';
   });
@@ -1002,6 +1039,7 @@ function renderTodayFit(){
     +'</span><span class="fit-names">'
     +trio.map(function(n,idx){return '<div><b>'+n+'</b><span>'+labels[idx]+'</span></div>'}).join('')
     +'</span></div>';
+  h+='<div class="fit-figure">'+outfitFigureSVG(trio)+'</div>';
   if(todayFitWhy) h+='<p class="fit-why">'+todayFitWhy+'</p>';
   h+='<div class="fit-actions"><button type="button" class="save-btn ghost" onclick="rerollTodayFit()">New one</button></div>';
   h+='<div class="outfit-link-row" style="text-align:left"><a class="linkbtn small" href="'+pinUrl(trio.join(' ')+' outfit men')+'" target="_blank" rel="noopener">See it worn \u2197</a></div></div>';
@@ -1223,7 +1261,8 @@ var THEMES={
   warm:{grad1:'#f8f3ea',grad2:'#f1e8d9',grad3:'#ebdfc9',ink:'#2d2013',muted:'#7e6f5e',line:'rgba(84,60,38,.16)',glass:'rgba(255,255,255,.52)',glassStrong:'rgba(255,255,255,.78)',glassBorder:'rgba(255,255,255,.72)',field:'#ffffff',meta:'#f8f3ea'},
   classic:{grad1:'#f6f6f6',grad2:'#efefef',grad3:'#e5e5e5',ink:'#111111',muted:'#5f5f5c',line:'rgba(0,0,0,.14)',glass:'rgba(255,255,255,.85)',glassStrong:'rgba(255,255,255,.96)',glassBorder:'rgba(0,0,0,.08)',field:'#ffffff',meta:'#f6f6f6'},
   green:{grad1:'#0e362a',grad2:'#0b2e25',grad3:'#07231b',ink:'#f5efe0',muted:'rgba(245,239,224,.62)',line:'rgba(245,239,224,.2)',glass:'rgba(245,239,224,.07)',glassStrong:'rgba(245,239,224,.13)',glassBorder:'rgba(245,239,224,.22)',field:'rgba(245,239,224,.1)',meta:'#0e362a'},
-  dark:{grad1:'#2b2119',grad2:'#211a13',grad3:'#16120e',ink:'#f5efe0',muted:'rgba(245,239,224,.6)',line:'rgba(245,239,224,.18)',glass:'rgba(245,239,224,.06)',glassStrong:'rgba(245,239,224,.12)',glassBorder:'rgba(245,239,224,.2)',field:'rgba(245,239,224,.09)',meta:'#2b2119'}
+  dark:{grad1:'#2b2119',grad2:'#211a13',grad3:'#16120e',ink:'#f5efe0',muted:'rgba(245,239,224,.6)',line:'rgba(245,239,224,.18)',glass:'rgba(245,239,224,.06)',glassStrong:'rgba(245,239,224,.12)',glassBorder:'rgba(245,239,224,.2)',field:'rgba(245,239,224,.09)',meta:'#2b2119'},
+  mustarddark:{grad1:'#3d3212',grad2:'#2c240e',grad3:'#171308',ink:'#f7ead0',muted:'rgba(247,234,208,.64)',line:'rgba(247,234,208,.2)',glass:'rgba(247,234,208,.07)',glassStrong:'rgba(247,234,208,.13)',glassBorder:'rgba(247,234,208,.24)',field:'rgba(247,234,208,.1)',meta:'#3d3212'}
 };
 var ACCENTS={
   'Rust':{hex:'#c5622d',deep:'#a34e22',deepDark:'#e59a68',soft:'rgba(197,98,45,.12)'},
@@ -1243,9 +1282,9 @@ function applySettings(){
   r.setProperty('--ink',settings.textCustom||settings.textColor||t.ink); r.setProperty('--muted',t.muted); r.setProperty('--line',t.line);
   r.setProperty('--glass',t.glass); r.setProperty('--glass-strong',t.glassStrong); r.setProperty('--glass-border',t.glassBorder); r.setProperty('--field',t.field);
   r.setProperty('--accent',a.hex);
-  r.setProperty('--accent-deep',(settings.theme==='green'||settings.theme==='dark')?a.deepDark:a.deep);
+  r.setProperty('--accent-deep',(settings.theme==='green'||settings.theme==='dark'||settings.theme==='mustarddark')?a.deepDark:a.deep);
   r.setProperty('--accent-soft',a.soft);
-  document.body.classList.remove('theme-warm','theme-classic','theme-green','theme-dark');
+  document.body.classList.remove('theme-warm','theme-classic','theme-green','theme-dark','theme-mustarddark');
   document.body.classList.add('theme-'+settings.theme);
   var meta=document.querySelector('meta[name="theme-color"]');
   if(meta) meta.setAttribute('content',t.meta);
@@ -1255,7 +1294,7 @@ function applySettings(){
   document.documentElement.style.backgroundColor=t.grad3;
   document.documentElement.style.backgroundImage='linear-gradient(180deg,'+t.grad1+' 0%,'+t.grad2+' 38%,'+t.grad3+' 100%)';
   var sb=document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
-  if(sb) sb.setAttribute('content',(settings.theme==='green'||settings.theme==='dark')?'black-translucent':'default');
+  if(sb) sb.setAttribute('content',(settings.theme==='green'||settings.theme==='dark'||settings.theme==='mustarddark')?'black-translucent':'default');
   renderSettings();
   // A theme/settings repaint can shift layout — keep the tab lens seated on the active tab.
   if(typeof positionLens==='function') positionLens();
@@ -1388,10 +1427,17 @@ function renderDrawer(){
       fitEl.style.display='none';
     }
   }
+  var cc=document.getElementById('drawerClosetCount');
+  var cl=document.getElementById('drawerClosetLine');
+  if(cc&&cl){
+    var total=(typeof closet!=='undefined'&&closet)?closet.length:0;
+    var favs=0; if(total) closet.forEach(function(p){ if(p.fav) favs++; });
+    cc.textContent=total+(total===1?' piece':' pieces')+(favs?(' · '+favs+' favorite'+(favs===1?'':'s')):'');
+    cl.textContent=total?'Your pieces and what they pair with live in Closet.':'Add pieces in Closet to see matches here.';
+  }
 }
 function openDrawer(){
   renderDrawer();
-  if(typeof renderDrawerQuick==='function') renderDrawerQuick();
   document.body.classList.add('drawer-open');
   var d=document.getElementById('drawer'); if(d) d.setAttribute('aria-hidden','false');
 }
@@ -1407,28 +1453,6 @@ function drawerGo(t){
 function drawerSettings(){
   closeDrawer();
   openSettings();
-}
-var drawerQuickTrio=null;
-function renderDrawerQuick(){
-  var box=document.getElementById('drawerQuickOutfit');
-  var btn=document.getElementById('drawerDealBtn');
-  if(!box) return;
-  if(!drawerQuickTrio || drawerQuickTrio.length!==3){
-    box.innerHTML='<div class="drawer-quick-empty">A fresh elite trio, right here — no tab hopping.</div>';
-    if(btn) btn.textContent='Deal an outfit';
-    return;
-  }
-  var labels=['Top','Bottom','Accent'];
-  var dots=drawerQuickTrio.map(function(n){return '<span class="dot" style="background:'+hex(n)+'"></span>'}).join('');
-  var names=drawerQuickTrio.map(function(n,idx){return '<div><b>'+n+'</b><span>'+labels[idx]+'</span></div>'}).join('');
-  box.innerHTML='<div class="drawer-quick-fit"><span class="dots">'+dots+'</span><span class="drawer-quick-names">'+names+'</span></div>';
-  if(btn) btn.textContent='Re-roll outfit';
-}
-function drawerDeal(){
-  var trio=(typeof dealTrio==='function')?dealTrio(null,false):null;
-  if(!trio) return;
-  drawerQuickTrio=trio;
-  renderDrawerQuick();
 }
 function openDrawerBoard(){
   var u=(typeof pinBoardUrl==='function')?pinBoardUrl():'https://www.pinterest.com/chibbynugget/elite-combos/';
