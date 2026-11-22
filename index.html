@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#f8f3ea">
+<meta name="theme-color" content="#fceed3">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -14,10 +14,10 @@
 <title>Elite Combos</title>
 <style>
 :root{
-  --bg:#f1e9dc; --bg2:#e9dfcd; --card:rgba(255,255,255,.72); --ink:#2d2013; --muted:#7e6f5e; --line:rgba(84,60,38,.16);
-  --grad1:#f8f3ea; --grad2:#f1e8d9; --grad3:#ebdfc9; --field:#ffffff; --accent-soft:rgba(197,98,45,.12);
+  --bg:#f7ddab; --bg2:#ecc887; --card:rgba(255,248,228,.72); --ink:#332211; --muted:#8a6543; --line:rgba(150,95,35,.22);
+  --grad1:#fceed3; --grad2:#f7ddab; --grad3:#ecc887; --field:#fffaf0; --accent-soft:rgba(197,98,45,.14);
   --accent:#c5622d; --accent-deep:#a34e22;
-  --glass:rgba(255,255,255,.52); --glass-strong:rgba(255,255,255,.78); --glass-border:rgba(255,255,255,.72);
+  --glass:rgba(255,246,220,.54); --glass-strong:rgba(255,248,228,.80); --glass-border:rgba(255,250,232,.75);
   --radius:16px;
 }
 *{box-sizing:border-box}
@@ -553,7 +553,7 @@ body.drawer-open .drawer{transform:translateX(0);visibility:visible;transition:t
     <div class="panel">
       <h3>Theme</h3>
       <div class="theme-grid" id="themeGrid">
-        <button type="button" class="theme-swatch sel" data-theme="warm" onclick="setTheme('warm')"><span class="ts-chip" style="background:linear-gradient(135deg,#f8f3ea,#ebdfc9)"></span><span class="ts-name">Warm</span></button>
+        <button type="button" class="theme-swatch sel" data-theme="warm" onclick="setTheme('warm')"><span class="ts-chip" style="background:linear-gradient(135deg,#fceed3,#ecc887)"></span><span class="ts-name">Warm</span></button>
         <button type="button" class="theme-swatch" data-theme="classic" onclick="setTheme('classic')"><span class="ts-chip" style="background:linear-gradient(135deg,#f7f7f7,#e2e2e2)"></span><span class="ts-name">Classic</span></button>
         <button type="button" class="theme-swatch" data-theme="green" onclick="setTheme('green')"><span class="ts-chip" style="background:linear-gradient(135deg,#0e362a,#07231b)"></span><span class="ts-name">Deep Green</span></button>
         <button type="button" class="theme-swatch" data-theme="dark" onclick="setTheme('dark')"><span class="ts-chip" style="background:linear-gradient(135deg,#2b2119,#16120e)"></span><span class="ts-name">Dark</span></button>
@@ -1263,7 +1263,7 @@ var settings={theme:'warm',accent:'Rust',accentCustom:'',name:'',email:'',signed
 try{ var _s=JSON.parse(localStorage.getItem('eliteSettings')||'null'); if(_s){ for(var k in _s){ if(_s[k]!==undefined) settings[k]=_s[k]; } if(!settings.pinterestBoard) settings.pinterestBoard='https://www.pinterest.com/chibbynugget/elite-combos/'; } }catch(e){}
 var TEXT_COLORS={'':'Auto (theme default)','#26221e':'Ink Black','#000000':'Pure Black','#5a3a22':'Warm Brown','#f5efe0':'Cream','#ffffff':'White','#5f6b76':'Slate Grey'};
 var THEMES={
-  warm:{grad1:'#f8f3ea',grad2:'#f1e8d9',grad3:'#ebdfc9',ink:'#2d2013',muted:'#7e6f5e',line:'rgba(84,60,38,.16)',glass:'rgba(255,255,255,.52)',glassStrong:'rgba(255,255,255,.78)',glassBorder:'rgba(255,255,255,.72)',field:'#ffffff',meta:'#f8f3ea'},
+  warm:{grad1:'#fceed3',grad2:'#f7ddab',grad3:'#ecc887',ink:'#332211',muted:'#8a6543',line:'rgba(150,95,35,.22)',glass:'rgba(255,246,220,.54)',glassStrong:'rgba(255,248,228,.80)',glassBorder:'rgba(255,250,232,.75)',field:'#fffaf0',meta:'#fceed3'},
   classic:{grad1:'#f6f6f6',grad2:'#efefef',grad3:'#e5e5e5',ink:'#111111',muted:'#5f5f5c',line:'rgba(0,0,0,.14)',glass:'rgba(255,255,255,.85)',glassStrong:'rgba(255,255,255,.96)',glassBorder:'rgba(0,0,0,.08)',field:'#ffffff',meta:'#f6f6f6'},
   green:{grad1:'#0e362a',grad2:'#0b2e25',grad3:'#07231b',ink:'#f5efe0',muted:'rgba(245,239,224,.62)',line:'rgba(245,239,224,.2)',glass:'rgba(245,239,224,.07)',glassStrong:'rgba(245,239,224,.13)',glassBorder:'rgba(245,239,224,.22)',field:'rgba(245,239,224,.1)',meta:'#0e362a'},
   dark:{grad1:'#2b2119',grad2:'#211a13',grad3:'#16120e',ink:'#f5efe0',muted:'rgba(245,239,224,.6)',line:'rgba(245,239,224,.18)',glass:'rgba(245,239,224,.06)',glassStrong:'rgba(245,239,224,.12)',glassBorder:'rgba(245,239,224,.2)',field:'rgba(245,239,224,.09)',meta:'#2b2119'},
