@@ -1526,5 +1526,34 @@ function sendAsk(e){
 applySettings();
 renderPinterest();
 </script>
+
+<!-- HAPTIC-STYLE TAP FEEDBACK — hidden iOS switch: toggling it via its label
+     makes a small Taptic tick on iOS 17+ Safari. Off-screen, unfocusable,
+     no visible UI. -->
+<label id="hapticTick" aria-hidden="true" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none"><input type="checkbox" switch id="hapticSwitch" tabindex="-1" aria-hidden="true"></label>
+<script>
+// Real haptics aren't available to web apps, so buttons get a tick from the
+// hidden switch above (iOS) or a 10ms vibration (Android). Throttled to one
+// tick per 50ms. Fires ALONGSIDE normal clicks — never preventDefault, never
+// blocks anything — and never for text inputs, the key/password fields, the
+// chat input, or color pickers.
+var hapticLabel=document.getElementById('hapticTick');
+var hapticLast=0;
+function haptic(){
+  var now=Date.now();
+  if(now-hapticLast<50) return;
+  hapticLast=now;
+  try{ if(hapticLabel) hapticLabel.click(); }catch(e){}
+  try{ if(navigator.vibrate) navigator.vibrate(10); }catch(e){}
+  try{ var ae=document.activeElement; if(ae&&ae.id==='hapticSwitch') ae.blur(); }catch(e){}
+}
+document.addEventListener('click',function(e){
+  var t=e.target;
+  if(!t||!t.closest) return;
+  if(t.closest('#hapticTick')) return;
+  if(t.closest('input, textarea, select, [contenteditable="true"]')) return;
+  if(t.closest('button, a.linkbtn, a.pin-fallback-btn, .tile, .chip, .partner, .occ-chip, .type-chip, .fav-btn')) haptic();
+},false);
+</script>
 </body>
 </html>
