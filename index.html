@@ -207,6 +207,9 @@ body.theme-green .combo-link:active,body.theme-dark .combo-link:active,body.them
 .add-btn{border:1px solid rgba(255,255,255,.85);border-radius:999px;padding:14px 10px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:900;min-height:52px;background:var(--glass-strong);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.06),inset 0 1px 0 #fff}
 .add-btn.ghost{background:var(--glass);-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);color:var(--ink);border:1px solid rgba(255,255,255,.7);box-shadow:0 4px 14px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.9)}
 .session-note{font-size:11px;color:var(--muted);text-align:center;margin:10px 0 0;line-height:1.5}
+.tag-status{display:none;font-size:12.5px;color:var(--muted);line-height:1.5;margin:14px 0 0;text-align:center}
+.tag-status.show{display:block}
+.tag-status b{color:var(--ink)}
 .pending{display:none}
 .pending.show{display:block}
 .pending-img{width:100%;height:220px;object-fit:cover;border-radius:14px;border:1px solid rgba(0,0,0,.08);background:var(--field)}
@@ -224,14 +227,32 @@ body.theme-green .combo-link:active,body.theme-dark .combo-link:active,body.them
 .type-row{display:flex;flex-wrap:wrap;gap:8px}
 .type-chip{border:1.5px solid var(--line);background:var(--field);color:var(--ink);border-radius:999px;padding:9px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;min-height:40px}
 .type-chip.sel{border-color:rgba(0,0,0,.22);background:rgba(255,255,255,.92);color:#2d2013;box-shadow:0 4px 12px rgba(0,0,0,.07),inset 0 1px 0 #fff}
-.closet-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
-@media(min-width:560px){.closet-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.item{background:var(--glass-strong);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);border:1px solid rgba(255,255,255,.68);border-radius:var(--radius);padding:10px;box-shadow:0 8px 22px rgba(0,0,0,.05)}
-.item img{width:100%;height:132px;object-fit:cover;border-radius:12px;border:1px solid rgba(0,0,0,.08);display:block;background:var(--field)}
-.item-name{font-size:13px;font-weight:800;letter-spacing:.06em;padding:10px 4px 2px;line-height:1.3}
-.item-meta{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:0 4px 4px}
-.item-meta i{width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.12);flex:0 0 14px}
-.item-actions{display:flex;flex-wrap:wrap;gap:8px;padding:6px 4px 4px}
+/* CLOSET — compact: category accordions (collapsed by default), each holding a
+   tight 3-across grid of square photo tiles so lots of pieces fit on screen */
+.cat{margin-top:12px}
+.cat-head{width:100%;display:flex;align-items:center;gap:10px;background:var(--glass-strong);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);border:1px solid var(--glass-border);border-radius:14px;padding:12px 14px;box-shadow:0 4px 14px rgba(0,0,0,.04);text-align:left;color:var(--ink)}
+.cat-head .cat-name{font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:900;flex:1;min-width:0}
+.cat-head .cat-count{font-size:11px;color:var(--muted);letter-spacing:.06em;font-weight:700;white-space:nowrap}
+.cat-head .cat-chev{font-size:14px;color:var(--muted);line-height:1;transition:transform .25s ease;flex:0 0 auto}
+.cat.open .cat-head .cat-chev{transform:rotate(180deg)}
+@media (prefers-reduced-motion: reduce){.cat-head .cat-chev{transition:none}}
+.cat-body{padding-top:8px}
+.closet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.item{position:relative;border-radius:14px;overflow:hidden;background:var(--glass-strong);border:1px solid var(--glass-border);box-shadow:0 4px 12px rgba(0,0,0,.05);min-width:0}
+.item.sel{border-color:var(--accent);box-shadow:0 0 0 1.5px var(--accent),0 4px 12px rgba(0,0,0,.05)}
+.tile-main{display:block;width:100%;padding:0;margin:0;border:0;background:none;min-height:0}
+.tile-main img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:var(--field)}
+.tile-label{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:5px;padding:16px 7px 6px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.6));color:#fff;font-size:9px;letter-spacing:.07em;text-transform:uppercase;font-weight:800;line-height:1.2;pointer-events:none}
+.tile-label i{width:11px;height:11px;border-radius:50%;flex:0 0 11px;border:1.5px solid rgba(255,255,255,.85);display:block}
+.tile-label span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile-fav{position:absolute;top:5px;right:5px;width:32px;height:32px;min-height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.7);background:rgba(20,16,10,.42);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 2px 8px rgba(0,0,0,.25);z-index:2}
+.tile-fav.on{color:#ffa25e;border-color:rgba(255,162,94,.8)}
+.piece-detail{margin-top:10px;background:var(--glass-strong);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);border:1px solid var(--glass-border);border-radius:14px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,.05)}
+.pd-name{font-size:15px;font-weight:800;letter-spacing:.04em;line-height:1.3}
+.pd-meta{display:flex;align-items:center;gap:6px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-top:5px}
+.pd-meta i{width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.12);flex:0 0 14px}
+.pd-note{margin:8px 0 0;font-size:13px;line-height:1.5;color:var(--ink)}
+.pd-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .mini-btn{border:1px solid rgba(255,255,255,.8);background:var(--glass-strong);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--ink);border-radius:999px;padding:7px 12px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;min-height:38px;box-shadow:0 3px 10px rgba(0,0,0,.04)}
 .mini-btn.danger{border-color:var(--line);color:var(--muted)}
 .closet-look{display:flex;gap:12px;align-items:center;background:var(--glass-strong);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);border:1px solid rgba(255,255,255,.68);border-radius:16px;padding:12px;margin-top:12px;box-shadow:0 4px 14px rgba(0,0,0,.04)}
@@ -487,6 +508,7 @@ body.drawer-open .drawer{transform:translateX(0);visibility:visible;transition:t
           <label for="pendingName">Name it (optional)</label>
           <input type="text" id="pendingName" maxlength="40" placeholder="e.g. Navy hoodie">
         </div>
+        <p class="tag-status" id="tagStatus" aria-live="polite"></p>
         <button class="deal-btn dark" style="margin-top:16px" onclick="savePiece()">Add to my closet</button>
         <button class="add-btn ghost" style="width:100%;margin-top:10px" onclick="cancelPending()">Cancel</button>
       </div>
@@ -1142,15 +1164,20 @@ function handleFile(input){
     c.getContext('2d').drawImage(img,0,0,c.width,c.height);
     URL.revokeObjectURL(url);
     pendingImgData=c.toDataURL('image/jpeg',0.8);
+    pendingLocalColor=estimateColorFromCanvas(c);
     document.getElementById('pendingImg').src=pendingImgData;
     document.getElementById('pendingWrap').classList.add('show');
     document.getElementById('pendingWrap').scrollIntoView({behavior:'smooth',block:'center'});
+    autoTag();
   };
   img.onerror=function(){ URL.revokeObjectURL(url); };
   img.src=url;
 }
 function cancelPending(){
+  tagRun++;
   pendingImgData=null;
+  pendingLocalColor='';
+  setTagStatus('');
   document.getElementById('pendingWrap').classList.remove('show');
   document.getElementById('pendingName').value='';
 }
@@ -1158,16 +1185,150 @@ function savePiece(){
   if(!pendingImgData) return;
   var color=document.getElementById('pendingColor').value;
   var name=document.getElementById('pendingName').value.replace(/^\s+|\s+$/g,'');
+  var addedType=pendingType;
   closet.push({img:pendingImgData,color:color,type:pendingType,name:name||(color+' '+pendingType.toLowerCase()),fav:false});
   cancelPending();
+  openCats[addedType]=true;
+  selectedPiece=closet.length-1;
   renderCloset();
   document.getElementById('closetOutfit').innerHTML='';
   document.getElementById('closetWrap').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function removePiece(i){
   closet.splice(i,1);
+  selectedPiece=-1;
   renderCloset();
   document.getElementById('closetOutfit').innerHTML='';
+}
+// ---------- AUTO-TAGGING ----------
+// With the Ask AI key connected, Gemini vision names the type + playbook
+// color and pre-fills the tags. Without a key, the color is estimated
+// locally from the photo's center pixels and the type is left for a tap.
+// Either way the tags stay fully editable — manual tagging works as before.
+var tagRun=0;
+var pendingLocalColor='';
+function setTagStatus(html){
+  var el=document.getElementById('tagStatus');
+  if(!el) return;
+  el.innerHTML=html;
+  el.classList.toggle('show', !!html);
+}
+function hexToRgbArr(hexv){ var c=hexv.replace('#',''); return [parseInt(c.substr(0,2),16),parseInt(c.substr(2,2),16),parseInt(c.substr(4,2),16)]; }
+function nearestPlaybookColor(r,g,b){
+  var best='', bestD=Infinity;
+  NAMES.forEach(function(n){
+    var rgb=hexToRgbArr(COLORS[n].hex);
+    var dr=r-rgb[0], dg=g-rgb[1], db=b-rgb[2];
+    var d=0.3*dr*dr+0.59*dg*dg+0.11*db*db;
+    if(d<bestD){ bestD=d; best=n; }
+  });
+  return best;
+}
+function estimateColorFromCanvas(c){
+  try{
+    var s=24;
+    var small=document.createElement('canvas');
+    small.width=s; small.height=s;
+    var ctx=small.getContext('2d');
+    ctx.drawImage(c,0,0,s,s);
+    var data=ctx.getImageData(0,0,s,s).data;
+    var rSum=0,gSum=0,bSum=0,count=0;
+    // Center half of the frame — the garment usually sits there, not the room around it.
+    for(var y=6;y<18;y++){
+      for(var x=6;x<18;x++){
+        var idx=(y*s+x)*4;
+        rSum+=data[idx]; gSum+=data[idx+1]; bSum+=data[idx+2]; count++;
+      }
+    }
+    if(!count) return '';
+    return nearestPlaybookColor(rSum/count,gSum/count,bSum/count);
+  }catch(e){ return ''; }
+}
+function applyTags(type,color,noteHtml){
+  if(color && COLORS[color]) document.getElementById('pendingColor').value=color;
+  if(type && TYPES.indexOf(type)>-1) setPendingType(type);
+  setTagStatus(noteHtml);
+}
+function autoTag(){
+  var run=++tagRun;
+  var dataUrl=pendingImgData;
+  if(!dataUrl) return;
+  if(!geminiKey){
+    if(pendingLocalColor) applyTags('', pendingLocalColor, 'Color guessed from the photo — <b>check the tags</b>, tap to fix.');
+    else setTagStatus('Pick the color and type below.');
+    return;
+  }
+  setTagStatus('Tagging your piece…');
+  geminiVisionTag(dataUrl).then(function(tags){
+    if(run!==tagRun || pendingImgData!==dataUrl) return; // a newer photo replaced this one
+    if(tags && (tags.type||tags.color)){
+      applyTags(tags.type, tags.color, '<b>AI tagged</b> — tap the tags to fix anything.');
+    } else if(pendingLocalColor){
+      applyTags('', pendingLocalColor, 'AI couldn’t read it — color guessed from the photo. <b>Check the tags.</b>');
+    } else {
+      setTagStatus('AI couldn’t read it — pick the tags below.');
+    }
+  }).catch(function(){
+    if(run!==tagRun || pendingImgData!==dataUrl) return;
+    if(pendingLocalColor) applyTags('', pendingLocalColor, 'AI tagging hit a snag — color guessed from the photo. <b>Check the tags.</b>');
+    else setTagStatus('AI tagging hit a snag — pick the tags below.');
+  });
+}
+function geminiVisionTag(dataUrl){
+  var b64=dataUrl.split(',')[1]||'';
+  var prompt='Look at this photo of one clothing item. Reply with ONLY a JSON object like {"type":"Top","color":"Navy"} — no other words. "type" must be exactly one of: Top, Bottom, Layer, Shoes, Accessory. "color" must be exactly one of these 25 names, whichever is closest to the main garment color: '+NAMES.join(', ')+'.';
+  var body={contents:[{role:'user',parts:[{text:prompt},{inlineData:{mimeType:'image/jpeg',data:b64}}]}],generationConfig:{maxOutputTokens:120,temperature:0}};
+  return discoverModel().then(function(){
+    var preferred=['gemini-flash-latest','gemini-flash-lite-latest','gemini-2.5-flash','gemini-2.5-flash-lite','gemini-2.0-flash'];
+    var models=[]; var seen={};
+    [geminiModel].concat(preferred).forEach(function(m){ if(m&&!seen[m]){ seen[m]=true; models.push(m); } });
+    function attempt(idx){
+      if(idx>=models.length) return Promise.reject(new Error('nomodel'));
+      var model=models[idx];
+      return fetchWithTimeout('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-goog-api-key':geminiKey},
+        body:JSON.stringify(body)
+      },25000).then(function(r){
+        return r.json().catch(function(){return {}}).then(function(data){
+          if(r.status===404) return attempt(idx+1);
+          if(!r.ok){ var em=(data&&data.error&&data.error.message)?data.error.message:('HTTP '+r.status); var err=new Error(em); err.status=r.status; throw err; }
+          geminiModel=model;
+          var cand=data&&data.candidates&&data.candidates[0];
+          var parts=(cand&&cand.content&&cand.content.parts)||[];
+          var out='';
+          parts.forEach(function(pt){ if(pt.text) out+=pt.text; });
+          return parseTagReply(out);
+        });
+      });
+    }
+    return attempt(0);
+  });
+}
+function parseTagReply(out){
+  if(!out) return null;
+  var type='', color='';
+  var m=out.match(/\{[\s\S]*\}/);
+  if(m){
+    try{
+      var j=JSON.parse(m[0]);
+      if(j.type) type=String(j.type);
+      if(j.color) color=String(j.color);
+    }catch(e){}
+  }
+  if(!color){
+    // Longest names first so "Dark Taupe" wins over "Taupe", "Baby Blue" over "Blue".
+    var sorted=NAMES.slice().sort(function(a,b){ return b.length-a.length; });
+    for(var i=0;i<sorted.length;i++){ if(out.toLowerCase().indexOf(sorted[i].toLowerCase())>-1){ color=sorted[i]; break; } }
+  }
+  if(!type){
+    for(var j=0;j<TYPES.length;j++){ if(new RegExp('\\b'+TYPES[j]+'\\b','i').test(out)){ type=TYPES[j]; break; } }
+  }
+  NAMES.forEach(function(n){ if(color && n.toLowerCase()===color.toLowerCase()) color=n; });
+  TYPES.forEach(function(t){ if(type && t.toLowerCase()===type.toLowerCase()) type=t; });
+  if(color && !COLORS[color]) color='';
+  if(type && TYPES.indexOf(type)===-1) type='';
+  return (type||color)?{type:type,color:color}:null;
 }
 function toggleFav(i){
   closet[i].fav=!closet[i].fav;
@@ -1179,6 +1340,20 @@ function setClosetFilter(f){
   for(var i=0;i<chips.length;i++) chips[i].classList.toggle('sel', (f==='ALL'&&i===0)||(f==='FAV'&&i===1));
   renderCloset();
 }
+// Closet categories — sections start collapsed; tapping a header expands it.
+// Tapping a tile selects the piece and shows its details under that grid.
+var CAT_LABELS={'Top':'Tops','Bottom':'Bottoms','Layer':'Layers','Shoes':'Shoes','Accessory':'Accessories'};
+var openCats={};
+var selectedPiece=-1;
+function toggleCat(t){
+  openCats[t]=!openCats[t];
+  renderCloset();
+}
+function selectPiece(i){
+  selectedPiece=(selectedPiece===i)?-1:i;
+  if(selectedPiece>-1) openCats[closet[i].type]=true;
+  renderCloset();
+}
 function renderCloset(){
   persistCloset();
   document.getElementById('closetCount').textContent=closet.length+(closet.length===1?' piece':' pieces');
@@ -1187,17 +1362,34 @@ function renderCloset(){
     w.innerHTML='<div class="empty">Closet’s empty.</div>';
     return;
   }
-  var shown=0;
-  var h='<div class="closet-grid">';
-  closet.forEach(function(p,i){
-    if(closetFilter==='FAV' && !p.fav) return;
-    shown++;
-    var matchCount=0;
-    closet.forEach(function(q,j){ if(j!==i&&pairs(p.color,q.color)) matchCount++; });
-    h+='<div class="item'+(p.fav?' fav':'')+'"><img src="'+p.img+'" alt="Your '+p.name+'"><div class="item-name">'+esc(p.name)+'</div><div class="item-meta"><i style="background:'+hex(p.color)+'"></i>'+p.color+' · '+p.type+'</div><div class="item-meta" style="text-transform:none;letter-spacing:.02em">'+(matchCount?('Pairs with '+matchCount+(matchCount===1?' piece':' pieces')+' you own'):'No elite match yet')+'</div><div class="item-actions"><button class="mini-btn fav-btn'+(p.fav?' on':'')+'" onclick="toggleFav('+i+')" aria-label="Favorite this piece">'+(p.fav?'♥':'♡')+'</button><button class="mini-btn" onclick="askAboutPiece('+i+')">What goes with it?</button><button class="mini-btn danger" onclick="removePiece('+i+')">Remove</button></div></div>';
+  var anyShown=false;
+  var h='';
+  TYPES.forEach(function(t){
+    var idxs=[];
+    closet.forEach(function(p,i){ if(p.type===t && (closetFilter!=='FAV'||p.fav)) idxs.push(i); });
+    if(!idxs.length) return;
+    anyShown=true;
+    var open=!!openCats[t];
+    h+='<div class="cat'+(open?' open':'')+'"><button type="button" class="cat-head" onclick="toggleCat(\''+t+'\')" aria-expanded="'+open+'"><span class="cat-name">'+CAT_LABELS[t]+'</span><span class="cat-count">'+idxs.length+(idxs.length===1?' piece':' pieces')+'</span><span class="cat-chev" aria-hidden="true">▾</span></button>';
+    if(open){
+      h+='<div class="cat-body"><div class="closet-grid">';
+      idxs.forEach(function(i){
+        var p=closet[i];
+        h+='<div class="item'+(p.fav?' fav':'')+(selectedPiece===i?' sel':'')+'"><button type="button" class="tile-main" onclick="selectPiece('+i+')" aria-label="Details for '+esc(p.name)+'"><img src="'+p.img+'" alt="Your '+esc(p.name)+'"></button><span class="tile-label"><i style="background:'+hex(p.color)+'"></i><span>'+p.color+'</span></span><button type="button" class="tile-fav'+(p.fav?' on':'')+'" onclick="toggleFav('+i+')" aria-label="Favorite this piece">'+(p.fav?'♥':'♡')+'</button></div>';
+      });
+      h+='</div>';
+      if(selectedPiece>-1 && closet[selectedPiece] && closet[selectedPiece].type===t && idxs.indexOf(selectedPiece)>-1){
+        var sp=closet[selectedPiece];
+        var matchCount=0;
+        closet.forEach(function(q,j){ if(j!==selectedPiece&&pairs(sp.color,q.color)) matchCount++; });
+        h+='<div class="piece-detail"><div class="pd-name">'+esc(sp.name)+'</div><div class="pd-meta"><i style="background:'+hex(sp.color)+'"></i>'+sp.color+' · '+sp.type+'</div><p class="pd-note">'+(matchCount?('Pairs with '+matchCount+(matchCount===1?' piece':' pieces')+' you own.'):'No elite match in your closet yet.')+'</p><div class="pd-actions"><button class="mini-btn" onclick="askAboutPiece('+selectedPiece+')">What goes with it?</button><button class="mini-btn danger" onclick="removePiece('+selectedPiece+')">Remove</button></div></div>';
+      }
+      h+='</div>';
+    }
+    h+='</div>';
   });
-  if(!shown){ w.innerHTML='<div class="empty">No favorites yet.</div>'; return; }
-  w.innerHTML=h+'</div>';
+  if(!anyShown){ w.innerHTML='<div class="empty">No favorites yet.</div>'; return; }
+  w.innerHTML=h;
 }
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function typeRank(t){return t==='Bottom'?0:(t==='Top'?1:(t==='Layer'?2:(t==='Shoes'?3:4)))}
